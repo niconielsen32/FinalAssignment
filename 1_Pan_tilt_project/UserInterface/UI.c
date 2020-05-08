@@ -26,6 +26,7 @@
 #include "glob_def.h"
 #include "FreeRTOS.h"
 #include "write.h"
+#include "data.h"
 
 /*****************************    Defines    *******************************/
 
@@ -70,7 +71,7 @@ void UI_task(void * pvParameters)
         // Motor 1
         write_string(sMotor1);
         write_string(sVel);
-        write_fp32(velocity);
+        write_fp32(leadfree92);
         write_character(' ');
 
         write_string(sRef);
@@ -84,7 +85,7 @@ void UI_task(void * pvParameters)
         // Motor 2
         write_string(sMotor2);
         write_string(sVel);
-        write_fp32(velocity);
+        write_fp32(leadfree92);
         write_character(' ');
 
         write_string(sRef);

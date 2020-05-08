@@ -24,7 +24,7 @@
 #include "queue.h"
 #include "emp_type.h"
 #include "ADC.h"
-#include "spi.h"
+//#include "spi.h"
 
 
 
@@ -110,7 +110,7 @@ void controller_task(void *pvParameters)
 
         reference = (FP32) adc_y_reference / VELOCITY_SCALE_Y;
         //measurement = (FP32) spi_receive(); // Receives time in 100'th of a ms pr degree
-        measurement = 0.0174532925f / ((FP32) spi_receive() / 100) * 1000;  // To get the speed in rad/s.
+        //measurement = 0.0174532925f / ((FP32) spi_receive() / 100) * 1000;  // To get the speed in rad/s.
         // measurement needs to be updated from SPI (maybe derivative for speed?)
 
         u_0 = reference - measurement; // error
@@ -146,7 +146,7 @@ void controller_task(void *pvParameters)
 
 
 
-        spi_send(duty_cycle_output);
+        //spi_send(duty_cycle_output);
         vTaskDelay(pdMS_TO_TICKS(SAMPLING_TIME_MS)); // wait 0.01s (our sampling time)
 
     }

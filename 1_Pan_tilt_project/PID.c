@@ -24,7 +24,7 @@
 #include "queue.h"
 #include "emp_type.h"
 #include "ADC.h"
-#include "spi.h"
+//#include "spi.h"
 #include "PID.h"
 
 /*****************************    Defines    *******************************/
@@ -73,7 +73,7 @@ void PID_task(void *pvParameters) {
 
     while (1) {
 
-        spi_update(pwm_motor1, pwm_motor2, &hastighed_modtaget1, &hastighed_modtaget2 );
+        //spi_update(pwm_motor1, pwm_motor2, &hastighed_modtaget1, &hastighed_modtaget2 );
 
         //Controller til motor 1 -----------------------------------------------------------------------------
 

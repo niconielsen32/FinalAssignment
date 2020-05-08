@@ -26,7 +26,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ADC.h"
-#include "spi.h"
+//#include "spi.h"
 #include "gpio.h"
 #include "PID.h"
 #include "controller.h"
@@ -75,7 +75,7 @@ static void setupHardware(void)
   init_systick();
   init_gpio();
   init_write();
-  init_spi();
+  //init_spi();
   init_ADC();
   //init_files(); // for printf....
 }

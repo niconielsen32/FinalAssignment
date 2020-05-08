@@ -20,8 +20,6 @@
 
 /***************************** Include files *******************************/
 #include "emp_type.h"
-#include "spi.h"
-#include "PID.h"
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "ADC.h"

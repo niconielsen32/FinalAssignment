@@ -26,10 +26,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ADC.h"
-#include "spi.h"
+//#include "spi.h"
 #include "gpio.h"
-#include "PID.h"
-#include "controller.h"
+//#include "PID.h"
+//#include "controller.h"
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
 

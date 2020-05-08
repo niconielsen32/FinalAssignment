@@ -91,7 +91,7 @@ int main(void)
 
     setupHardware();
 
-
+//tesstttttttttttttttttttttttttttttttttttttttttttttt
     xTaskCreate( write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
     xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
   //  xTaskCreate( spi_task,  "spi",    USERTASK_STACK_SIZE, NULL, HIGH_PRIO, NULL );

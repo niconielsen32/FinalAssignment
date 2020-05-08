@@ -19,17 +19,14 @@
 
 /***************************** Include files *******************************/
 #include <stdint.h>
-#include <UserInterface/leds.h>
+#include "UserInterface/leds.h"
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "systick_frt.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "ADC.h"
-#include "spi.h"
 #include "gpio.h"
-#include "PID.h"
-#include "controller.h"
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
 

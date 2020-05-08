@@ -65,14 +65,7 @@ void UI_task(void * pvParameters)
     write_string(sClear);
     while(1)
     {
-        // get values
-        reference_motor1 = (adc_get_y() - JOYSTICK_CENTER_VALUE);
-        reference_motor1 = reference_motor1 / VELOCITY_SCALE;
-        spi_outgoing = spi_peek_send_queue();
-        duty_cycle_motor1 = (spi_outgoing & 0b0000001111111111) / 1024 * 100;
-        TEMP = spi_receive();
-        velocity = 1745.32925/(FP32)TEMP;
-        duty_cycle_motor1 = 100;
+
 
 
         // write output

@@ -75,7 +75,6 @@ static void setupHardware(void)
   init_systick();
   init_gpio();
   init_write();
-  init_spi();
   init_ADC();
   //init_files(); // for printf....
 }
@@ -93,9 +92,7 @@ int main(void)
 
     xTaskCreate( write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
     xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-  //  xTaskCreate( spi_task,  "spi",    USERTASK_STACK_SIZE, NULL, HIGH_PRIO, NULL );
     xTaskCreate( adc_read_task,  "ADC_read",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate( PID_task,  "PID controllerr",  USERTASK_STACK_SIZE, NULL, HIGH_PRIO, NULL );
     xTaskCreate( UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL);
 
 

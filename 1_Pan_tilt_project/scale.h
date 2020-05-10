@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: payment.h
+* MODULENAME.: scale.h
 *
 * PROJECT....: EMP
 *
@@ -17,8 +17,8 @@
 *
 *****************************************************************************/
 
-#ifndef _PAYMENT_H
-  #define _PAYMENT_H
+#ifndef _SCALE_H
+  #define _SCALE_H
 
 /***************************** Include files *******************************/
 

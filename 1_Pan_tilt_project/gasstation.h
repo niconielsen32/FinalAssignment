@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: payment.h
+* MODULENAME.: gasstation.h
 *
 * PROJECT....: EMP
 *
@@ -17,8 +17,8 @@
 *
 *****************************************************************************/
 
-#ifndef _PAYMENT_H
-  #define _PAYMENT_H
+#ifndef _GASSTATION_H
+  #define _GASSTATION_H
 
 /***************************** Include files *******************************/
 

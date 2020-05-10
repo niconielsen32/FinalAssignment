@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: payment.h
+* MODULENAME.: fuelselect.c
 *
 * PROJECT....: EMP
 *
@@ -17,10 +17,10 @@
 *
 *****************************************************************************/
 
-#ifndef _PAYMENT_H
-  #define _PAYMENT_H
-
 /***************************** Include files *******************************/
+#include "emp_type.h"
+#include "glob_def.h"
+#include "fuelselect.h"
 
 /*****************************    Defines    *******************************/
 
@@ -30,4 +30,3 @@
 /*****************************   Functions   *******************************/
 
 /****************************** End Of Module *******************************/
-#endif

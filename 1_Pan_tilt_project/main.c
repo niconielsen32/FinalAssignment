@@ -32,6 +32,7 @@
 //#include "controller.h"
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
+#include "buttons.h"
 
 
 
@@ -51,17 +52,6 @@
 
 /*****************************   Functions   *******************************/
 
-
-int putChar()
-/*****************************************************************************
-*   Input    :  -
-*   Output   :  Result
-*   Function :  putChar for FreeRTOS debug functionality.
-*****************************************************************************/
-{
-  return(0);
-}
-
 static void setupHardware(void)
 /*****************************************************************************
 *   Input    :  -
@@ -80,6 +70,12 @@ static void setupHardware(void)
 }
 
 
+TaskHandle_t write_task_handle = NULL;
+TaskHandle_t adc_task_handle = NULL;
+TaskHandle_t ui_task_handle = NULL;
+TaskHandle_t button_task_handle = NULL;
+
+
 int main(void)
 /*****************************************************************************
 *   Input    :
@@ -91,10 +87,11 @@ int main(void)
     setupHardware();
 
 
-    xTaskCreate( write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate( adc_read_task,  "ADC_read",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate( UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL);
+    xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
+//    xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
+    xTaskCreate(adc_read_task,  "ADC_read",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
+    xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &ui_task_handle);
+    xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
 
 
     // Start the scheduler.

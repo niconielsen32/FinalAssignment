@@ -36,7 +36,7 @@ void init_ADC(void);
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
-void adc_read_task(void * pvParameters);
+void adc_read_task(void* pvParameters);
 void adc_to_uart(INT16U adc_datax, INT16U adc_datay);
 INT16U adc_get_x();
 INT16U adc_get_y();

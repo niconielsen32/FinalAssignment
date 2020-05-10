@@ -61,24 +61,24 @@ void red_led_init(void)
 
 
 
-void status_led_task(void *pvParameters)
-{
-    red_led_init();
-    INT16U value = pdMS_TO_TICKS( 10 );
-//    gfprintf(COM1, "Ticks,   A  \n \r"); //Angiver hvad der printes i kolonnerne
-    while(1)
-    {
-    // Toggle red led
-    GPIO_PORTF_DATA_R ^= RED;
-
-
-//    gfprintf( COM1, "%2d,     %2d, \n \r", pwm_motor1, pwm_motor2); //Printer ticks og værdien A = adc_get_x() (sat til 5) i en kolonne med mellemrum 2
-
-    value += 10;
-
-    vTaskDelay( pdMS_TO_TICKS( 2000 ));
-  }
-}
+//void status_led_task(void *pvParameters)
+//{
+//    red_led_init();
+//    INT16U value = pdMS_TO_TICKS( 10 );
+////    gfprintf(COM1, "Ticks,   A  \n \r"); //Angiver hvad der printes i kolonnerne
+//    while(1)
+//    {
+//    // Toggle red led
+//    GPIO_PORTF_DATA_R ^= RED;
+//
+//
+////    gfprintf( COM1, "%2d,     %2d, \n \r", pwm_motor1, pwm_motor2); //Printer ticks og værdien A = adc_get_x() (sat til 5) i en kolonne med mellemrum 2
+//
+//    value += 10;
+//
+//    vTaskDelay( pdMS_TO_TICKS( 2000 ));
+//  }
+//}
 
 
 

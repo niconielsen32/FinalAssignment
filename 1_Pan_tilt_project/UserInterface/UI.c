@@ -28,6 +28,7 @@
 #include "write.h"
 #include "data.h"
 #include "UI.h"
+#include "buttons.h"
 
 /*****************************    Defines    *******************************/
 
@@ -35,7 +36,6 @@
 
 /*****************************   Variables   *******************************/
 
-#define TO_RAD_PER_SECONDS_SCALE 0.0174532925f
 
 /*****************************   Functions   *******************************/
 
@@ -48,29 +48,32 @@ void UI_task(void * pvParameters)
 *   Function : The super loop.
 ******************************************************************************/
 {
+    INT8U button;
 
-    INT8U* button = "No button";
 
     while(1)
     {
+        button = get_button_state;
 
         // test for buttons working
 
                if(!(GPIO_PORTF_DATA_R & 0x10)){ //sw1
-                   GPIO_PORTF_DATA_R = 0x08; //put it on the green LED
+                   //GPIO_PORTF_DATA_R = 0x08; //put it on the green LED
                    button = "button1";
                } else if(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2
-                   GPIO_PORTF_DATA_R = 0x02; //put it on the RED LED
+                   //GPIO_PORTF_DATA_R = 0x02; //put it on the RED LED
                    button = "button2";
                } else {
-                   GPIO_PORTF_DATA_R = 0x00;
+                   //GPIO_PORTF_DATA_R = 0x00;
                    button = "No button";
                }
 
 
-        write_string(button);
-        write_character(' ');
+//        write_string(button);
+//        write_character(' ');
 
+          write_character(button);
+          write_character(' ');
 //        // write output
 //        // Motor 1
 //        write_string(sMotor1);

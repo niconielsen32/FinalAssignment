@@ -25,6 +25,7 @@
 #include "queue.h"
 #include "glob_def.h"
 #include "uart0.h"
+#include "write.h"
 
 /*****************************    Defines    *******************************/
 #define QUEUE_LENGTH 256

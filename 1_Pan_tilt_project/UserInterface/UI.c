@@ -27,6 +27,7 @@
 #include "FreeRTOS.h"
 #include "write.h"
 #include "data.h"
+#include "UI.h"
 
 /*****************************    Defines    *******************************/
 
@@ -47,25 +48,13 @@ void UI_task(void * pvParameters)
 *   Function : The super loop.
 ******************************************************************************/
 {
-    INT16U spi_outgoing;
-    INT16U duty_cycle_motor1;
-    INT16U duty_cycle_motor2;
-    FP32 reference_motor1;
-    FP32 reference_motor2;
-    FP32 velocity;
-    INT16S TEMP;
 
-    INT8U* sVel = "v: ";
-    INT8U* sRef = "r: ";
-    INT8U* sDuty = "d: ";
-    INT8U* sMotor1 = "M1:  ";
-    INT8U* sMotor2 = " |  M2:  ";
-    INT8U* sClear = "                                         ";
-    write_string(sClear);
     INT8U* button = "No button";
+
     while(1)
     {
 
+        // test for buttons working
 
                if(!(GPIO_PORTF_DATA_R & 0x10)){ //sw1
                    GPIO_PORTF_DATA_R = 0x08; //put it on the green LED
@@ -88,29 +77,7 @@ void UI_task(void * pvParameters)
 //        write_string(sVel);
 //        write_fp32(leadfree92);
 //        write_character(' ');
-//
-//        write_string(sRef);
-//        write_fp32(reference_motor1);
-//        write_character(' ');
-//
-//        write_string(sDuty);
-//        write_int16u(duty_cycle_motor1);
-//        write_character(' ');
-//
-//        // Motor 2
-//        write_string(sMotor2);
-//        write_string(sVel);
-//        write_fp32(leadfree92);
-//        write_character(' ');
-//
-//        write_string(sRef);
-//        write_fp32(reference_motor1);
-//        write_character(' ');
-//
-//        write_string(sDuty);
-//        write_int16u(duty_cycle_motor1);
-//        write_character(' ');
-//
+
 //        write_cr();
 
 

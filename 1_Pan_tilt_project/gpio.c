@@ -37,7 +37,14 @@ void init_gpio(void)
 *   Function : The super loop.
 ******************************************************************************/
 {
-  int dummy;
+    int dummy;
+       SYSCTL_RCGC2_R = SYSCTL_RCGC2_GPIOF; // 1) activate clock for Port F
+       dummy = SYSCTL_RCGC2_R;           // allow time for clock to start
+       GPIO_PORTF_LOCK_R = 0x4C4F434B;   // 2) unlock GPIO Port F
+       GPIO_PORTF_CR_R = 0x1F;           // allow changes to PF4-0
+       GPIO_PORTF_DIR_R = 0x0E;
+       GPIO_PORTF_DEN_R = 0x1F;
+       GPIO_PORTF_PUR_R = 0x11;
 
 //      GPIO_PORTF_DIR_R  = 0x0a; //PF3, PF1 as output PF4, PF0 as input
 //

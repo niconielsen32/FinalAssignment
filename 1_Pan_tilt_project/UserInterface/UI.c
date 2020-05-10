@@ -62,41 +62,47 @@ void UI_task(void * pvParameters)
     INT8U* sMotor2 = " |  M2:  ";
     INT8U* sClear = "                                         ";
     write_string(sClear);
+    INT8U* button = "No button";
     while(1)
     {
 
+        if(~GPIO_PORTF_DATA_R & 0x11)
+            button = "button1";
+        else if (GPIO_PORTF_DATA_R &= ~(0x02))
+            button = "button2";
 
-
-        // write output
-        // Motor 1
-        write_string(sMotor1);
-        write_string(sVel);
-        write_fp32(leadfree92);
+        write_string(button);
         write_character(' ');
-
-        write_string(sRef);
-        write_fp32(reference_motor1);
-        write_character(' ');
-
-        write_string(sDuty);
-        write_int16u(duty_cycle_motor1);
-        write_character(' ');
-
-        // Motor 2
-        write_string(sMotor2);
-        write_string(sVel);
-        write_fp32(leadfree92);
-        write_character(' ');
-
-        write_string(sRef);
-        write_fp32(reference_motor1);
-        write_character(' ');
-
-        write_string(sDuty);
-        write_int16u(duty_cycle_motor1);
-        write_character(' ');
-
-        write_cr();
+//        // write output
+//        // Motor 1
+//        write_string(sMotor1);
+//        write_string(sVel);
+//        write_fp32(leadfree92);
+//        write_character(' ');
+//
+//        write_string(sRef);
+//        write_fp32(reference_motor1);
+//        write_character(' ');
+//
+//        write_string(sDuty);
+//        write_int16u(duty_cycle_motor1);
+//        write_character(' ');
+//
+//        // Motor 2
+//        write_string(sMotor2);
+//        write_string(sVel);
+//        write_fp32(leadfree92);
+//        write_character(' ');
+//
+//        write_string(sRef);
+//        write_fp32(reference_motor1);
+//        write_character(' ');
+//
+//        write_string(sDuty);
+//        write_int16u(duty_cycle_motor1);
+//        write_character(' ');
+//
+//        write_cr();
 
 
         vTaskDelay(pdMS_TO_TICKS(500));

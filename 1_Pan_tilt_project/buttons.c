@@ -22,6 +22,7 @@
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
+#include "FreeRTOS.h"
 #include "buttons.h"
 #include "UserInterface/write.h"
 #include <stdint.h>
@@ -39,13 +40,14 @@
 #define TIM_1_SEC     200
 #define TIM_2_SEC     400
 
-#define TE_TIMEOUT      10
+#define TE_TIMEOUT      1
 
 
 /*****************************   Constants   *******************************/
 
 static INT16U  button_state = idle;
 static INT16U counter_timer = 0;
+INT16U counter_timer_event = TE_TIMEOUT;
 
 BOOLEAN pumping = FALSE;
 
@@ -53,7 +55,6 @@ INT8U karakter;
 
 INT8U event;
 
-INT8U* timer = "timer runout";
 
 /*****************************   Functions   *******************************/
 
@@ -67,46 +68,48 @@ void button_task(void* pvParameters){
 
         if(counter_timer){
              if(! --counter_timer){
-                 write_string(timer);
+                counter_timer_event = TE_TIMEOUT;
              }
         }
-
+        GPIO_PORTF_DATA_R &= 0xF7;
         switch(button_state)
           {
             case idle:
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    GPIO_PORTF_DATA_R = 0x02; //put it on the RED LED
+                    GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
                     button_state = nozzle_removal;
-                    counter_timer = TIM_2_SEC;
-
+                    write_string("nozzle_removed ");
                 }
                 break;
             case nozzle_removal:
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                    GPIO_PORTF_DATA_R = 0x06; //put it on the RED LED
+                    GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_depressed;
-                    counter_timer = TIM_2_SEC;
+                    write_string("lever_depressed ");
                 }
                 break;
             case lever_depressed:
                 while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
-                    pumping = FALSE;
+                    pumping = TRUE;
                     GPIO_PORTF_DATA_R = 0x08; //put it on the RED LED
-                    counter_timer = TIM_2_SEC;
                 }
-                if(GPIO_PORTF_DATA_R & 0x01){ //sw2 pressed
+                if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
+                    GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_released;
-                    counter_timer = TIM_2_SEC;
+                    write_string("lever_released ");
                 }
                 break;
             case lever_released:
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    GPIO_PORTF_DATA_R = 0x00;
+                    GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
+                    counter_timer = TIM_100_MSEC;
+                } else if(! --counter_timer){
+                    write_string("idle ");
                     button_state = idle;
-                    counter_timer = TIM_2_SEC;
                 }
                 break;
           }
         }
+    vTaskDelay(pdMS_TO_TICKS(500));
 }
 /****************************** End Of Module *******************************/

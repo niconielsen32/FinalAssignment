@@ -24,19 +24,18 @@
 
 /*****************************    Defines    *******************************/
 
-#define no_pumping        0
-#define pumping_start     1
-#define pumping_regular   2
-#define pumping_stop      3
-
 /*****************************   Constants   *******************************/
 static INT16U  pumping_state = no_pumping;
 
-
+BOOLEAN pumping_interrupted = FALSE;
 /*****************************   Functions   *******************************/
 
 INT16U get_pumping_state(){
     return pumping_state;
+}
+
+BOOLEAN pumping_running(){
+    return pumping_interrupted;
 }
 
 void pumping_task(void* pvParameters){

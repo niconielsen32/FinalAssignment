@@ -23,12 +23,16 @@
 /***************************** Include files *******************************/
 
 /*****************************    Defines    *******************************/
-
+#define no_pumping        0
+#define pumping_start     1
+#define pumping_regular   2
+#define pumping_stop      3
 
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
 INT16U get_pumping_state();
+BOOLEAN pumping_running();
 
 void pumping_task(void* pvParameters);
 /****************************** End Of Module *******************************/

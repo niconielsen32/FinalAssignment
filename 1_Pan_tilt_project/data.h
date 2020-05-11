@@ -42,7 +42,6 @@ FP32 sum_of_cash = 0;
 FP32 sum_of_card = 0;
 FP32 total_operating_time = 0;
 
-BOOLEAN payment_complete = FALSE;
 BOOLEAN gastype_selected = FALSE;
 BOOLEAN pumping_ended = FALSE;
 

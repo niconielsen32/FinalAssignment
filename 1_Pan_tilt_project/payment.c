@@ -23,11 +23,27 @@
 #include "payment.h"
 
 /*****************************    Defines    *******************************/
-
+#define CARD 0
+#define CASH 1
 
 /*****************************   Constants   *******************************/
+INT16U payment_type;
 
+BOOLEAN is_payment_complete = FALSE;
 /*****************************   Functions   *******************************/
+INT16U get_payment_type(){
+    return payment_type;
+}
+BOOLEAN payment_complete(){
+    return is_payment_complete;
+}
 
+void payment_task(void* pvParameters){
+
+    while(1){
+
+
+    }
+}
 /****************************** End Of Module *******************************/
 

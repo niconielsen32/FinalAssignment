@@ -30,6 +30,12 @@
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
 #include "buttons.h"
+#include "payment.h"
+#include "keypad.h"
+#include "flowmeter.h"
+#include "fuelselect.h"
+#include "LCD.h"
+#include "pumping.h"
 
 
 
@@ -56,8 +62,6 @@ static void setupHardware(void)
 *   Function :
 *****************************************************************************/
 {
-  // TODO: Put hardware configuration and initialisation in here
-
   // Warning: If you do not initialize the hardware clock, the timings will be inaccurate
   init_systick();
   init_gpio();
@@ -71,7 +75,9 @@ TaskHandle_t write_task_handle = NULL;
 TaskHandle_t adc_task_handle = NULL;
 TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
-
+TaskHandle_t payment_task_handle = NULL;
+TaskHandle_t keypad_task_handle = NULL;
+TaskHandle_t flowmeter_task_handle = NULL;
 
 int main(void)
 /*****************************************************************************
@@ -85,11 +91,13 @@ int main(void)
 
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
-//    xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
+//  xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
     xTaskCreate(adc_read_task,  "ADC_read",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
     xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &ui_task_handle);
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
-
+    xTaskCreate(payment_task, "payment", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &payment_task_handle);
+    xTaskCreate(keypad_task, "keypad", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &keypad_task_handle);
+    xTaskCreate(flowmeter_task, "flowmeter", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &flowmeter_task_handle);
 
     // Start the scheduler.
     // --------------------

@@ -29,5 +29,9 @@
 
 /*****************************   Functions   *******************************/
 
+INT64U get_total_pulses();
+
+void flowmeter_task(void* pvParameters);
+
 /****************************** End Of Module *******************************/
 #endif

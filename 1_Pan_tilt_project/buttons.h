@@ -27,7 +27,7 @@
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
-INT8U get_button_state();
+INT16U get_button_state();
 
 void button_task(void* pvParameters);
 

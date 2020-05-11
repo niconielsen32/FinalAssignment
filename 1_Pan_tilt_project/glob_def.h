@@ -1,41 +1,39 @@
-/*****************************************************************************
-* University of Southern Denmark
-* Embedded C Programming (ECP)
-*
-* MODULENAME.: glob_def.h
-*
-* PROJECT....: ECP
-*
-* DESCRIPTION: Definements of variable types.
-*
-* Change Log:
-******************************************************************************
-* Date    Id    Change
-* YYMMDD
-* --------------------
-* 050128  KA    Module created.
-*
-*****************************************************************************/
+/*
+ * glob_def.h
+ *
+ *  Created on: 6. maj 2019
+ *      Author: test
+ */
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "event_groups.h"
+#include "emp_type.h"
+#include "semphr.h"
 
-#ifndef _GLOB_DEF_H
-  #define _GLOB_DEF_H
+#ifndef GLOB_DEF_H_
+#define GLOB_DEF_H_
 
-/***************************** Include files *******************************/
+//  QUEUES
+QueueHandle_t  Q_KEY, Q_LCD;
 
-/*****************************    Defines    *******************************/
+// SEMAPHORES
+xSemaphoreHandle xMutex;
 
-#define FALSE	0
+#define FALSE   0
 #define TRUE  !FALSE
-#define NULL	((void *)0)
+#define NULL    ((void *)0)
 #define NEGATIVE 0
 #define POSITIVE 1
 #define LEFT    0
 #define RIGHT   1
 
+// GLOBAL
 
-/*****************************   Constants   *******************************/
+INT16U ai_value;
+INT16U adjusted_value;
+INT8U scale;
+INT16U offset;
 
-/*****************************   Functions   *******************************/
 
-/****************************** End Of Module *******************************/
-#endif
+
+#endif /* GLOB_DEF_H_ */

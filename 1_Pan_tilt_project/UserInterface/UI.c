@@ -72,8 +72,8 @@ void UI_task(void * pvParameters)
 //        write_string(button);
 //        write_character(' ');
 
-          write_character(button);
-          write_character(' ');
+//          write_character(button);
+//          write_character(' ');
 //        // write output
 //        // Motor 1
 //        write_string(sMotor1);

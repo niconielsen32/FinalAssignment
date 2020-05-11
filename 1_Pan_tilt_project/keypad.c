@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: payment.h
+* MODULENAME.: keypad.h
 *
 * PROJECT....: EMP
 *

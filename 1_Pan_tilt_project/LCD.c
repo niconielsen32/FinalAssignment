@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: payment.h
+* MODULENAME.: LCD.h
 *
 * PROJECT....: EMP
 *
@@ -20,7 +20,7 @@
 /***************************** Include files *******************************/
 #include "emp_type.h"
 #include "glob_def.h"
-#include "LCD.h"
+#include "keypad.h"
 
 /*****************************    Defines    *******************************/
 

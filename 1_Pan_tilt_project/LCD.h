@@ -2,7 +2,7 @@
 * University of Southern Denmark
 * Embedded Programming (EMP)
 *
-* MODULENAME.: LCD.h
+* MODULENAME.: keypad.h
 *
 * PROJECT....: EMP
 *

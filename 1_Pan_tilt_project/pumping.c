@@ -43,10 +43,9 @@ INT16U type_of_payment;
 FP32 out_of_cash_cal;
 FP32 total_cash_temp;
 INT16U total_pulses_temp = 0;
+INT16U seconds = 0;
 
 
-static INT16U counter_timer_pumping = 0;
-INT16U counter_timer_event_pumping;
 
 /*****************************   Functions   *******************************/
 
@@ -58,6 +57,9 @@ BOOLEAN pumping_running(){
     return pumping_stopped;
 }
 
+void timer1_callback(TimerHandle_t timer) {
+    seconds--;
+}
 
 void pumping_task(void* pvParameters){
 
@@ -67,14 +69,7 @@ void pumping_task(void* pvParameters){
 
     while(1){
 
-
-        if(counter_timer_pumping){
-             if(! --counter_timer_pumping){
-                counter_timer_event_pumping = TE_TIMEOUT;
-             }
-        }
-
-//        write_int16u(counter_timer_pumping);
+//        write_int16u(seconds);
 //        write_string(" ");
 
         type_of_payment = select_payment_type(CARD); //input from keypad
@@ -102,18 +97,21 @@ void pumping_task(void* pvParameters){
 //            }
 //        }
 
-
+        if(seconds == 0){
+            seconds = 0;
+        }
 
           if(!pumping_stopped){
             switch(pumping_state)
                   {
                     case no_pumping:
+                        seconds = 0;
                         //selected_gastype = get_gastype_keypad();
                         select_gas_type(selected_gastype);
                         gas_type = get_gas_price();
 
                         // red led
-                        //write_string("no_pumping ");
+                        //write_string("no ");
                         if(cur_button_state == nozzle_removal){
                             pumping_state = pumping_idle;
                         }
@@ -121,8 +119,9 @@ void pumping_task(void* pvParameters){
 
                     case pumping_idle:
 
-                        //write_string("pumping_idle ");
+                        //write_string("idle ");
                         if(cur_button_state == lever_depressed){
+                            seconds = 2;
                             pumping_state = pumping_start;
                         }
                             //start diplay
@@ -131,15 +130,11 @@ void pumping_task(void* pvParameters){
 
                     case pumping_start:
 
-                        //xTimerStart(timer1Sec_handle, (TickType_t) 10);
-
-
-
                         //yellow led
                         //reduced speed 2 sec
-                        //write_string("pumping_start ");
+                        //write_string("start ");
 
-                        if(! --counter_timer_pumping){
+                        if(seconds == 0){
                             pumping_state = pumping_regular;
                         }
 
@@ -152,33 +147,31 @@ void pumping_task(void* pvParameters){
                     case pumping_regular:
                             //green led
                             //Regular speed
-                       // write_string("pumping_reg ");
+                        //write_string("regu ");
 
                         if(cur_button_state == lever_released){
+                            seconds = 1;
                             pumping_state = pumping_stop;
                         }
                         break;
 
                     case pumping_stop:
 
+                        //write_string("stop ");
                         //yellow led
-                        //reduced speed 1 sec
-                        //write_string("pumping_stop ");
-                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
-                                if(total_amount == total_cash_temp){
-                                        total_pulses_temp = get_total_pulses();
-                                        pumping_stopped = TRUE;
-                                        pumping_state = no_pumping;
-                                }
-                        }
-
-                        counter_timer_pumping = TIM_1_SEC;
-
-
-                        if(counter_timer_event_pumping == TE_TIMEOUT){
+                        if(seconds == 0){
                            total_pulses_temp = get_total_pulses();
                            pumping_state = no_pumping;
                         }
+                        //reduced speed 1 sec
+                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
+                                if(total_amount == total_cash_temp){
+                                    total_pulses_temp = get_total_pulses();
+                                    pumping_stopped = TRUE;
+                                    pumping_state = no_pumping;
+                                }
+                        }
+
 
                         break;
                   }

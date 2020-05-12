@@ -46,8 +46,8 @@ void flowmeter_task(void* pvParameters){
 
     while(1){
 
-//        write_int16u(total_pulses);
-//        write_string(" ");
+        write_int16u(total_pulses);
+        write_string(" ");
 
         type_of_flow = get_pumping_state();
 

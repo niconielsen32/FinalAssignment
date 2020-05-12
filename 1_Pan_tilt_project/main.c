@@ -77,9 +77,6 @@ TaskHandle_t keypad_task_handle = NULL;
 TaskHandle_t flowmeter_task_handle = NULL;
 TaskHandle_t pumping_task_handle = NULL;
 
-void timer1_callback(TimerHandle_t timer) {
-    write_string("1s ");
-}
 
 int main(void)
 /*****************************************************************************
@@ -92,11 +89,12 @@ int main(void)
     setupHardware();
 
     TimerHandle_t timer1 = xTimerCreate("1 second timer", pdMS_TO_TICKS(1000), pdTRUE, 0, timer1_callback);
-        if (xTimerStart(timer1, 0)==pdPASS) {
-            write_string("timer created");
-        } else {
-            write_string("timer created");
-        }
+         if (xTimerStart(timer1, 0)==pdPASS) {
+             write_string("timer created");
+
+         } else {
+             write_string("timer not created");
+         }
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 

@@ -36,7 +36,7 @@ BOOLEAN pumping_stopped;
 INT16U get_pumping_state();
 BOOLEAN pumping_running();
 
-static void vTimerCallback1SecExpired( TimerHandle_t xTimer );
+void vTimerCallback1SecExpired( TimerHandle_t xTimer );
 
 void pumping_task(void* pvParameters);
 /****************************** End Of Module *******************************/

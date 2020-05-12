@@ -22,6 +22,7 @@
 #include "glob_def.h"
 #include "flowmeter.h"
 #include "pumping.h"
+#include "UserInterface/write.h"
 /*****************************    Defines    *******************************/
 //#define no_pumping        0
 //#define pumping_start     1
@@ -30,7 +31,7 @@
 /*****************************   Constants   *******************************/
 
 INT16U type_of_flow;
-INT64U total_pulses = 0;
+INT16U total_pulses = 0;
 
 /*****************************   Functions   *******************************/
 INT64U get_total_pulses(){
@@ -39,20 +40,37 @@ INT64U get_total_pulses(){
 
 void flowmeter_task(void* pvParameters){
 
-    while(1){
-        type_of_flow = get_pumping_state();
-        //1 løsning
-        if(type_of_flow == pumping_regular){
-            total_pulses += 154;
-        }
-        if(type_of_flow == (pumping_start | pumping_stop)){
-            total_pulses += 26;
-        }
+    TickType_t last_unblock_flowmeter;
+    last_unblock_flowmeter = xTaskGetTickCount();
 
-//        //alternativ løsning
-//        total_pulses += 512;
-//        // udregningerne og resten laves under pumping state machinen.
+
+    while(1){
+
+//        write_int16u(total_pulses);
+//        write_string(" ");
+
+        type_of_flow = get_pumping_state();
+
+
+       switch(type_of_flow){
+           case no_pumping:
+               total_pulses = 0;
+               break;
+
+           case pumping_regular:
+               total_pulses += 154;
+               break;
+
+           case pumping_start:
+               total_pulses += 26;
+               break;
+
+           case pumping_stop:
+               total_pulses += 26;
+               break;
+       }
+
+        vTaskDelayUntil(&last_unblock_flowmeter, pdMS_TO_TICKS(1000));; // der tælles pulser op for hvert sekund
     }
-    vTaskDelay(pdMS_TO_TICKS(1000)); // der tælles pulser op for hvert sekund
 }
 /****************************** End Of Module *******************************/

@@ -25,10 +25,6 @@
 
 
 /*****************************    Defines    *******************************/
-#define CARD 0
-#define CASH 1
-#define PIN_ODD 1
-#define PIN_EVEN 0
 
 /*****************************   Constants   *******************************/
 INT16U payment_type;
@@ -44,6 +40,7 @@ BOOLEAN pulses_clockwise; // = get_digi_direction
 BOOLEAN is_pin_even;
 /*****************************   Functions   *******************************/
 
+
 INT16U select_payment_type(INT16U payment){
     if(payment == CARD)
         return CARD;
@@ -55,7 +52,9 @@ BOOLEAN payment_complete(){
     return is_payment_complete;
 }
 
-
+INT16U get_total_cash(){
+    return total_cash;
+}
 
 void payment_task(void* pvParameters){
 

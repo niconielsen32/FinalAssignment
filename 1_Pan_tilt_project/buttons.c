@@ -29,10 +29,7 @@
 
 
 /*****************************    Defines    *******************************/
-#define idle              0
-#define nozzle_removal    1
-#define lever_depressed   2
-#define lever_released    3
+
 
 #define TIM_100_MSEC   20
 #define TIM_200_MSEC   40

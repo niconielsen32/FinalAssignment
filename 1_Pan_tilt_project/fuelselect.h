@@ -29,5 +29,10 @@
 
 /*****************************   Functions   *******************************/
 
+void select_gas_type(INT16U);
+FP32 get_gas_price();
+
+void fuelselect_task(void* pvParameters);
+
 /****************************** End Of Module *******************************/
 #endif

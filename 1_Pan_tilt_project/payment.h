@@ -28,8 +28,9 @@
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
-INT16U get_payment_type();
+INT16U select_payment_type(INT16U);
 BOOLEAN payment_complete();
+INT16U get_payment_selection();
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

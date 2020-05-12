@@ -26,7 +26,7 @@
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
-INT16U get_keyboard();
+INT8U get_keyboard();
 
 void keypad_task(void* pvParameters);
 

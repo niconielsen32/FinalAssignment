@@ -50,8 +50,8 @@ INT8U x, y;
   return( matrix[x-1][y-1] );
 }
 
-INT16U get_keyboard() {
-    INT16U test;
+INT8U get_keyboard() {
+    INT8U test;
     if( xQueueReceive(Q_KEY, &test, 0 ))
         {
             return test;
@@ -70,7 +70,7 @@ BOOLEAN check_column(INT8U x)
     }
     return 0;
 }
-
+INT8U temp;
 void keypad_task(void* pvParameters)
 /*****************************************************************************
 *   Input    :
@@ -81,6 +81,9 @@ void keypad_task(void* pvParameters)
   INT8U my_state = 0;
   while (1)
   {
+//    temp = get_keyboard();
+//    write_int16u(temp);
+
     switch(my_state)
     {
     case 0:

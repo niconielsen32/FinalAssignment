@@ -24,9 +24,10 @@
 
 /*****************************    Defines    *******************************/
 #define no_pumping        0
-#define pumping_start     1
-#define pumping_regular   2
-#define pumping_stop      3
+#define pumping_idle      1
+#define pumping_start     2
+#define pumping_regular   3
+#define pumping_stop      4
 
 /*****************************   Constants   *******************************/
 

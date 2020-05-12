@@ -20,8 +20,6 @@
 /***************************** Include files *******************************/
 #include <stdint.h>
 #include "FreeRTOS.h"
-#include "queue.h"
-#include "task.h"
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"

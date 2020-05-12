@@ -21,13 +21,12 @@
 #include "emp_type.h"
 #include "glob_def.h"
 #include "pumping.h"
-#include "FreeRTOS.h"
 #include "buttons.h"
 #include "flowmeter.h"
 #include "fuelselect.h"
 #include "payment.h"
 #include "UserInterface/write.h"
-#include "timer.h"
+
 #include "frt10/frt10/inc/timers.h"
 
 /*****************************    Defines    *******************************/

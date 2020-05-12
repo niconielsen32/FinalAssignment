@@ -78,16 +78,19 @@
 /* Here is a good place to include header files that are required across
 your application. */
 
-#define configUSE_PREEMPTION                    1
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION 0
-#define configUSE_TICKLESS_IDLE                 0
-#define configCPU_CLOCK_HZ                      60000000
-#define configTICK_RATE_HZ                      250
-#define configMAX_PRIORITIES                    5
-#define configMINIMAL_STACK_SIZE                128
-#define configMAX_TASK_NAME_LEN                 16
-#define configUSE_16_BIT_TICKS                  0
-#define configIDLE_SHOULD_YIELD                 1
+#define configUSE_PREEMPTION        1
+#define configUSE_IDLE_HOOK         0
+#define configUSE_TICK_HOOK         0
+#define configCPU_CLOCK_HZ          ( ( unsigned long ) 16000000 )
+#define configTICK_RATE_HZ          ( ( portTickType ) 200 )
+#define configMAX_PRIORITIES        10
+//#define configMAX_PRIORITIES        ( ( unsigned portBASE_TYPE ) 10 )
+#define configMINIMAL_STACK_SIZE    ( ( unsigned short ) 70 )
+#define configTOTAL_HEAP_SIZE       ( ( size_t ) ( 7000 ) )
+#define configMAX_TASK_NAME_LEN     ( 10 )
+#define configUSE_TRACE_FACILITY    0
+#define configUSE_16_BIT_TICKS      0
+#define configIDLE_SHOULD_YIELD     1
 #define configUSE_TASK_NOTIFICATIONS            1
 #define configUSE_MUTEXES                       0
 #define configUSE_RECURSIVE_MUTEXES             0
@@ -102,11 +105,6 @@ your application. */
 #define configSTACK_DEPTH_TYPE                  uint16_t
 #define configMESSAGE_BUFFER_LENGTH_TYPE        size_t
 
-/* Memory allocation related definitions. */
-#define configSUPPORT_STATIC_ALLOCATION         1
-#define configSUPPORT_DYNAMIC_ALLOCATION        1
-#define configTOTAL_HEAP_SIZE                   10240
-#define configAPPLICATION_ALLOCATED_HEAP        1
 
 /* Hook function related definitions. */
 #define configUSE_IDLE_HOOK                     0
@@ -124,11 +122,18 @@ your application. */
 #define configUSE_CO_ROUTINES                   0
 #define configMAX_CO_ROUTINE_PRIORITIES         1
 
+/* Memory allocation related definitions. */
+#define configSUPPORT_STATIC_ALLOCATION         0
+#define configSUPPORT_DYNAMIC_ALLOCATION        1
+#define configTOTAL_HEAP_SIZE                   10240
+#define configAPPLICATION_ALLOCATED_HEAP        1
+
 /* Software timer related definitions. */
 #define configUSE_TIMERS                        1
 #define configTIMER_TASK_PRIORITY               3
 #define configTIMER_QUEUE_LENGTH                10
 #define configTIMER_TASK_STACK_DEPTH            configMINIMAL_STACK_SIZE
+
 
 /* Interrupt nesting behaviour configuration. */
 #define configKERNEL_INTERRUPT_PRIORITY         [dependent of processor]

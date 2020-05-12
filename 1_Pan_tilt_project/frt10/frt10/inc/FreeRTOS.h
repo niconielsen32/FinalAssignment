@@ -245,15 +245,15 @@ extern "C" {
 #if configUSE_TIMERS == 1
 
 	#ifndef configTIMER_TASK_PRIORITY
-		#error If configUSE_TIMERS is set to 1 then configTIMER_TASK_PRIORITY must also be defined.
+        #define configTIMER_TASK_PRIORITY 3
 	#endif /* configTIMER_TASK_PRIORITY */
 
 	#ifndef configTIMER_QUEUE_LENGTH
-		#error If configUSE_TIMERS is set to 1 then configTIMER_QUEUE_LENGTH must also be defined.
+		#define configTIMER_QUEUE_LENGTH 10
 	#endif /* configTIMER_QUEUE_LENGTH */
 
 	#ifndef configTIMER_TASK_STACK_DEPTH
-		#error If configUSE_TIMERS is set to 1 then configTIMER_TASK_STACK_DEPTH must also be defined.
+        #define configTIMER_TASK_STACK_DEPTH 128
 	#endif /* configTIMER_TASK_STACK_DEPTH */
 
 #endif /* configUSE_TIMERS */

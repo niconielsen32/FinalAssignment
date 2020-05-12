@@ -22,8 +22,10 @@
 #include <UserInterface/leds.h>
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
+#include "glob_def.h"
 #include "systick_frt.h"
 #include "FreeRTOS.h"
+#include "queue.h"
 #include "task.h"
 #include "ADC.h"
 #include "gpio.h"
@@ -36,6 +38,7 @@
 #include "fuelselect.h"
 #include "LCD.h"
 #include "pumping.h"
+#include "semphr.h"
 
 
 
@@ -89,6 +92,10 @@ int main(void)
 
     setupHardware();
 
+    xMutex = xSemaphoreCreateMutex();                                                     // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
+
+    Q_KEY = xQueueCreate(128, sizeof(INT8U));
+    //Q_LCD = xQueueCreate(128, sizeof(INT8U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
 //  xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );

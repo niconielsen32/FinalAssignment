@@ -1,12 +1,12 @@
 /*****************************************************************************
 * University of Southern Denmark
-* Embedded Programming (EMP)
+* Embedded C Programming (ECP)
 *
-* MODULENAME.: keypad.h
+* MODULENAME.: leds.h
 *
-* PROJECT....: EMP
+* PROJECT....: ECP
 *
-*  Definements of variable types.
+* DESCRIPTION: Test.
 *
 * Change Log:
 ******************************************************************************
@@ -23,11 +23,33 @@
 /***************************** Include files *******************************/
 
 /*****************************    Defines    *******************************/
+// Special ASCII characters
+// ------------------------
+
+#define LF      0x0A
+#define FF      0x0C
+#define CR      0x0D
+
+#define ESC     0x1B
 
 
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
+void wr_str_LCD( INT8U* );
+void move_LCD( INT8U, INT8U );
+INT8U wr_ch_LCD( INT8U Ch );
+
+
+
+void lcd_task();
+/*****************************************************************************
+*   Input    : -
+*   Output   : -
+*   Function : Test function
+******************************************************************************/
+
 
 /****************************** End Of Module *******************************/
 #endif
+

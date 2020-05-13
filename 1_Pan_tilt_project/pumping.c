@@ -26,8 +26,7 @@
 #include "fuelselect.h"
 #include "payment.h"
 #include "UserInterface/write.h"
-
-#include "frt10/frt10/inc/timers.h"
+#include "timer.h"
 
 /*****************************    Defines    *******************************/
 
@@ -124,7 +123,7 @@ void pumping_task(void* pvParameters){
                             seconds = 2;
                             pumping_state = pumping_start;
                         }
-                            //start diplay
+                        //lcd = LCD_POWER_UP;
 
                         break;
 
@@ -176,7 +175,7 @@ void pumping_task(void* pvParameters){
                         break;
                   }
           }
-          vTaskDelayUntil(&last_unblock_pumping, pdMS_TO_TICKS(1000));
+          vTaskDelayUntil(&last_unblock_pumping, pdMS_TO_TICKS(100));
     }
 }
 

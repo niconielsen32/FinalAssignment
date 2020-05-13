@@ -104,6 +104,6 @@ void button_task(void* pvParameters){
                 break;
           }
         }
-    vTaskDelayUntil(&last_unblock_buttons, pdMS_TO_TICKS(1000));
+   // vTaskDelayUntil(&last_unblock_buttons, pdMS_TO_TICKS(1000));
 }
 /****************************** End Of Module *******************************/

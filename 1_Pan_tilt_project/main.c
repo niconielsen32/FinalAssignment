@@ -35,6 +35,9 @@
 #include "fuelselect.h"
 #include "LCD.h"
 #include "pumping.h"
+#include "scale.h"
+#include "analog.h"
+
 
 
 /*****************************    Defines    *******************************/
@@ -64,18 +67,25 @@ static void setupHardware(void)
   init_gpio();
   init_write();
   init_ADC();
-  //init_files(); // for printf....
+  init_files();
+  init_files(); // for printf....
+ // uart0_init( 9600, 8, 1, 'n' );
 }
 
 
 TaskHandle_t write_task_handle = NULL;
 TaskHandle_t adc_task_handle = NULL;
-TaskHandle_t ui_task_handle = NULL;
+TaskHandle_t ai_task_handle = NULL;
+TaskHandle_t UI_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;
 TaskHandle_t flowmeter_task_handle = NULL;
 TaskHandle_t pumping_task_handle = NULL;
+TaskHandle_t lcd_task_handle = NULL;
+TaskHandle_t ui_task_handle = NULL;
+TaskHandle_t scale_task_handle = NULL;
+
 
 
 int main(void)
@@ -91,25 +101,28 @@ int main(void)
     TimerHandle_t timer1 = xTimerCreate("1 second timer", pdMS_TO_TICKS(1000), pdTRUE, 0, timer1_callback);
          if (xTimerStart(timer1, 0)==pdPASS) {
              write_string("timer created");
-
          } else {
              write_string("timer not created");
          }
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 
-    Q_KEY = xQueueCreate(128, sizeof(INT8U));
-    //Q_LCD = xQueueCreate(128, sizeof(INT8U));
+    Q_KEY = xQueueCreate(128, sizeof(INT16U));
+    Q_LCD = xQueueCreate(128, sizeof(INT16U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
-//  xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate(adc_read_task,  "ADC_read",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
-    xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &ui_task_handle);
+    //xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
+    xTaskCreate(adc_task,  "ADC",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
+    xTaskCreate(ai_task,  "ai",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &ai_task_handle);
+    xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
     xTaskCreate(payment_task, "payment", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &payment_task_handle);
     xTaskCreate(keypad_task, "keypad", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &keypad_task_handle);
     xTaskCreate(flowmeter_task, "flowmeter", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &flowmeter_task_handle);
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
+    xTaskCreate(scale_task, "scale", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &scale_task_handle);
+    //xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
+
 
     // Start the scheduler.
     // --------------------

@@ -31,8 +31,7 @@
 
 /*****************************   Variables   *******************************/
 
-QueueHandle_t Q_ADC_X;
-QueueHandle_t Q_ADC_Y;
+QueueHandle_t Q_ADC;
 
 
 /*****************************   Functions   *******************************/
@@ -93,13 +92,12 @@ void init_ADC(void)
     ADC1_SSCTL3_R = ADC_SSCTL3_END0 | ADC_SSCTL3_IE0;
     ADC1_ACTSS_R |= ADC_ACTSS_ASEN3;            // Enable sample sequencer
 
-    Q_ADC_Y = xQueueCreate(1, sizeof(INT16U));
-    Q_ADC_X = xQueueCreate(1, sizeof(INT16U));
+    Q_ADC = xQueueCreate(1, sizeof(INT16U));
 }
 
 
 
-void adc_read_task( void * pvParameters )
+void adc_task( void * pvParameters )
 /*****************************************************************************
 *   Input    :
 *   Output   :
@@ -111,28 +109,17 @@ void adc_read_task( void * pvParameters )
 
     while(1)
     {
-        INT16S resultx;
+        INT16S result;
         ADC0_PSSI_R |= ADC_PSSI_SS3;                // Start conversion
         while ((ADC0_RIS_R & 0x08) == 0);           // wait for conversion
-        resultx = ADC0_SSFIFO3_R;                    // Save result
+        result = ADC0_SSFIFO3_R;                    // Save result
 
-        if (resultx > 1898 && resultx < 2198)
-                    resultx = 2048;
+        if (result > 1898 && result < 2198)
+                    result = 2048;
 
         ADC0_ISC_R = 0x08;                          // Clear completion flag
-        xQueueOverwrite( Q_ADC_X, &resultx );
+        xQueueOverwrite(Q_ADC, &result);
 
-
-        INT16S resulty;
-        ADC1_PSSI_R |= ADC_PSSI_SS3;                // Start conversion
-        while ((ADC1_RIS_R & 0x08) == 0);           // wait for conversion
-        resulty = ADC1_SSFIFO3_R;                    // Save result
-
-        if (resulty > 1898 && resulty < 2198)
-            resulty = 2048;
-
-        ADC1_ISC_R = 0x08;                          // Clear completion flag
-        xQueueOverwrite( Q_ADC_Y, &resulty);
 
         vTaskDelay(pdMS_TO_TICKS(10));
 
@@ -140,17 +127,10 @@ void adc_read_task( void * pvParameters )
 
 }
 
-INT16U adc_get_x()
+INT16U get_adc()
 {
     INT16U data;
-    xQueuePeek( Q_ADC_X, &data, (TickType_t) 0 );
-    return data;
-}
-
-INT16U adc_get_y()
-{
-    INT16U data;
-    xQueuePeek(Q_ADC_Y, &data,  0);
+    xQueuePeek( Q_ADC, &data, (TickType_t) 0 );
     return data;
 }
 

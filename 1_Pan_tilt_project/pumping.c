@@ -18,6 +18,7 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
 #include "pumping.h"
@@ -104,21 +105,22 @@ void pumping_task(void* pvParameters){
             switch(pumping_state)
                   {
                     case no_pumping:
+                        GPIO_PORTF_DATA_R = 0x02; //red
                         seconds = 0;
                         //selected_gastype = get_gastype_keypad();
                         select_gas_type(selected_gastype);
                         gas_type = get_gas_price();
 
                         // red led
-                        //write_string("no ");
+                        write_string("no ");
                         if(cur_button_state == nozzle_removal){
                             pumping_state = pumping_idle;
                         }
                         break;
 
                     case pumping_idle:
-
-                        //write_string("idle ");
+                        GPIO_PORTF_DATA_R = 0x02; //red
+                        write_string("idle ");
                         if(cur_button_state == lever_depressed){
                             seconds = 2;
                             pumping_state = pumping_start;
@@ -128,10 +130,10 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_start:
-
+                        GPIO_PORTF_DATA_R = 0x04; //yellow
                         //yellow led
                         //reduced speed 2 sec
-                        //write_string("start ");
+                        write_string("start ");
 
                         if(seconds == 0){
                             pumping_state = pumping_regular;
@@ -144,9 +146,10 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_regular:
+                        GPIO_PORTF_DATA_R = 0x08; //green
                             //green led
                             //Regular speed
-                        //write_string("regu ");
+                        write_string("regu ");
 
                         if(cur_button_state == lever_released){
                             seconds = 1;
@@ -155,11 +158,12 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_stop:
-
-                        //write_string("stop ");
+                        GPIO_PORTF_DATA_R = 0x04; //yellow
+                        write_string("stop ");
                         //yellow led
                         if(seconds == 0){
                            total_pulses_temp = get_total_pulses();
+                           //////VENT MED AT GÅ TIL NO PUMPING FØR AT DER ER GÅET 5 SEC, DER SKAL VÆRE MULIGHED FOR AT KUNNE TRYKKE LEVER NED IGEN EFTER DEN ER SLUPPET
                            pumping_state = no_pumping;
                         }
                         //reduced speed 1 sec

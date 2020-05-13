@@ -63,12 +63,12 @@ void button_task(void* pvParameters){
         }
 
 
-        GPIO_PORTF_DATA_R &= 0xF7;
+        //GPIO_PORTF_DATA_R &= 0xF7;
         switch(button_state)
           {
             case idle:
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
+                    //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
                     button_state = nozzle_removal;
                     pumping_stopped = FALSE;
                     //write_string("nozzle_removed ");
@@ -76,7 +76,7 @@ void button_task(void* pvParameters){
                 break;
             case nozzle_removal:
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                    GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
+                    //GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_depressed;
                     //write_string("lever_depressed ");
                 }
@@ -84,17 +84,17 @@ void button_task(void* pvParameters){
             case lever_depressed:
                 while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
                     pumping = TRUE;
-                    GPIO_PORTF_DATA_R = 0x08; //put it on the RED LED
+                   // GPIO_PORTF_DATA_R = 0x08; //put it on the RED LED
                 }
                 if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
-                    GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
+                   // GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_released;
                     //write_string("lever_released ");
                 }
                 break;
             case lever_released:
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
+                  //  GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
                     counter_timer = TIM_100_MSEC;
 
                 } else if(! --counter_timer){

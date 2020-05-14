@@ -24,7 +24,7 @@
 #include "tm4c123gh6pm.h"
 #include "ADC.h"
 #include "glob_def.h"
-#include "FreeRTOS.h"
+#include "frt10/frt10/inc/FreeRTOS.h"
 #include "write.h"
 #include "data.h"
 #include "UI.h"

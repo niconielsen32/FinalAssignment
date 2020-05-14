@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
-#include "FreeRTOS.h"
+#include "frt10/frt10/inc/FreeRTOS.h"
 #include "queue.h"
 #include "glob_def.h"
 #include "uart0.h"

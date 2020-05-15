@@ -31,19 +31,11 @@
 //Scale.h is missing, what is scale? -> Not even nesessary in his program
 //Semphr.h is also missing -> also not nesserary
 #include "ADC.h"
-<<<<<<< Updated upstream
-#include "glob_def.h"
-#include "FreeRTOS.h"
-=======
 #include <stdint.h>
->>>>>>> Stashed changes
 #include "write.h"
 #include "data.h"
 #include "buttons.h"
-<<<<<<< Updated upstream
-=======
 #include "tmodel.h"
->>>>>>> Stashed changes
 
 
 /*****************************    Defines    *******************************/
@@ -64,27 +56,19 @@ void UI_task(void * pvParameters)
 *   Function : The super loop.
 ******************************************************************************/
 {
-    INT8U button;
+
+
+    INT8U ui_state = 0;
+    INT16U off1;                                                        // off1-3 are used for storing the 3 digits of the offset temporarily
+    INT8U off2;
+    INT8U off3;
+    INT8U scale_tmp;                                                    // scale_tmp stores the scale value temporarily
+    scale = 1;                                                          // we initialize the scale and offset values
+    offset = 0;
 
 
     while(1)
     {
-<<<<<<< Updated upstream
-        button = get_button_state;
-
-        // test for buttons working
-
-               if(!(GPIO_PORTF_DATA_R & 0x10)){ //sw1
-                   //GPIO_PORTF_DATA_R = 0x08; //put it on the green LED
-                   button = "button1";
-               } else if(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2
-                   //GPIO_PORTF_DATA_R = 0x02; //put it on the RED LED
-                   button = "button2";
-               } else {
-                   //GPIO_PORTF_DATA_R = 0x00;
-                   button = "No button";
-               }
-=======
         INT8U key = 0;
         gfprintf(COM2, "%c%cValue: %05u", 0x1B, 0x80, adjusted_value);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
         switch(ui_state)
@@ -135,26 +119,47 @@ void UI_task(void * pvParameters)
             break;
         }
     }
->>>>>>> Stashed changes
 
 
-//        write_string(button);
-//        write_character(' ');
 
-//          write_character(button);
-//          write_character(' ');
-//        // write output
-//        // Motor 1
-//        write_string(sMotor1);
-//        write_string(sVel);
-//        write_fp32(leadfree92);
-//        write_character(' ');
-
-//        write_cr();
-
-
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+//    INT8U button;
+//
+//
+//    while(1)
+//    {
+//        button = get_button_state;
+//
+//        // test for buttons working
+//
+//               if(!(GPIO_PORTF_DATA_R & 0x10)){ //sw1
+//                   //GPIO_PORTF_DATA_R = 0x08; //put it on the green LED
+//                   button = "button1";
+//               } else if(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2
+//                   //GPIO_PORTF_DATA_R = 0x02; //put it on the RED LED
+//                   button = "button2";
+//               } else {
+//                   //GPIO_PORTF_DATA_R = 0x00;
+//                   button = "No button";
+//               }
+//
+//
+////        write_string(button);
+////        write_character(' ');
+//
+////          write_character(button);
+////          write_character(' ');
+////        // write output
+////        // Motor 1
+////        write_string(sMotor1);
+////        write_string(sVel);
+////        write_fp32(leadfree92);
+////        write_character(' ');
+//
+////        write_cr();
+//
+//
+//        vTaskDelay(pdMS_TO_TICKS(100));
+//    }
 
 
 }

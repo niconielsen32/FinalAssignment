@@ -47,6 +47,8 @@
 #define MED_PRIO  2
 #define HIGH_PRIO 3
 
+#define NUM_TIMERS 3
+
 
 
 /*****************************   Constants   *******************************/
@@ -68,7 +70,7 @@ static void setupHardware(void)
   init_write();
   init_ADC();
   init_files();
-  init_files(); // for printf....
+  //init_files(); // for printf....
  // uart0_init( 9600, 8, 1, 'n' );
 }
 
@@ -107,8 +109,10 @@ int main(void)
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 
-    Q_KEY = xQueueCreate(128, sizeof(INT16U));
-    Q_LCD = xQueueCreate(128, sizeof(INT16U));
+    Q_KEY = xQueueCreate(128, sizeof(INT8U));
+    Q_LCD = xQueueCreate(128, sizeof(INT8U));
+    Q_PIN = xQueueCreate(4, sizeof(INT8U));
+    Q_CARD_NUMBER = xQueueCreate(8, sizeof(INT8U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     //xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );

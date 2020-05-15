@@ -74,7 +74,6 @@ static void setupHardware(void)
  // uart0_init( 9600, 8, 1, 'n' );
 }
 
-
 TaskHandle_t write_task_handle = NULL;
 TaskHandle_t adc_task_handle = NULL;
 TaskHandle_t ai_task_handle = NULL;
@@ -89,7 +88,6 @@ TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
 
 
-
 int main(void)
 /*****************************************************************************
 *   Input    :
@@ -100,16 +98,14 @@ int main(void)
 
     setupHardware();
 
-    TimerHandle_t timer1 = xTimerCreate("1 second timer", pdMS_TO_TICKS(1000), pdTRUE, 0, timer1_callback);
-         if (xTimerStart(timer1, 0)==pdPASS) {
-             write_string("timer created");
-         } else {
-             write_string("timer not created");
-         }
+    timer_pumping = xTimerCreate("pumping timer", pdMS_TO_TICKS(1000), pdTRUE, 0, pumping_timer_callback);
+    timer_total_pumping = xTimerCreate("total pumping timer", pdMS_TO_TICKS(1000), pdTRUE, 0, total_pumping_time_callback);
+
+
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 
-    Q_KEY = xQueueCreate(128, sizeof(INT8U));
+    Q_KEY = xQueueCreate(8, sizeof(INT8U));
     Q_LCD = xQueueCreate(128, sizeof(INT8U));
     Q_PIN = xQueueCreate(4, sizeof(INT8U));
     Q_CARD_NUMBER = xQueueCreate(8, sizeof(INT8U));

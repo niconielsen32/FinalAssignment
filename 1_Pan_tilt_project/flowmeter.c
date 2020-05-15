@@ -32,6 +32,8 @@
 
 INT16U type_of_flow;
 INT16U total_pulses = 0;
+INT16U pulses_regular = 154;
+INT16U pulses_reduced = 26;
 
 /*****************************   Functions   *******************************/
 INT64U get_total_pulses(){
@@ -46,8 +48,8 @@ void flowmeter_task(void* pvParameters){
 
     while(1){
 
-//        write_int16u(total_pulses);
-//        write_string(" ");
+        write_int16u(total_pulses);
+        write_string(" ");
 
         type_of_flow = get_pumping_state();
 
@@ -58,15 +60,15 @@ void flowmeter_task(void* pvParameters){
                break;
 
            case pumping_regular:
-               total_pulses += 154;
+               total_pulses += pulses_regular;
                break;
 
            case pumping_start:
-               total_pulses += 26;
+               total_pulses += pulses_reduced;
                break;
 
            case pumping_stop:
-               total_pulses += 26;
+               total_pulses += pulses_reduced;
                break;
        }
 

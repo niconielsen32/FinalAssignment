@@ -20,7 +20,7 @@
 /***************************** Include files *******************************/
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
-#include "frt10/frt10/inc/FreeRTOS.h"
+#include "FreeRTOS.h"
 #include "emp_type.h"
 #include "string.h"
 #include "ADC.h"

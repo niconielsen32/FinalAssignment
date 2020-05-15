@@ -13,8 +13,14 @@
 #ifndef GLOB_DEF_H_
 #define GLOB_DEF_H_
 
+
 //  QUEUES
 QueueHandle_t  Q_KEY, Q_LCD, Q_PIN, Q_CARD_NUMBER;
+
+// TIMERS
+
+TimerHandle_t timer_pumping;
+TimerHandle_t timer_total_pumping;
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;
@@ -26,6 +32,7 @@ xSemaphoreHandle xMutex;
 #define POSITIVE 1
 #define LEFT    0
 #define RIGHT   1
+
 
 // GLOBAL
 

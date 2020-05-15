@@ -71,14 +71,15 @@ void button_task(void* pvParameters){
                     //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
                     button_state = nozzle_removal;
                     pumping_stopped = FALSE;
-                    //write_string("nozzle_removed ");
+                    write_string("nozzle_removed ");
+                    pumping_stopped = FALSE;
                 }
                 break;
             case nozzle_removal:
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                     //GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_depressed;
-                    //write_string("lever_depressed ");
+                    write_string("lever_depressed ");
                 }
                 break;
             case lever_depressed:
@@ -89,21 +90,34 @@ void button_task(void* pvParameters){
                 if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
                    // GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_released;
-                    //write_string("lever_released ");
+                    write_string("lever_released ");
                 }
                 break;
             case lever_released:
+//                    counter_timer = TIM_100_MSEC;
+//                if(! --counter_timer){
+                    write_string("nozzle_putback ");
+                    button_state = nozzle_putback;
+                //}
+                break;
+            case nozzle_putback:
+                //SKAL KUNNE GÅ TILBAGE TIL LEVER_DEPRESSED IGEN HER
+                if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
+                   button_state = lever_depressed;
+                   write_string("lever_depressed ");
+               }
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                  //  GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
-                    counter_timer = TIM_100_MSEC;
+                     counter_timer = TIM_100_MSEC;
 
-                } else if(! --counter_timer){
-                    //write_string("idle ");
-                    button_state = idle;
-                }
+                    } else if(! --counter_timer){
+                        button_state = idle;
+                        pumping_stopped = TRUE;
+                        write_string("nozzle_idle ");
+                    }
+
                 break;
           }
         }
-   // vTaskDelayUntil(&last_unblock_buttons, pdMS_TO_TICKS(1000));
+   // vTaskDelayUntil(&last_unblock_buttons, pdMS_TO_TICKS(1SEC));
 }
 /****************************** End Of Module *******************************/

@@ -83,11 +83,11 @@ void pumping_task(void* pvParameters){
         total_cash_temp = get_total_cash();
         out_of_cash_cal = gas_price_temp * 0.15;
 
-        write_int16u(total_pulses_temp);
+        //write_int16u(total_pulses_temp);
         if(pumping_stopped){
             total_liters = total_pulses_temp / 512;
             total_amount = total_liters * gas_price_temp;
-            write_fp32(total_amount);
+            //write_fp32(total_amount);
         }
 //        if(cur_button_state == lever_released){
 //            counter_timer_pumping = TIM_15_SEC;
@@ -127,6 +127,13 @@ void pumping_task(void* pvParameters){
                             xTimerStart(timer_total_pumping, 0);
                             pumping_state = pumping_idle;
                         }
+
+                        if(cur_button_state == lever_depressed){
+                            xTimerStart(timer_pumping, 0);
+                            seconds = 2;
+                            pumping_state = pumping_start;
+                        }
+
                         break;
 
                     case pumping_idle:
@@ -169,27 +176,30 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("stop ");
-                        if(seconds == 0){
 
-                           //////VENT MED AT GÅ TIL NO PUMPING FØR AT DER ER GÅET 5 SEC, DER SKAL VÆRE MULIGHED FOR AT KUNNE TRYKKE LEVER NED IGEN EFTER DEN ER SLUPPET
+                        if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
+                           pumping_state = no_pumping;
                         }
-                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
-                                if(total_amount == total_cash_temp){
-                                    total_pulses_temp = get_total_pulses();
-                                    pumping_stopped = TRUE;
-                                }
-                        }
-                        if(cur_button_state == nozzle_removal){
-                            xTimerStop(timer_total_pumping, 0);
-                            total_pulses_temp = get_total_pulses();
-                            pumping_state = no_pumping;
-                            pumping_stopped = TRUE;
-                       }
+                        ////// tjek om det her er det rigtige sted
+//                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
+//                                if(total_amount == total_cash_temp){
+//                                    total_pulses_temp = get_total_pulses();
+//                                    pumping_stopped = TRUE;
+//                                }
+//                        }
+//                        if(cur_button_state == nozzle_removal){
+//                            xTimerStop(timer_total_pumping, 0);
+//                            total_pulses_temp = get_total_pulses();
+//                            pumping_state = no_pumping;
+//                            pumping_stopped = TRUE;
+//                       }
+
+
                         break;
                   }
           }
-       vTaskDelayUntil(&last_unblock_pumping, pdMS_TO_TICKS(1000));
+       vTaskDelayUntil(&last_unblock_pumping, pdMS_TO_TICKS(100));
     }
 }
 

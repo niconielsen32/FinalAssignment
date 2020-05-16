@@ -55,66 +55,56 @@ void button_task(void* pvParameters){
     last_unblock_buttons = xTaskGetTickCount();
     while(1){
 
-
         if(counter_timer){
              if(! --counter_timer){
                 counter_timer_event = TE_TIMEOUT;
              }
         }
 
-
         //GPIO_PORTF_DATA_R &= 0xF7;
         switch(button_state)
           {
             case idle:
+
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
+                    write_string("nozzle_removed ");
                     button_state = nozzle_removal;
                     pumping_stopped = FALSE;
-                    write_string("nozzle_removed ");
-                    pumping_stopped = FALSE;
                 }
                 break;
+
             case nozzle_removal:
+
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                    //GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
-                    button_state = lever_depressed;
                     write_string("lever_depressed ");
+                    button_state = lever_depressed;
                 }
                 break;
+
             case lever_depressed:
+
                 while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
                     pumping = TRUE;
-                   // GPIO_PORTF_DATA_R = 0x08; //put it on the RED LED
                 }
+
                 if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
-                   // GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_released;
                     write_string("lever_released ");
                 }
                 break;
-            case lever_released:
-//                    counter_timer = TIM_100_MSEC;
-//                if(! --counter_timer){
-                    write_string("nozzle_putback ");
-                    button_state = nozzle_putback;
-                //}
-                break;
-            case nozzle_putback:
-                //SKAL KUNNE GÅ TILBAGE TIL LEVER_DEPRESSED IGEN HER
-                if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                   button_state = lever_depressed;
-                   write_string("lever_depressed ");
-               }
-                if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                     counter_timer = TIM_100_MSEC;
 
+            case lever_released:
+
+                    if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
+                        write_string("lever_depressed ");
+                        button_state = lever_depressed;
+                    } else if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
+                        counter_timer = TIM_200_MSEC;
                     } else if(! --counter_timer){
+                       write_string("nozzle_idle ");
                         button_state = idle;
                         pumping_stopped = TRUE;
-                        write_string("nozzle_idle ");
                     }
-
                 break;
           }
         }

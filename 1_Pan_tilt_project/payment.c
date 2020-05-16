@@ -68,7 +68,7 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        payment_type = select_payment_type(CASH);
+        payment_type = select_payment_type(CARD);
 
         cash_invalid = get_button_state();
 

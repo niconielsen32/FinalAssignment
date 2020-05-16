@@ -30,14 +30,16 @@
 #define pumping_stop      4
 
 /*****************************   Constants   *******************************/
-BOOLEAN pumping_stopped;
 
 /*****************************   Functions   *******************************/
 INT16U get_pumping_state();
-BOOLEAN pumping_running();
+
+BOOLEAN get_pumping_stopped();
+void set_pumping_stopped(BOOLEAN pumping_bool);
 
 void pumping_timer_callback(TimerHandle_t timer);
 void total_pumping_time_callback(TimerHandle_t timer);
+void lever_timer_callback(TimerHandle_t timer);
 
 
 void pumping_task(void* pvParameters);

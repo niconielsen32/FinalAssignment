@@ -30,7 +30,9 @@
 /*****************************   Functions   *******************************/
 
 void select_gas_type(INT16U);
+INT16U get_gas_type();
 FP32 get_gas_price();
+void set_gas_price(INT16U gastype, FP32 gasprice);
 
 void fuelselect_task(void* pvParameters);
 

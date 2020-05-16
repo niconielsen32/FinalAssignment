@@ -21,9 +21,11 @@ QueueHandle_t  Q_KEY, Q_LCD, Q_PIN, Q_CARD_NUMBER;
 
 TimerHandle_t timer_pumping;
 TimerHandle_t timer_total_pumping;
+TimerHandle_t timer_lever;
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;
+
 
 #define FALSE   0
 #define TRUE  !FALSE

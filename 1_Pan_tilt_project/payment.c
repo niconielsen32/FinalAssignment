@@ -48,19 +48,27 @@ INT16U select_payment_type(INT16U payment){
         return CASH;
 }
 
-BOOLEAN payment_complete(){
+BOOLEAN get_payment_complete(){
     return is_payment_complete;
+}
+
+void set_payment_complete(BOOLEAN payment_complete){
+    is_payment_complete = payment_complete;
 }
 
 INT16U get_total_cash(){
     return total_cash;
 }
 
+INT16U get_payment_type(){
+    return payment_type;
+}
+
 void payment_task(void* pvParameters){
 
     while(1){
 
-        payment_type = select_payment_type(CARD);
+        payment_type = select_payment_type(CASH);
 
         cash_invalid = get_button_state();
 
@@ -87,7 +95,7 @@ void payment_task(void* pvParameters){
                   } else if(!pulses_clockwise){
                       total_cash += 10;
                   }
-                  if(cash_invalid != 0){
+                  if(cash_invalid != idle){
                       is_payment_complete = TRUE;
                   }
                  }

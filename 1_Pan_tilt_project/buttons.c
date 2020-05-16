@@ -39,16 +39,14 @@ static INT16U  button_state = idle;
 static INT16U counter_timer = 0;
 INT16U counter_timer_event = TE_TIMEOUT;
 
-BOOLEAN pumping = FALSE;
 
-INT8U karakter;
-
-INT8U event;
 /*****************************   Functions   *******************************/
 
 INT16U get_button_state(){
     return button_state;
 }
+
+
 void button_task(void* pvParameters){
 
     TickType_t last_unblock_buttons;
@@ -69,7 +67,7 @@ void button_task(void* pvParameters){
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
                     write_string("nozzle_removed ");
                     button_state = nozzle_removal;
-                    pumping_stopped = FALSE;
+                    set_pumping_stopped(FALSE);
                 }
                 break;
 
@@ -84,7 +82,7 @@ void button_task(void* pvParameters){
             case lever_depressed:
 
                 while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
-                    pumping = TRUE;
+
                 }
 
                 if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
@@ -95,6 +93,7 @@ void button_task(void* pvParameters){
 
             case lever_released:
 
+
                     if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                         write_string("lever_depressed ");
                         button_state = lever_depressed;
@@ -102,8 +101,8 @@ void button_task(void* pvParameters){
                         counter_timer = TIM_200_MSEC;
                     } else if(! --counter_timer){
                        write_string("nozzle_putback ");
-                        button_state = idle;
-                        pumping_stopped = TRUE;
+                        button_state = idle; //GÅ TIL EN NY TANKNING ISTEDET
+                        set_pumping_stopped(TRUE);
                     }
                 break;
           }

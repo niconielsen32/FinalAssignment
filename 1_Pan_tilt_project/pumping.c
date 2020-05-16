@@ -43,23 +43,29 @@ INT16U type_of_payment;
 FP32 out_of_cash_cal;
 FP32 total_cash_temp;
 INT16U total_pulses_temp = 0;
-INT16U seconds = 0;
-INT16U total_pumping_time = 0;
 FP32 total_liters = 0;
 FP32 pulses_pr_liter = 512.0;
 FP32 SEC3_reduced = 0.15;
 
+INT16U seconds_lever = 0;
+INT16U seconds = 0;
+INT16U total_pumping_time = 0;
 
-
+BOOLEAN pumping_stopped;
 
 /*****************************   Functions   *******************************/
 
-INT16U get_pumping_state(){
-    return pumping_state;
+
+BOOLEAN get_pumping_stopped(){
+    return pumping_stopped;
 }
 
-BOOLEAN pumping_running(){
-    return pumping_stopped;
+void set_pumping_stopped(BOOLEAN pumping_bool){
+    pumping_stopped = pumping_bool;
+}
+
+INT16U get_pumping_state(){
+    return pumping_state;
 }
 
 void pumping_timer_callback(TimerHandle_t timer) {
@@ -69,6 +75,11 @@ void pumping_timer_callback(TimerHandle_t timer) {
 void total_pumping_time_callback(TimerHandle_t timer) {
     total_pumping_time++;
 }
+
+void lever_timer_callback(TimerHandle_t timer){
+    seconds_lever++;
+}
+
 void pumping_task(void* pvParameters){
 
     TickType_t last_unblock_pumping;
@@ -80,9 +91,10 @@ void pumping_task(void* pvParameters){
 //write_int16u(total_pumping_time);
 //write_string(" ");
 
-        type_of_payment = select_payment_type(CARD); //input from keypad
+        type_of_payment = get_payment_type(); //input from keypad
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
+
         total_cash_temp = get_total_cash();
         out_of_cash_cal = gas_price_temp * SEC3_reduced;
 
@@ -106,17 +118,11 @@ void pumping_task(void* pvParameters){
 //            }
 //        }
 
-            if(pumping_stopped == TRUE){
+            if(get_pumping_stopped() == TRUE){
                 xTimerStop(timer_total_pumping, 0);
                 total_pulses_temp = total_pulses;
                 total_liters = total_pulses_temp / pulses_pr_liter;
                 total_amount = total_liters * gas_price_temp;
-                write_int16u(total_pulses_temp);
-                write_string("  ");
-                write_fp32(total_liters);
-                write_string("  ");
-                write_fp32(total_amount);
-                write_string("  ");
                 pumping_state = no_pumping;
             } else {
 
@@ -128,7 +134,6 @@ void pumping_task(void* pvParameters){
                         seconds = 0;
                         //selected_gastype = get_gastype_keypad();
                         select_gas_type(selected_gastype);
-                        gas_type = get_gas_price();
 
                         // red led
                         //write_string("no ");
@@ -138,17 +143,22 @@ void pumping_task(void* pvParameters){
                             pumping_state = pumping_idle;
                         }
 
-                        if(cur_button_state == lever_depressed){
-                            xTimerStart(timer_pumping, 0);
-                            seconds = 2;
-                            pumping_state = pumping_start;
-                        }
-
                         break;
 
                     case pumping_idle:
 
-                        GPIO_PORTF_DATA_R = 0x02; //red
+                        if(seconds_lever == 15){
+                            seconds_lever = 0;
+                            write_string("15sec timeout");
+                            set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
+                        }
+
+                        if((seconds_lever == 5) && (get_payment_type() == CARD)){
+                            seconds_lever = 0;
+                            write_string("5sec timeout");
+                            set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
+                        }
+
                        // write_string("idle ");
                         if(cur_button_state == lever_depressed){
                             xTimerStart(timer_pumping, 0);
@@ -167,6 +177,7 @@ void pumping_task(void* pvParameters){
                             pumping_state = pumping_regular;
                         }
                         if(cur_button_state == lever_released){
+                           xTimerStart(timer_lever, 0);
                            pumping_state = pumping_stop;
                         }
                         break;
@@ -176,6 +187,7 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x08; //green
                         //write_string("regu ");
                         if(cur_button_state == lever_released){
+                            xTimerStart(timer_lever, 0);
                             xTimerStart(timer_pumping, 0);
                             seconds = 1;
                             pumping_state = pumping_stop;
@@ -184,7 +196,7 @@ void pumping_task(void* pvParameters){
                         if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
                            if(total_amount == total_cash_temp){
                                total_pulses_temp = get_total_pulses();
-                               pumping_stopped = TRUE;
+                               set_pumping_stopped(TRUE);
                            }
                         }
 
@@ -197,7 +209,7 @@ void pumping_task(void* pvParameters){
 
                         if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
-                           pumping_state = no_pumping;
+                           pumping_state = pumping_idle;
                         }
 
                         break;

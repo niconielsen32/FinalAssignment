@@ -45,8 +45,11 @@ FP32 total_cash_temp;
 INT16U total_pulses_temp = 0;
 INT16U seconds = 0;
 INT16U total_pumping_time = 0;
-INT16U total_liters = 0;
-INT16U pulses_pr_litr = 512;
+FP32 total_liters = 0;
+FP32 pulses_pr_liter = 512.0;
+FP32 SEC3_reduced = 0.15;
+
+
 
 
 /*****************************   Functions   *******************************/
@@ -81,14 +84,10 @@ void pumping_task(void* pvParameters){
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
         total_cash_temp = get_total_cash();
-        out_of_cash_cal = gas_price_temp * 0.15;
+        out_of_cash_cal = gas_price_temp * SEC3_reduced;
 
         //write_int16u(total_pulses_temp);
-        if(pumping_stopped){
-            total_liters = total_pulses_temp / 512;
-            total_amount = total_liters * gas_price_temp;
-            //write_fp32(total_amount);
-        }
+
 //        if(cur_button_state == lever_released){
 //            counter_timer_pumping = TIM_15_SEC;
 //
@@ -107,11 +106,21 @@ void pumping_task(void* pvParameters){
 //            }
 //        }
 
+            if(pumping_stopped == TRUE){
+                xTimerStop(timer_total_pumping, 0);
+                total_pulses_temp = total_pulses;
+                total_liters = total_pulses_temp / pulses_pr_liter;
+                total_amount = total_liters * gas_price_temp;
+                write_int16u(total_pulses_temp);
+                write_string("  ");
+                write_fp32(total_liters);
+                write_string("  ");
+                write_fp32(total_amount);
+                write_string("  ");
+                pumping_state = no_pumping;
+            } else {
 
-
-          if(!pumping_stopped){
-
-            switch(pumping_state)
+                switch(pumping_state)
                   {
                     case no_pumping:
 
@@ -124,6 +133,7 @@ void pumping_task(void* pvParameters){
                         // red led
                         //write_string("no ");
                         if(cur_button_state == nozzle_removal){
+                            total_pulses = 0;
                             xTimerStart(timer_total_pumping, 0);
                             pumping_state = pumping_idle;
                         }
@@ -170,6 +180,14 @@ void pumping_task(void* pvParameters){
                             seconds = 1;
                             pumping_state = pumping_stop;
                         }
+
+                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
+                           if(total_amount == total_cash_temp){
+                               total_pulses_temp = get_total_pulses();
+                               pumping_stopped = TRUE;
+                           }
+                        }
+
                         break;
 
                     case pumping_stop:
@@ -181,20 +199,6 @@ void pumping_task(void* pvParameters){
                            xTimerStop(timer_pumping, 0);
                            pumping_state = no_pumping;
                         }
-                        ////// tjek om det her er det rigtige sted
-//                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
-//                                if(total_amount == total_cash_temp){
-//                                    total_pulses_temp = get_total_pulses();
-//                                    pumping_stopped = TRUE;
-//                                }
-//                        }
-//                        if(cur_button_state == nozzle_removal){
-//                            xTimerStop(timer_total_pumping, 0);
-//                            total_pulses_temp = get_total_pulses();
-//                            pumping_state = no_pumping;
-//                            pumping_stopped = TRUE;
-//                       }
-
 
                         break;
                   }

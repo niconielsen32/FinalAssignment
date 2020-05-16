@@ -101,7 +101,7 @@ void button_task(void* pvParameters){
                     } else if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
                         counter_timer = TIM_200_MSEC;
                     } else if(! --counter_timer){
-                       write_string("nozzle_idle ");
+                       write_string("nozzle_putback ");
                         button_state = idle;
                         pumping_stopped = TRUE;
                     }

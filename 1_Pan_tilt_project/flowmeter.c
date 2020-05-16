@@ -31,7 +31,6 @@
 /*****************************   Constants   *******************************/
 
 INT16U type_of_flow;
-INT16U total_pulses = 0;
 INT16U pulses_regular = 154;
 INT16U pulses_reduced = 26;
 
@@ -55,9 +54,6 @@ void flowmeter_task(void* pvParameters){
 
 
        switch(type_of_flow){
-           case no_pumping:
-               total_pulses = 0;
-               break;
 
            case pumping_regular:
                total_pulses += pulses_regular;

@@ -94,8 +94,8 @@ int main(void)
 *   Output   :
 *   Function : The super loop.
 ******************************************************************************/
-{
 
+{
     setupHardware();
 
     TimerHandle_t timer1 = xTimerCreate("1 second timer", pdMS_TO_TICKS(1000), pdTRUE, 0, timer1_callback);

@@ -24,14 +24,11 @@
 
 /*****************************    Defines    *******************************/
 
-#define CARD 0
-#define CASH 1
-#define PIN_ODD 1
-#define PIN_EVEN 0
+
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
-INT16U select_payment_type(INT16U);
+//INT16U select_payment_type(INT16U);
 BOOLEAN payment_complete();
 INT16U get_payment_selection();
 INT16U get_total_cash();

@@ -33,6 +33,12 @@ INT16U ai_value;
 INT16U adjusted_value;
 INT8U scale;
 INT16U offset;
+INT16U payment_type;
+
+#define CARD 1
+#define CASH 2
+#define PIN_ODD 1
+#define PIN_EVEN 0
 
 
 

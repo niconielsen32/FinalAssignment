@@ -72,7 +72,7 @@ void pumping_task(void* pvParameters){
 //        write_int16u(seconds);
 //        write_string(" ");
 
-        type_of_payment = select_payment_type(CARD); //input from keypad
+        type_of_payment = CARD; //input from keypad
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
         total_cash_temp = get_total_cash();

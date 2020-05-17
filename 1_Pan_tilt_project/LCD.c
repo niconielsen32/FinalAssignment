@@ -25,6 +25,8 @@
 #include "glob_def.h"
 #include "file.h"
 #include "string.h"
+#include "keypad.h"
+#include "write.h"
 
 
 /*****************************    Defines    *******************************/
@@ -66,6 +68,22 @@ INT8U LCD_init;
 
 
 /*****************************   Functions   *******************************/
+//INT16U get_pay_type(){
+//    INT8U key = 0;
+//    gfprintf(COM2, "%c%cCash: Press one", 0x1B, 0x80);
+//    gfprintf(COM2, "%c%cCard: Press two", 0x1B, 0xA8);
+//    key = get_keyboard();
+//    if( key >= '1' && key <= '2')
+//    {
+//        write_int16u(key);
+//        if (key == 50){
+//            return CASH;
+//        } else if (key == 49){
+//            return CARD;
+//        }
+//    }
+//}
+
 INT8U wr_ch_LCD( INT8U Ch )
 /*****************************************************************************
 *   OBSERVE  : LCD_PROC NEEDS 20 mS TO PRINT OUT ONE CHARACTER

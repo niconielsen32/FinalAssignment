@@ -22,12 +22,15 @@
 #include "glob_def.h"
 #include "payment.h"
 #include "buttons.h"
+#include "string.h"
+#include "write.h"
+#include "LCD.h"
+#include "file.h"
 
 
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
-INT16U payment_type;
 
 BOOLEAN is_payment_complete = FALSE;
 
@@ -38,15 +41,16 @@ INT16U total_cash = 0;
 INT16U cash_invalid;
 BOOLEAN pulses_clockwise; // = get_digi_direction
 BOOLEAN is_pin_even;
+
 /*****************************   Functions   *******************************/
 
 
-INT16U select_payment_type(INT16U payment){
-    if(payment == CARD)
-        return CARD;
-    if(payment== CASH)
-        return CASH;
-}
+//INT16U select_payment_type(INT16U payment){
+//    if(payment == CARD)
+//        return CARD;
+//    if(payment== CASH)
+//        return CASH;
+//}
 
 BOOLEAN payment_complete(){
     return is_payment_complete;
@@ -60,11 +64,29 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        payment_type = select_payment_type(CARD);
+        //payment_type = select_payment_type(CARD);
+
+//
+//        if (payment_type == 2){
+//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
+//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
+//            write_int16u(payment_type);
+//        } else if(payment_type == 1){
+//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
+//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
+//            write_int16u(payment_type);
+//        } else {
+//            payment_type = get_pay_type();
+//        }
+
+
+
+        //write_int16u(payment_type);
 
         cash_invalid = get_button_state();
 
         switch(payment_type){
+
               case CARD:
 
                   xQueuePeek(Q_KEY, que_buffer, (TickType_t) 10); //Q-key mangler

@@ -34,6 +34,7 @@
 #include "fuelselect.h"
 #include "LCD.h"
 #include "pumping.h"
+#include "digiswitch.h"
 
 
 
@@ -77,6 +78,7 @@ TaskHandle_t keypad_task_handle = NULL;
 TaskHandle_t flowmeter_task_handle = NULL;
 TaskHandle_t pumping_task_handle = NULL;
 TaskHandle_t lcd_task_handle = NULL;
+TaskHandle_t digiswitch_task_handle = NULL;
 
 int main(void)
 /*****************************************************************************
@@ -101,13 +103,14 @@ int main(void)
     Q_CARD_NUMBER = xQueueCreate(8, sizeof(INT8U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
-    //xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);
+    //xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle); ///// skal ind kommenteres for at det virker
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
     xTaskCreate(payment_task, "payment", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &payment_task_handle);
     xTaskCreate(keypad_task, "keypad", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &keypad_task_handle);
     xTaskCreate(flowmeter_task, "flowmeter", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &flowmeter_task_handle);
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
+    xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
 
 
     // Start the scheduler.

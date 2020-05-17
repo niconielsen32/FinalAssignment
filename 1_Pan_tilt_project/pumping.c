@@ -133,7 +133,7 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x02; //red
                         seconds = 0;
                         //selected_gastype = get_gastype_keypad();
-                        select_gas_type(selected_gastype);
+                        select_gas_type(0);
 
                         // red led
                         //write_string("no ");

@@ -35,7 +35,7 @@ BOOLEAN is_payment_complete = FALSE;
 
 INT16U que_buffer;
 INT16U adc_value;
-INT16U digi_pulses = 0;
+
 INT16U total_cash = 0;
 INT16U cash_invalid;
 BOOLEAN pulses_clockwise; // = get_digi_direction

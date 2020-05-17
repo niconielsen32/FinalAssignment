@@ -159,7 +159,7 @@ void pumping_task(void* pvParameters){
                             set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
                         }
 
-                       // write_string("idle ");
+                       //write_string("idle ");
                         if(cur_button_state == lever_depressed){
                             xTimerStart(timer_pumping, 0);
                             seconds = 2;
@@ -193,11 +193,10 @@ void pumping_task(void* pvParameters){
                             pumping_state = pumping_stop;
                         }
 
-                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount) <= out_of_cash_cal)){
-                           if(total_amount == total_cash_temp){
-                               total_pulses_temp = get_total_pulses();
-                               set_pumping_stopped(TRUE);
-                           }
+                        if((type_of_payment == CASH) && ((total_cash_temp - total_amount ) <= out_of_cash_cal)){ // total amont skal være et løbende beløb
+                            //bool reduced3sec = true
+                            //go to pumping_stop
+                            //reduced speed for 3 sec
                         }
 
                         break;
@@ -212,9 +211,17 @@ void pumping_task(void* pvParameters){
                            pumping_state = pumping_idle;
                         }
 
+                        //if reduced3sec == true then
+                        //
+//                         if(total_amount == total_cash_temp){
+//                           total_pulses_temp = get_total_pulses();
+//                           set_pumping_stopped(TRUE);
+//                       }
+
                         break;
                   }
           }
+
        vTaskDelayUntil(&last_unblock_pumping, pdMS_TO_TICKS(100));
     }
 }

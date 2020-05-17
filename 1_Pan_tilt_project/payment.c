@@ -24,6 +24,7 @@
 #include "buttons.h"
 #include "LCD.h"
 #include "string.h"
+#include "digiswitch.h"
 
 
 /*****************************    Defines    *******************************/
@@ -34,10 +35,8 @@ INT16U payment_type = 3;
 BOOLEAN is_payment_complete = FALSE;
 
 INT16U que_buffer;
-INT16U adc_value;
-
-INT16U total_cash = 0;
-INT16U cash_invalid;
+INT16U total_cash;
+INT16U stop_payment;
 BOOLEAN pulses_clockwise; // = get_digi_direction
 BOOLEAN is_pin_even;
 /*****************************   Functions   *******************************/
@@ -60,9 +59,6 @@ void set_payment_complete(BOOLEAN payment_complete){
     is_payment_complete = payment_complete;
 }
 
-INT16U get_total_cash(){
-    return total_cash;
-}
 
 INT16U get_payment_type(){
     return payment_type;
@@ -74,15 +70,15 @@ void payment_task(void* pvParameters){
 
 
 
-        if (payment_type == 0 || payment_type == 1){
-        gfprintf(COM2, "%c%cPayment type is:", 0x1B, 0x80);
-        gfprintf(COM2, "%c%c     %05u", 0x1B, 0xA8, payment_type);
-        } else {
-            payment_type = get_pay_type();
-        }
+//        if (payment_type == 0 || payment_type == 1){
+//        gfprintf(COM2, "%c%cPayment type is:", 0x1B, 0x80);
+//        gfprintf(COM2, "%c%c     %05u", 0x1B, 0xA8, payment_type);
+//        } else {
+//            payment_type = get_pay_type();
+//        }
 
-
-        cash_invalid = get_button_state();
+        payment_type = get_pay_type();
+        stop_payment = get_payment_stop();
 
         switch(payment_type){
               case CARD:
@@ -99,24 +95,15 @@ void payment_task(void* pvParameters){
               break;
 
               case CASH:
-                  //adc_value = get_adc(); //evt fra en que, skal laves om
-                  //digi_pulses = get_digi_pulses();
-                  while(!is_payment_complete){
-                  if(pulses_clockwise){                                        //mangler
-                      total_cash += 100;
-                  } else if(!pulses_clockwise){
-                      total_cash += 10;
-                  }
-                  if(cash_invalid != idle){
-                      is_payment_complete = TRUE;
-                  }
-                 }
+
+                      if(stop_payment){
+                         total_cash = get_total_cash();
+                         is_payment_complete = TRUE;
+                      }
 
               break;
 
         }
-
-
     }
 }
 /****************************** End Of Module *******************************/

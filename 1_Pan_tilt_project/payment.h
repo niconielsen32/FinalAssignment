@@ -31,7 +31,6 @@ INT16U select_payment_type(INT16U);
 BOOLEAN get_payment_complete();
 void set_payment_complete(BOOLEAN);
 INT16U get_payment_selection();
-INT16U get_total_cash();
 INT16U get_payment_type();
 
 

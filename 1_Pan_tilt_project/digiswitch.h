@@ -28,8 +28,7 @@
 
 /*****************************   Functions   *******************************/
 
-INT8U get_direction();
-INT16U get_digi_pulses();
+INT16U get_total_cash();
 
 void digiswitch_task(void* pvParameters);
 /****************************** End Of Module *******************************/

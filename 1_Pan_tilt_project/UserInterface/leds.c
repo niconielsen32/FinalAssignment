@@ -23,7 +23,6 @@
 #include "FreeRTOS.h"
 #include "emp_type.h"
 #include "string.h"
-#include "ADC.h"
 #include "leds.h"
 
 

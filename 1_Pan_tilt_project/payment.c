@@ -34,6 +34,7 @@
 
 BOOLEAN is_payment_complete = FALSE;
 
+INT16U payment_type;
 INT16U que_buffer;
 INT16U adc_value;
 INT16U digi_pulses = 0;
@@ -62,7 +63,10 @@ INT16U get_total_cash(){
 
 void payment_task(void* pvParameters){
 
+
     while(1){
+        select_pay_type();
+        payment_type = get_pay_type();
 
         //payment_type = select_payment_type(CARD);
 
@@ -89,7 +93,8 @@ void payment_task(void* pvParameters){
 
               case CARD:
 
-                  xQueuePeek(Q_KEY, que_buffer, (TickType_t) 10); //Q-key mangler
+                  xQueuePeek(Q_card, que_buffer, 0); //Q-key mangler
+
 
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;
@@ -117,6 +122,7 @@ void payment_task(void* pvParameters){
               break;
 
         }
+        write_int16u(que_buffer);
 
 
     }

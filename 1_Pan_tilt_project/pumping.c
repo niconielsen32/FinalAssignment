@@ -112,7 +112,7 @@ void pumping_task(void* pvParameters){
                         gas_type = get_gas_price();
 
                         // red led
-                        write_string("no ");
+                        //write_string("no ");
                         if(cur_button_state == nozzle_removal){
                             pumping_state = pumping_idle;
                         }
@@ -120,7 +120,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_idle:
                         GPIO_PORTF_DATA_R = 0x02; //red
-                        write_string("idle ");
+                        //write_string("idle ");
                         if(cur_button_state == lever_depressed){
                             seconds = 2;
                             pumping_state = pumping_start;
@@ -133,7 +133,7 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //yellow led
                         //reduced speed 2 sec
-                        write_string("start ");
+                        //write_string("start ");
 
                         if(seconds == 0){
                             pumping_state = pumping_regular;
@@ -149,7 +149,7 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x08; //green
                             //green led
                             //Regular speed
-                        write_string("regu ");
+                        //write_string("regu ");
 
                         if(cur_button_state == lever_released){
                             seconds = 1;
@@ -159,7 +159,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_stop:
                         GPIO_PORTF_DATA_R = 0x04; //yellow
-                        write_string("stop ");
+                        //write_string("stop ");
                         //yellow led
                         if(seconds == 0){
                            total_pulses_temp = get_total_pulses();

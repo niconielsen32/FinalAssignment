@@ -109,6 +109,7 @@ int main(void)
 
     Q_KEY = xQueueCreate(128, sizeof(INT16U));
     Q_LCD = xQueueCreate(128, sizeof(INT16U));
+    Q_card = xQueueCreate(8, sizeof(INT16U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     //xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );

@@ -14,7 +14,7 @@
 #define GLOB_DEF_H_
 
 //  QUEUES
-QueueHandle_t  Q_KEY, Q_LCD;
+QueueHandle_t  Q_KEY, Q_LCD, Q_card;
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;
@@ -33,7 +33,6 @@ INT16U ai_value;
 INT16U adjusted_value;
 INT8U scale;
 INT16U offset;
-INT16U payment_type;
 
 #define CARD 1
 #define CASH 2

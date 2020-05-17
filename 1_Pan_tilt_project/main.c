@@ -24,7 +24,7 @@
 #include "emp_type.h"
 #include "glob_def.h"
 #include "systick_frt.h"
-#include "ADC.h"
+//#include "ADC.h"
 #include "gpio.h"
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
@@ -68,14 +68,14 @@ static void setupHardware(void)
   init_systick();
   init_gpio();
   init_write();
-  init_ADC();
+//  init_ADC();
   init_files();
   //init_files(); // for printf....
  // uart0_init( 9600, 8, 1, 'n' );
 }
 
 TaskHandle_t write_task_handle = NULL;
-TaskHandle_t adc_task_handle = NULL;
+//TaskHandle_t adc_task_handle = NULL;
 TaskHandle_t ai_task_handle = NULL;
 TaskHandle_t UI_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
@@ -111,7 +111,7 @@ int main(void)
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     //xTaskCreate( status_led_task, "Red_led", USERTASK_STACK_SIZE, NULL, LOW_PRIO, NULL );
-    xTaskCreate(adc_task,  "ADC",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
+    //xTaskCreate(adc_task,  "ADC",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &adc_task_handle);
     xTaskCreate(ai_task,  "ai",  USERTASK_STACK_SIZE, NULL, LOW_PRIO, &ai_task_handle);
     xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);

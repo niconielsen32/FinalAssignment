@@ -87,7 +87,7 @@ BOOLEAN get_paytype_complete(){
     return paytype_complete;
 }
 
-void select_pay_type(){
+void select_pay_type_task(void* pvParameters){
 
     while(1)
     {
@@ -197,7 +197,9 @@ void select_pay_type(){
 
             }
         }
+        vTaskDelay(  100 / portTICK_PERIOD_MS);
     }
+
 }
 
 INT16U get_pay_type(){
@@ -384,7 +386,7 @@ void out_LCD( INT8U Ch )
 
 
 
-void lcd_task()
+void lcd_task(void* pvParameters)
 /*****************************************************************************
 *   Input    :
 *   Output   :

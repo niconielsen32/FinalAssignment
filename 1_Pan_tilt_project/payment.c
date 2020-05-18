@@ -69,7 +69,7 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        select_pay_type();
+        //select_pay_type();
         payment_type = get_pay_type();
 
         //payment_type = select_payment_type(CARD);
@@ -99,7 +99,7 @@ void payment_task(void* pvParameters){
                   if(get_paytype_complete()){
                       write_string("weout");
                       xQueuePeek(Q_CARD, que_buffer, 0); //Q-key mangler
-                      write_int16u(que_buffer);
+                      //write_int16u(que_buffer);
                   }
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;

@@ -43,13 +43,13 @@ INT8U wr_ch_LCD( INT8U Ch );
 BOOLEAN get_paytype_complete();
 
 
-void lcd_task();
+void lcd_task(void* pvParameters);
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
-void select_pay_type();
+void select_pay_type_task(void* pvParameters);
 INT16U get_pay_type();
 BOOLEAN get_card_number_entered();
 

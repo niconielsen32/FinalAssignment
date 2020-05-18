@@ -84,6 +84,7 @@ TaskHandle_t lcd_task_handle = NULL;
 TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
 TaskHandle_t paytype_task_handle = NULL;
+TaskHandle_t fuelselect_task_handle = NULL;
 
 
 int main(void)
@@ -119,6 +120,7 @@ int main(void)
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
     xTaskCreate(select_pay_type_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &paytype_task_handle);
+    xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
 
     // Start the scheduler.
     // --------------------

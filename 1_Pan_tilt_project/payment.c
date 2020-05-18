@@ -101,6 +101,7 @@ void payment_task(void* pvParameters){
                       //write_string("weout");
                       xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
+                      is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
                   }
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;

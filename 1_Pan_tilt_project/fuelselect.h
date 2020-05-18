@@ -31,7 +31,7 @@
 
 void select_gas_type(INT16U);
 FP32 get_gas_price();
-
+BOOLEAN get_fuelselect_complete();
 void fuelselect_task(void* pvParameters);
 
 /****************************** End Of Module *******************************/

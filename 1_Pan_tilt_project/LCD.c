@@ -77,6 +77,7 @@ INT8U order = 0;
 INT8U key = 0;
 INT8U card_cif;
 INT8U pin_cif;
+//INT8U card_try;        //<-- If pin is wrong 3 times
 INT16U type;
 
 /*****************************   Functions   *******************************/
@@ -116,12 +117,13 @@ void select_pay_type_task(void* pvParameters){
 
             if( type == CARD)
             {
+                card_try = 3;
                 gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                 payment_type = CARD;
                 ui_state = 2;
 
             }else if ( type == CASH){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
-                gfprintf(COM2, "%c%c    Cash       ", 0x1B, 0xA8);
+                gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
                 payment_type = CASH;
                // write_string("cashaha");
                 cash_selected = TRUE;
@@ -135,6 +137,7 @@ void select_pay_type_task(void* pvParameters){
             break;
 
         case 2:
+            order = 0;
              switch(order)
              {
 
@@ -199,11 +202,17 @@ void select_pay_type_task(void* pvParameters){
             case 3:
 
                 //Do if statement
+//                if (!cardpin){
+//                    //if (card_try == 0){
+//                    ui_state = 1; // if the card number and pin doesn't match, go to 'choose payment type' again ----- or try three times and then go to ui_state 1
+//                    //}else{
+//                    //k--}
+//                } else{
 
                 paytype_complete = TRUE;
                 write_string(" Complete ");
                 break;
-
+//                }
             }
         }
         vTaskDelay(  100 / portTICK_PERIOD_MS);

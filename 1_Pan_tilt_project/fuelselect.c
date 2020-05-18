@@ -95,7 +95,7 @@ void fuelselect_task(void* pvParameters){
                 break;
 
             case 1:
-                gfprintf(COM2, "%c%cYou have selected: ", 0x1B, 0x80);
+                gfprintf(COM2, "%c%cYou have chosen: ", 0x1B, 0x80);
                 select_gas_type(gastype);
                 fuelselect = TRUE;
                 break;

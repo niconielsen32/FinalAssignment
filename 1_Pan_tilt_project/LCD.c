@@ -75,6 +75,7 @@ BOOLEAN paytype_complete;
 INT8U ui_state = 0;
 INT8U order = 0;
 INT8U key = 0;
+INT8U card_cif;
 INT16U type;
 
 /*****************************   Functions   *******************************/
@@ -148,8 +149,10 @@ void select_pay_type_task(void* pvParameters){
                      if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                        {
                          gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+i, key);
-                         write_int16u(key - '0');
-                         xQueueSend(Q_CARD, &key, 0);
+                         card_cif = key -'0';
+                         write_int16u(card_cif);
+                         xQueueSend(Q_CARD, &card_cif, 5);
+
                          if (i == 7){
                              write_string("card entered");
                              card_number_entered = TRUE;

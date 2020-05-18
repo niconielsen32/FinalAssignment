@@ -105,10 +105,10 @@ int main(void)
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 
-    Q_KEY = xQueueCreate(128, sizeof(INT16U));
+    Q_KEY = xQueueCreate(128, sizeof(INT8U));
     Q_LCD = xQueueCreate(128, sizeof(INT16U));
-    Q_CARD = xQueueCreate(8, sizeof(INT16U));
-    Q_PIN = xQueueCreate(4, sizeof(INT16U));
+    Q_CARD = xQueueCreate(8, sizeof(INT8U));
+    Q_PIN = xQueueCreate(4, sizeof(INT8U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);

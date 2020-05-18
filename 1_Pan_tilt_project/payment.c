@@ -27,6 +27,7 @@
 #include "LCD.h"
 #include "file.h"
 #include "keypad.h"
+#include "queue.h"
 
 
 /*****************************    Defines    *******************************/
@@ -36,7 +37,7 @@
 BOOLEAN is_payment_complete = FALSE;
 
 INT16U payment_type;
-INT16U que_buffer;
+INT8U que_buffer;
 INT16U adc_value;
 INT16U digi_pulses = 0;
 INT16U total_cash = 0;
@@ -97,9 +98,9 @@ void payment_task(void* pvParameters){
 
               case CARD:
                   if(get_paytype_complete()){
-                      write_string("weout");
-                      xQueuePeek(Q_CARD, que_buffer, 0); //Q-key mangler
-                      //write_int16u(que_buffer);
+                      //write_string("weout");
+                      xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
+                      write_int16u(que_buffer);
                   }
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;

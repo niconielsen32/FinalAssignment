@@ -83,6 +83,7 @@ TaskHandle_t pumping_task_handle = NULL;
 TaskHandle_t lcd_task_handle = NULL;
 TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
+TaskHandle_t pay_type_task_handle = NULL;
 
 
 
@@ -117,6 +118,7 @@ int main(void)
     xTaskCreate(flowmeter_task, "flowmeter", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &flowmeter_task_handle);
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
+    xTaskCreate(pay_type_task, "pay type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pay_type_task_handle);
 
 
     // Start the scheduler.

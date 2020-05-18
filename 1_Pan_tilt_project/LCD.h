@@ -49,7 +49,7 @@ void lcd_task();
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
-void select_pay_type();
+void pay_type_task();
 INT16U get_pay_type();
 
 /****************************** End Of Module *******************************/

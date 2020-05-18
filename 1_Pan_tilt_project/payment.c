@@ -69,7 +69,7 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        select_pay_type();
+     //   select_pay_type();
         payment_type = get_pay_type();
 
 

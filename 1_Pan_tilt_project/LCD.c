@@ -65,12 +65,12 @@ const INT8U LCD_init_sequense[]=
 enum LCD_states LCD_state = LCD_POWER_UP;
 INT8U LCD_init;
 INT16U payment_type;
-
+BOOLEAN card_number_entered;
 
 
 
 /*****************************   Functions   *******************************/
-void select_pay_type(){
+void pay_type_task(){
     INT8U ui_state = 0;
     INT8U order = 0;
 
@@ -141,6 +141,7 @@ void select_pay_type(){
                  break;
              case 1:
                  write_string("This");
+                 card_number_entered = TRUE;
                  break;
              }
             break;
@@ -152,6 +153,10 @@ void select_pay_type(){
 
 INT16U get_pay_type(){
     return payment_type;
+}
+
+BOOLEAN get_card_number_entered(){
+    return card_number_entered;
 }
 
 INT8U wr_ch_LCD( INT8U Ch )

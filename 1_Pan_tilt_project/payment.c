@@ -73,7 +73,7 @@ void payment_task(void* pvParameters){
         payment_type = get_pay_type();
 
 
-
+        write_int16u(payment_type);
 
         //payment_type = select_payment_type(CARD);
 
@@ -99,10 +99,8 @@ void payment_task(void* pvParameters){
         switch(payment_type){
 
               case CARD:
-
                   if(get_card_number_entered()){
-                      xQueuePeek(Q_card, que_buffer, 0); //Q-key mangler
-                      write_string("hej");
+                      xQueuePeek(Q_CARD, que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
                   }
                   if(que_buffer % 2 == 0){
@@ -131,7 +129,7 @@ void payment_task(void* pvParameters){
               break;
 
         }
-        write_int16u(que_buffer);
+        //write_int16u(que_buffer);
 
 
     }

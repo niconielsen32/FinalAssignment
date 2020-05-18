@@ -51,6 +51,7 @@ void lcd_task();
 ******************************************************************************/
 void select_pay_type();
 INT16U get_pay_type();
+BOOLEAN get_card_number_entered();
 
 /****************************** End Of Module *******************************/
 #endif

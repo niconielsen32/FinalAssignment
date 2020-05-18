@@ -143,7 +143,7 @@ void select_pay_type_task(void* pvParameters){
                  gfprintf(COM2, "%c%cCard number:    ", 0x1B, 0x80);
                  gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
-                 write_string("card no: ");
+                 write_string(" card no: ");
                  //BOOLEAN hat = TRUE;
                  for(INT8U i = 0; i < 8; i++){
 
@@ -156,7 +156,7 @@ void select_pay_type_task(void* pvParameters){
                          xQueueSend(Q_CARD, &card_cif, 5);
 
                          if (i == 7){
-                             write_string("card entered");
+                             write_string(" card entered ");
                              //write_int16u(get_queue_element(Q_CARD, 8, 7));
                              card_number_entered = TRUE;
                              order = 1;
@@ -184,7 +184,7 @@ void select_pay_type_task(void* pvParameters){
                          write_int16u(pin_cif);
                          xQueueSend(Q_PIN, &pin_cif, 0);
                          if (j == 3){
-                             write_string("pin entered");
+                             write_string(" pin entered ");
                              pin_code_entered = TRUE;
                              ui_state = 3;
                          }

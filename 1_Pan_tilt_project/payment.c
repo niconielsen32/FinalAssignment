@@ -144,7 +144,7 @@ void payment_task(void* pvParameters){
                   }
 
                   if(card_valid){
-                      write_string("card valid!");
+                      write_string(" card valid! ");
                   }
 
               break;

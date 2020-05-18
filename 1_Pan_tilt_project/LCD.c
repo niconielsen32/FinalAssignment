@@ -84,8 +84,8 @@ INT16U type;
 BOOLEAN get_card_number_entered(){
     return card_number_entered;
 }
-
 BOOLEAN get_paytype_complete(){
+    write_int16u(paytype_complete);
     return paytype_complete;
 }
 
@@ -177,7 +177,7 @@ void select_pay_type_task(void* pvParameters){
                      key = get_keyboard();
                      if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                        {
-                         gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+j, key);
+                         gfprintf(COM2, "%c%c%c", 0x1B, 0xC6+j, key);
                          pin_cif = key - '0';
                          write_int16u(pin_cif);
                          xQueueSend(Q_PIN, &pin_cif, 0);
@@ -197,7 +197,11 @@ void select_pay_type_task(void* pvParameters){
             break;
 
             case 3:
+
+                //Do if statement
+
                 paytype_complete = TRUE;
+                write_string(" Complete ");
                 break;
 
             }
@@ -209,7 +213,11 @@ void select_pay_type_task(void* pvParameters){
 
 INT16U get_pay_type(){
     return payment_type;
+
 }
+
+
+
 
 INT8U wr_ch_LCD( INT8U Ch )
 /*****************************************************************************

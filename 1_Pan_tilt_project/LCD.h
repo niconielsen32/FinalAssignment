@@ -53,6 +53,7 @@ void select_pay_type_task(void* pvParameters);
 INT16U get_pay_type();
 BOOLEAN get_card_number_entered();
 
+
 /****************************** End Of Module *******************************/
 #endif
 

@@ -56,12 +56,12 @@ void select_gas_type(INT16U gastype){
     switch(gastype){
 
        case LeadFree92:
-           gfprintf(COM2, "%c%c     LeadFree92      ", 0x1B, 0xA8);
+           gfprintf(COM2, "%c%c   LeadFree92   ", 0x1B, 0xA8);
            gas_price = LF92_price;
            break;
 
        case LeadFree95:
-           gfprintf(COM2, "%c%c     LeadFree95      ", 0x1B, 0xA8);
+           gfprintf(COM2, "%c%c   LeadFree95   ", 0x1B, 0xA8);
            gas_price = LF95_price;
            break;
 
@@ -78,13 +78,13 @@ void fuelselect_task(void* pvParameters){
     {
         INT8U key = 0;
        // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
-        if(payment_complete()){
+        if(get_paytype_complete()){
             switch(gas_state)
             {
 
             case 0:
-                gfprintf(COM2, "%c%cLF92: Press 1", 0x1B, 0x80);
-                gfprintf(COM2, "%c%cLF95: Press 2", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
+                gfprintf(COM2, "%c%cLF92: LF95:  D: ", 0x1B, 0x80);
+                gfprintf(COM2, "%c%c  1     2    3  ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
                 //gfprintf(COM2, "%c%cD: Press 3", 0x1B, 0xA8);
                 key = get_keyboard();                                       // we get a value from the keyboard
                 if( key >= '1' && key <= '3'){

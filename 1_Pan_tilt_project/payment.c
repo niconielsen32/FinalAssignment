@@ -26,6 +26,7 @@
 #include "UserInterface/write.h"
 #include "LCD.h"
 #include "file.h"
+#include "keypad.h"
 
 
 /*****************************    Defines    *******************************/
@@ -42,6 +43,7 @@ INT16U total_cash = 0;
 INT16U cash_invalid;
 BOOLEAN pulses_clockwise; // = get_digi_direction
 BOOLEAN is_pin_even;
+
 
 /*****************************   Functions   *******************************/
 
@@ -61,12 +63,17 @@ INT16U get_total_cash(){
     return total_cash;
 }
 
+
 void payment_task(void* pvParameters){
 
 
     while(1){
+
         select_pay_type();
         payment_type = get_pay_type();
+
+
+
 
         //payment_type = select_payment_type(CARD);
 
@@ -93,9 +100,11 @@ void payment_task(void* pvParameters){
 
               case CARD:
 
-                  xQueuePeek(Q_card, que_buffer, 0); //Q-key mangler
-
-
+                  if(get_card_number_entered()){
+                      xQueuePeek(Q_card, que_buffer, 0); //Q-key mangler
+                      write_string("hej");
+                      write_int16u(que_buffer);
+                  }
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;
                       is_payment_complete = TRUE;

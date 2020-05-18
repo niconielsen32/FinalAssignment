@@ -32,6 +32,7 @@
 BOOLEAN payment_complete();
 INT16U get_payment_selection();
 INT16U get_total_cash();
+INT16U get_pay_type();
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

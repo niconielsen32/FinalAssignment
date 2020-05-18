@@ -101,7 +101,7 @@ void payment_task(void* pvParameters){
                       //write_string("weout");
                       xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
-                      is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER
+                      is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
                   }
 //                  if(que_buffer % 2 == 0){
 //                      is_pin_even = TRUE;
@@ -115,16 +115,19 @@ void payment_task(void* pvParameters){
               case CASH:
                   //adc_value = get_adc(); //evt fra en que, skal laves om
                   //digi_pulses = get_digi_pulses();
-                  while(!is_payment_complete){
-                  if(pulses_clockwise){                                        //mangler
-                      total_cash += 100;
-                  } else if(!pulses_clockwise){
-                      total_cash += 10;
+
+                  if(get_paytype_complete()){
+                      while(!is_payment_complete){
+                          if(pulses_clockwise){                                        //mangler
+                              total_cash += 100;
+                          } else if(!pulses_clockwise){
+                              total_cash += 10;
+                          }
+                          if(cash_invalid != 0){
+                              is_payment_complete = TRUE;
+                          }
+                      }
                   }
-                  if(cash_invalid != 0){
-                      is_payment_complete = TRUE;
-                  }
-                 }
 
               break;
 

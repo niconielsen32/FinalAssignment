@@ -55,6 +55,7 @@ extern void uart0_putc( INT8U );
 *   Output   : -
 *   Function : Put character to uart0 TX
 ******************************************************************************/
+extern void uart_get_string(INT16U *string);
 
 extern void uart0_init( INT32U, INT8U, INT8U, INT8U );
 /*****************************************************************************
@@ -62,7 +63,7 @@ extern void uart0_init( INT32U, INT8U, INT8U, INT8U );
 *   Output   : -
 *   Function : Initialize uart 0
 ******************************************************************************/
-
+void uart_read_text(char* output, INT8U length);
 
 /****************************** End Of Module *******************************/
 #endif

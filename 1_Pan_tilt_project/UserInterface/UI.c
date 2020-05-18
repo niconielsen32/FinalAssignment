@@ -33,6 +33,7 @@
 #include "keypad.h"
 #include "string.h"
 #include "tmodel.h"
+#include "UserInterface/uart0.h"
 
 /*****************************    Defines    *******************************/
 
@@ -59,6 +60,15 @@ void UI_task(void * pvParameters)
 //
     while(1)
     {
+//        char output[41];
+//        uart_read_text(output, 7);
+
+//        if(name){
+//            //write_string(" Enter name: ");
+//            write_string(" name entered: ");
+//            write_string(name);
+//        }
+
 //        INT8U key = 0;
 //        INT16U type;
 //       // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time

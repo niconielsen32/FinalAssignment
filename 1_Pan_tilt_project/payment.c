@@ -34,7 +34,6 @@
 
 /*****************************   Constants   *******************************/
 
-BOOLEAN is_payment_complete = FALSE;
 
 INT16U payment_type;
 INT8U que_buffer;
@@ -43,8 +42,15 @@ INT16U digi_pulses = 0;
 INT16U total_cash = 0;
 INT16U cash_invalid;
 BOOLEAN pulses_clockwise; // = get_digi_direction
-BOOLEAN is_pin_even;
 
+INT8U card_last_number;
+INT8U card_last_pin;
+
+
+BOOLEAN is_card_number_even;
+BOOLEAN is_pin_even;
+BOOLEAN card_valid;
+BOOLEAN is_payment_complete = FALSE;
 
 /*****************************   Functions   *******************************/
 
@@ -55,6 +61,10 @@ BOOLEAN is_pin_even;
 //    if(payment== CASH)
 //        return CASH;
 //}
+
+BOOLEAN get_card_valid(){
+    return card_valid;
+}
 
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
     INT8U last_element;
@@ -110,18 +120,33 @@ void payment_task(void* pvParameters){
               case CARD:
                   if(get_paytype_complete()){
                       //write_string("weout");
-                      INT8U card_last_number = last_elemet_queue(Q_CARD, 8);
-                      INT8U card_last_pin = last_elemet_queue(Q_PIN, 4);
+                      card_last_number = last_elemet_queue(Q_CARD, 8);
+                      card_last_pin = last_elemet_queue(Q_PIN, 4);
                       //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
                       //write_int16u(que_buffer);
                   }
-                  if(que_buffer % 2 == 0){
+
+                  if(card_last_number % 2 == 0){
+                      is_card_number_even = TRUE;
+                  } else {
+                      is_card_number_even = FALSE;
+                  }
+
+                  if(card_last_pin % 2 == 0){
                       is_pin_even = TRUE;
-                      is_payment_complete = TRUE;
                   } else {
                       is_pin_even = FALSE;
+                  }
+
+                  if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
+                      card_valid = TRUE;
                       is_payment_complete = TRUE;
                   }
+
+                  if(card_valid){
+                      write_string("card valid!");
+                  }
+
               break;
 
               case CASH:

@@ -70,39 +70,20 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        //select_pay_type();
         payment_type = get_pay_type();
-
-        //payment_type = select_payment_type(CARD);
-
-//
-//        if (payment_type == 2){
-//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
-//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
-//            write_int16u(payment_type);
-//        } else if(payment_type == 1){
-//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
-//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
-//            write_int16u(payment_type);
-//        } else {
-//            payment_type = get_pay_type();
-//        }
-
-
 
         //write_int16u(payment_type);
 
         cash_invalid = get_button_state();
 
-        switch(payment_type){
-
+        if (get_paytype_complete()) {
+            switch(payment_type){
               case CARD:
-                  if(get_paytype_complete()){
-                      //write_string("weout");
-                      xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
-                      write_int16u(que_buffer);
-                      is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
-                  }
+                  //write_string("weout");
+                  xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
+                  write_int16u(que_buffer);
+                  is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
+
 //                  if(que_buffer % 2 == 0){
 //                      is_pin_even = TRUE;
 //                      is_payment_complete = TRUE;
@@ -110,24 +91,24 @@ void payment_task(void* pvParameters){
 //                      is_pin_even = FALSE;
 //                      is_payment_complete = TRUE;
 //                  }
-              break;
+                  break;
 
               case CASH:
                   //adc_value = get_adc(); //evt fra en que, skal laves om
                   //digi_pulses = get_digi_pulses();
                   while(!is_payment_complete){
-                  if(pulses_clockwise){                                        //mangler
-                      total_cash += 100;
-                  } else if(!pulses_clockwise){
-                      total_cash += 10;
+                      if(pulses_clockwise){                                        //mangler
+                          total_cash += 100;
+                      } else if(!pulses_clockwise){
+                          total_cash += 10;
+                      }
+                      if(cash_invalid != 0){
+                          is_payment_complete = TRUE;
+                      }
                   }
-                  if(cash_invalid != 0){
-                      is_payment_complete = TRUE;
-                  }
-                 }
 
-              break;
-
+                  break;
+            }
         }
         //write_int16u(que_buffer);
 

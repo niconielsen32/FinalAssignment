@@ -103,13 +103,13 @@ void payment_task(void* pvParameters){
                       write_int16u(que_buffer);
                       is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
                   }
-                  if(que_buffer % 2 == 0){
-                      is_pin_even = TRUE;
-                      is_payment_complete = TRUE;
-                  } else {
-                      is_pin_even = FALSE;
-                      is_payment_complete = TRUE;
-                  }
+//                  if(que_buffer % 2 == 0){
+//                      is_pin_even = TRUE;
+//                      is_payment_complete = TRUE;
+//                  } else {
+//                      is_pin_even = FALSE;
+//                      is_payment_complete = TRUE;
+//                  }
               break;
 
               case CASH:

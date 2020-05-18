@@ -56,6 +56,17 @@ BOOLEAN is_pin_even;
 //        return CASH;
 //}
 
+INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
+    INT8U last_element;
+    INT8U reverseQueue[queue_size];
+    for(INT8U i = 0; i < queue_size; i++){
+        xQueueReceive(queue, &reverseQueue[i], 5);
+    }
+    last_element = reverseQueue[queue_size - 1];
+    //write_int16u(last_element);
+    return last_element;
+}
+
 BOOLEAN payment_complete(){
     return is_payment_complete;
 }
@@ -99,8 +110,10 @@ void payment_task(void* pvParameters){
               case CARD:
                   if(get_paytype_complete()){
                       //write_string("weout");
-                      xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
-                      write_int16u(que_buffer);
+                      INT8U card_last_number = last_elemet_queue(Q_CARD, 8);
+                      INT8U card_last_pin = last_elemet_queue(Q_PIN, 4);
+                      //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
+                      //write_int16u(que_buffer);
                   }
                   if(que_buffer % 2 == 0){
                       is_pin_even = TRUE;
@@ -112,8 +125,7 @@ void payment_task(void* pvParameters){
               break;
 
               case CASH:
-                  //adc_value = get_adc(); //evt fra en que, skal laves om
-                  //digi_pulses = get_digi_pulses();
+
                   while(!is_payment_complete){
                   if(pulses_clockwise){                                        //mangler
                       total_cash += 100;

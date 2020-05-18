@@ -33,6 +33,7 @@ BOOLEAN payment_complete();
 INT16U get_payment_selection();
 INT16U get_total_cash();
 INT16U get_pay_type();
+INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size);
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

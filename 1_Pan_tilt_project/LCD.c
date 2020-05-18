@@ -28,6 +28,7 @@
 #include "keypad.h"
 #include "UserInterface/write.h"
 #include "queue.h"
+#include "payment.h"
 
 
 /*****************************    Defines    *******************************/
@@ -156,6 +157,7 @@ void select_pay_type_task(void* pvParameters){
 
                          if (i == 7){
                              write_string("card entered");
+                             //write_int16u(get_queue_element(Q_CARD, 8, 7));
                              card_number_entered = TRUE;
                              order = 1;
                          }

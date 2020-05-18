@@ -39,6 +39,7 @@ FP32 Diesel_price = 8.12;
 
 FP32 gas_price = 0;
 
+INT8U gas_state = 0;
 INT8U gastype;
 BOOLEAN fuelselect;
 /*****************************   Functions   *******************************/
@@ -51,8 +52,6 @@ BOOLEAN get_fuelselect_complete(){
 }
 
 void select_gas_type(INT16U gastype){
-
-    gfprintf(COM2, "%c%cYou have selected: ", 0x1B, 0x80);
 
     switch(gastype){
 
@@ -80,22 +79,32 @@ void fuelselect_task(void* pvParameters){
         INT8U key = 0;
        // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
         if(payment_complete()){
-            gfprintf(COM2, "%c%cLF92: Press 1", 0x1B, 0x80);
-            gfprintf(COM2, "%c%cLF95: Press 2", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
-            //gfprintf(COM2, "%c%cD: Press 3", 0x1B, 0xA8);
-            key = get_keyboard();                                       // we get a value from the keyboard
-            if( key >= '1' && key <= '3'){
-                gastype = key - '0';
-                write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+            switch(gas_state)
+            {
+
+            case 0:
+                gfprintf(COM2, "%c%cLF92: Press 1", 0x1B, 0x80);
+                gfprintf(COM2, "%c%cLF95: Press 2", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
+                //gfprintf(COM2, "%c%cD: Press 3", 0x1B, 0xA8);
+                key = get_keyboard();                                       // we get a value from the keyboard
+                if( key >= '1' && key <= '3'){
+                    gastype = key - '0';
+                    write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+                    gas_state = 1;
+                }
+                break;
+
+            case 1:
+                gfprintf(COM2, "%c%cYou have selected: ", 0x1B, 0x80);
                 select_gas_type(gastype);
                 fuelselect = TRUE;
+                break;
             }
         }
 
 
         vTaskDelay(  100 / portTICK_PERIOD_MS);
     }
-
 }
 
 

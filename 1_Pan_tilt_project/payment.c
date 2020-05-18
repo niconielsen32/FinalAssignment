@@ -97,7 +97,7 @@ void payment_task(void* pvParameters){
 
               case CARD:
                   if(get_paytype_complete()){
-                      //write_string("weout");
+                      write_string("weout");
                       xQueuePeek(Q_CARD, que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
                   }

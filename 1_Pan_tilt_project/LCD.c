@@ -72,7 +72,10 @@ BOOLEAN pin_code_entered;
 BOOLEAN cash_selected;
 
 BOOLEAN paytype_complete;
-
+INT8U ui_state = 0;
+INT8U order = 0;
+INT8U key = 0;
+INT16U type;
 
 /*****************************   Functions   *******************************/
 
@@ -85,17 +88,12 @@ BOOLEAN get_paytype_complete(){
 }
 
 void select_pay_type(){
-    INT8U ui_state = 0;
-    INT8U order = 0;
 
-
-
-    while(!paytype_complete)
+    while(1)
     {
-        INT8U key = 0;
-        INT16U type;
        // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
         if(!paytype_complete){
+
         switch(ui_state)
         {
 
@@ -137,7 +135,6 @@ void select_pay_type(){
         case 2:
              switch(order)
              {
-             INT8U i = 0;
 
              case 0:
                  gfprintf(COM2, "%c%cCard number:    ", 0x1B, 0x80);
@@ -145,7 +142,7 @@ void select_pay_type(){
 
                  write_string("card no: ");
                  //BOOLEAN hat = TRUE;
-                 for(i; i < 8; i++){
+                 for(INT8U i = 0; i < 8; i++){
 
                      key = get_keyboard();
                      if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
@@ -165,29 +162,27 @@ void select_pay_type(){
                  break;
 
              case 1:
-                 i = 0;
 
                  gfprintf(COM2, "%c%cPin code:    ", 0x1B, 0x80);
                  gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
                  write_string("pin: ");
                  //BOOLEAN hat = TRUE;
-                 for(i; i < 4; i++){
+                 for(INT8U j = 0; j < 4; j++){
 
                      key = get_keyboard();
                      if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                        {
-                         gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+i, key);
+                         gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+j, key);
                          write_int16u(key - '0');
                          xQueueSend(Q_PIN, &key, 0);
-                         if (i == 3){
+                         if (j == 3){
                              write_string("pin entered");
-                             card_number_entered = TRUE;
                              pin_code_entered = TRUE;
                              ui_state = 3;
                          }
                        } else {
-                           i--;
+                           j--;
                        }
                      }
 

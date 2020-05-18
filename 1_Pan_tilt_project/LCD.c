@@ -66,43 +66,48 @@ enum LCD_states LCD_state = LCD_POWER_UP;
 INT8U LCD_init;
 INT16U payment_type;
 BOOLEAN card_number_entered;
-
+BOOLEAN pin_code_entered;
 
 
 /*****************************   Functions   *******************************/
-void pay_type_task(){
+void select_pay_type(){
+
     INT8U ui_state = 0;
     INT8U order = 0;
 
-
-    while(1)
+    while(!(card_number_entered && pin_code_entered))
     {
+
         INT8U key = 0;
         INT16U type;
+
        // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
         switch(ui_state)
         {
         case 0:
             gfprintf(COM2, "%c%cCard: Press one", 0x1B, 0x80);
             gfprintf(COM2, "%c%cCash: Press two", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
-            key = get_keyboard();                                       // we get a value from the keyboard
+            key = get_keyboard();
+            // we get a value from the keyboard
             if( key >= '1' && key <= '2')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
             {
-                type = key;                                  // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+
+                type = key - '0';
+                write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                 ui_state = 1;
             }
             break;
         case 1:
             gfprintf(COM2, "%c%cYou have method: ", 0x1B, 0x80);                  // "Offset:" is printed on the second line of the display                                      // same procedure as in state 0, but we save the value in off1 since we want it as the first digit of the offset value
 
-            if( type == 49)
+            if( type == CARD)
             {
                 gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                 payment_type = CARD;
                 ui_state = 2;
 
 
-            }else if ( type == 50){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
+            }else if ( type == CASH){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
                 gfprintf(COM2, "%c%c    Cash       ", 0x1B, 0xA8);
                 payment_type = CASH;
                 ui_state = 3;
@@ -125,11 +130,12 @@ void pay_type_task(){
                  //BOOLEAN hat = TRUE;
                  for(i; i < 8; i++){
 
-                     write_int16u(i);
+                     //write_int16u(i);
                      key = get_keyboard();
                      if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                        {
                          gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+i, key);
+                          write_int16u(key-'0');
                          xQueueSend(Q_card, &key, 0);
                          if (i == 7){
                              order = 1;
@@ -142,6 +148,7 @@ void pay_type_task(){
              case 1:
                  write_string("This");
                  card_number_entered = TRUE;
+                 pin_code_entered = TRUE;
                  break;
              }
             break;

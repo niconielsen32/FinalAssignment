@@ -71,7 +71,7 @@ BOOLEAN card_number_entered;
 BOOLEAN pin_code_entered;
 BOOLEAN cash_selected;
 
-
+BOOLEAN paytype_complete;
 
 
 /*****************************   Functions   *******************************/
@@ -80,17 +80,22 @@ BOOLEAN get_card_number_entered(){
     return card_number_entered;
 }
 
+BOOLEAN get_paytype_complete(){
+    return paytype_complete;
+}
 
 void select_pay_type(){
     INT8U ui_state = 0;
     INT8U order = 0;
 
 
-    while(!(card_number_entered && pin_code_entered) || !cash_selected)
+
+    while(!paytype_complete)
     {
         INT8U key = 0;
         INT16U type;
        // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
+        if(!paytype_complete){
         switch(ui_state)
         {
 
@@ -111,17 +116,16 @@ void select_pay_type(){
 
             if( type == CARD)
             {
-
                 gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                 payment_type = CARD;
                 ui_state = 2;
 
-
             }else if ( type == CASH){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
                 gfprintf(COM2, "%c%c    Cash       ", 0x1B, 0xA8);
                 payment_type = CASH;
-                write_string("cashaha");
+               // write_string("cashaha");
                 cash_selected = TRUE;
+                ui_state = 3;
                 break;
 
             } else{
@@ -139,6 +143,7 @@ void select_pay_type(){
                  gfprintf(COM2, "%c%cCard number:    ", 0x1B, 0x80);
                  gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
+                 write_string("card no: ");
                  //BOOLEAN hat = TRUE;
                  for(i; i < 8; i++){
 
@@ -149,6 +154,7 @@ void select_pay_type(){
                          write_int16u(key - '0');
                          xQueueSend(Q_CARD, &key, 0);
                          if (i == 7){
+                             write_string("card entered");
                              card_number_entered = TRUE;
                              order = 1;
                          }
@@ -160,10 +166,11 @@ void select_pay_type(){
 
              case 1:
                  i = 0;
-                 write_string("case1");
+
                  gfprintf(COM2, "%c%cPin code:    ", 0x1B, 0x80);
                  gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
+                 write_string("pin: ");
                  //BOOLEAN hat = TRUE;
                  for(i; i < 4; i++){
 
@@ -174,10 +181,10 @@ void select_pay_type(){
                          write_int16u(key - '0');
                          xQueueSend(Q_PIN, &key, 0);
                          if (i == 3){
-                             write_string("heaea");
+                             write_string("pin entered");
                              card_number_entered = TRUE;
                              pin_code_entered = TRUE;
-                             //order = 2;
+                             ui_state = 3;
                          }
                        } else {
                            i--;
@@ -186,13 +193,16 @@ void select_pay_type(){
 
                  break;
 
-             case 2:
-                 break;
              }
             break;
 
+            case 3:
+                paytype_complete = TRUE;
+                break;
+
+            }
         }
-}
+    }
 }
 
 INT16U get_pay_type(){

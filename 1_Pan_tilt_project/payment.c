@@ -72,9 +72,6 @@ void payment_task(void* pvParameters){
         select_pay_type();
         payment_type = get_pay_type();
 
-
-        write_int16u(payment_type);
-
         //payment_type = select_payment_type(CARD);
 
 //
@@ -99,7 +96,8 @@ void payment_task(void* pvParameters){
         switch(payment_type){
 
               case CARD:
-                  if(get_card_number_entered()){
+                  if(get_paytype_complete()){
+                      //write_string("weout");
                       xQueuePeek(Q_CARD, que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
                   }

@@ -72,7 +72,7 @@ void button_task(void* pvParameters){
                     //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
                     button_state = nozzle_removal;
                     pumping_stopped = FALSE;
-                    write_int16u(get_pay_type());
+                    //write_int16u(get_pay_type());
                     //write_string("nozzle_removed ");
                 }
                 break;

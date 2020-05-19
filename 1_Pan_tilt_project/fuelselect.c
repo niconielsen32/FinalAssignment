@@ -104,7 +104,7 @@ void fuelselect_task(void* pvParameters){
     {
         INT8U key = 0;
 
-        if(get_paytype_complete()){
+        if(get_payment_complete()){
             switch(gas_state)
             {
 

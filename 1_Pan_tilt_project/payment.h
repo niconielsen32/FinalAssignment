@@ -28,28 +28,11 @@
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
-INT16U select_payment_type(INT16U);
-BOOLEAN get_payment_complete();
-void set_payment_complete(BOOLEAN);
-INT16U get_payment_selection();
-INT16U get_payment_type();
-
-
-/*****************************   Constants   *******************************/
-
-/*****************************   Functions   *******************************/
-//INT16U select_payment_type(INT16U);
-BOOLEAN payment_complete();
-INT16U get_payment_selection();
-INT16U get_total_cash();
-BOOLEAN get_card_valid();
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size);
-
+BOOLEAN get_payment_complete();
+void set_payment_complete(BOOLEAN payment_complete);
+INT16U get_payment_type();
 INT16U get_pay_type();
-void select_pay_type_task(void* pvParameters);
-INT16U get_pay_type();
-BOOLEAN get_card_number_entered();
-BOOLEAN get_paytype_complete();
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

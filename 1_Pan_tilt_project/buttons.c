@@ -39,7 +39,7 @@
 static INT16U  button_state = idle;
 static INT16U counter_timer = 0;
 INT16U counter_timer_event = TE_TIMEOUT;
-BOOLEAN payment_stop = FALSE;
+
 INT16U running_pulses;
 
 
@@ -50,15 +50,12 @@ INT16U get_button_state(){
     return button_state;
 }
 
-INT16U get_payment_stop(){
-    return payment_stop;
-}
-
 
 void button_task(void* pvParameters){
 
     TickType_t last_unblock_buttons;
     last_unblock_buttons = xTaskGetTickCount();
+
     while(1){
 
         if(counter_timer){
@@ -67,57 +64,57 @@ void button_task(void* pvParameters){
              }
         }
 
-        //GPIO_PORTF_DATA_R &= 0xF7;
-        switch(button_state)
-          {
-            case idle:
+        if(get_fuelselect_complete()){
+            switch(button_state)
+              {
+                case idle:
 
-                if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                    //write_string("nozzle_removed ");
-                    button_state = nozzle_removal;
-                    set_pumping_stopped(FALSE);
-                    payment_stop = TRUE;
-                }
-                break;
+                    if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
+                        //write_string("nozzle_removed ");
+                        button_state = nozzle_removal;
+                        set_pumping_stopped(FALSE);
+                    }
+                    break;
 
-            case nozzle_removal:
+                case nozzle_removal:
 
-                //turn on display
-                running_pulses = get_total_pulses(); // = 0 here
-
-                if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                    //write_string("lever_depressed ");
-                    button_state = lever_depressed;
-                }
-                break;
-
-            case lever_depressed:
-
-                while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
-
-                }
-
-                if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
-                    button_state = lever_released;
-                    //write_string("lever_released ");
-                }
-                break;
-
-            case lever_released:
+                    //turn on display
+                    //running_pulses = get_total_pulses(); // = 0 here
 
                     if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
-                       // write_string("lever_depressed ");
+                        //write_string("lever_depressed ");
                         button_state = lever_depressed;
-                    } else if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-                        counter_timer = TIM_200_MSEC;
-                    } else if(! --counter_timer){
-                       // write_string("nozzle_putback ");
-                        button_state = idle; //GÅ TIL EN NY TANKNING ISTEDET
-                        set_pumping_stopped(TRUE);
                     }
-                break;
+                    break;
+
+                case lever_depressed:
+
+                    while(!(GPIO_PORTF_DATA_R & 0x01)){ //sw2 depressed
+
+                    }
+
+                    if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
+                        button_state = lever_released;
+                        //write_string("lever_released ");
+                    }
+                    break;
+
+                case lever_released:
+
+                        if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
+                           // write_string("lever_depressed ");
+                            button_state = lever_depressed;
+                        } else if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
+                            counter_timer = TIM_200_MSEC;
+                        } else if(! --counter_timer){
+                           // write_string("nozzle_putback ");
+                            button_state = idle; //GÅ TIL EN NY TANKNING ISTEDET
+                            set_pumping_stopped(TRUE);
+                        }
+                    break;
+              }
           }
-        }
+    }
    // vTaskDelayUntil(&last_unblock_buttons, pdMS_TO_TICKS(1SEC));
 }
 /****************************** End Of Module *******************************/

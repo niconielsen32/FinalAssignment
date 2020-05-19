@@ -72,8 +72,6 @@ static void setupHardware(void)
 }
 
 TaskHandle_t write_task_handle = NULL;
-//TaskHandle_t adc_task_handle = NULL;
-TaskHandle_t ai_task_handle = NULL;
 TaskHandle_t UI_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
@@ -82,9 +80,7 @@ TaskHandle_t flowmeter_task_handle = NULL;
 TaskHandle_t pumping_task_handle = NULL;
 TaskHandle_t lcd_task_handle = NULL;
 TaskHandle_t digiswitch_task_handle = NULL;
-TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
-TaskHandle_t paytype_task_handle = NULL;
 TaskHandle_t fuelselect_task_handle = NULL;
 
 
@@ -121,7 +117,6 @@ int main(void)
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
-    xTaskCreate(select_pay_type_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &paytype_task_handle);
     xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
 
 

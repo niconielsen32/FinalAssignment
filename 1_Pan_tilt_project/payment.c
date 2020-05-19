@@ -37,13 +37,8 @@
 
 /*****************************   Constants   *******************************/
 
-INT16U que_buffer;
 INT16U stop_payment;
-INT16U payment_type;
-INT16U adc_value;
-INT16U digi_pulses = 0;
 INT16U cash_invalid;
-BOOLEAN pulses_clockwise; // = get_digi_direction
 
 INT8U card_last_number;
 INT8U card_last_pin;
@@ -53,17 +48,12 @@ INT16U total_cash_from_digi;
 BOOLEAN is_card_number_even;
 BOOLEAN is_pin_even;
 BOOLEAN card_valid;
-BOOLEAN is_payment_complete = FALSE;
-
+BOOLEAN is_payment_complete;
 
 INT16U payment_type;
 
-BOOLEAN card_number_entered;
-BOOLEAN pin_code_entered;
-BOOLEAN cash_selected;
-
 BOOLEAN paytype_complete;
-INT8U ui_state = 0;
+INT8U pay_state = 0;
 INT8U order = 0;
 INT8U card_cif;
 INT8U pin_cif;
@@ -71,20 +61,6 @@ INT8U pin_cif;
 INT16U type;
 
 /*****************************   Functions   *******************************/
-
-
-//INT16U select_payment_type(INT16U payment){
-//
-
-//    if(payment == CARD)
-//        return CARD;
-//    if(payment== CASH)
-//        return CASH;
-//}
-
-BOOLEAN get_card_valid(){
-    return card_valid;
-}
 
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
     INT8U last_element;
@@ -105,10 +81,10 @@ void set_payment_complete(BOOLEAN payment_complete){
     is_payment_complete = payment_complete;
 }
 
-
 INT16U get_payment_type(){
     return payment_type;
 }
+
 
 INT16U get_pay_type()
 {
@@ -128,14 +104,6 @@ INT16U get_pay_type()
       }
 }
 
-BOOLEAN get_card_number_entered(){
-    return card_number_entered;
-}
-BOOLEAN get_paytype_complete(){
-    //write_int16u(paytype_complete);
-    return paytype_complete;
-}
-
 
 
 void payment_task(void* pvParameters){
@@ -143,15 +111,11 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        payment_type = get_pay_type();
-        stop_payment = get_payment_stop();
-
-
         if(!paytype_complete){
 
             INT8U key = 0;
 
-               switch(ui_state)
+               switch(pay_state)
                {
 
                case 0:
@@ -162,7 +126,7 @@ void payment_task(void* pvParameters){
                    {
                        type = key - '0';
                        //write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
-                       ui_state = 1;
+                       pay_state = 1;
                    }
                    break;
 
@@ -174,14 +138,13 @@ void payment_task(void* pvParameters){
                        //card_try = 3;
                        gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                        payment_type = CARD;
-                       ui_state = 2;
+                       pay_state = 2;
 
                    }else if ( type == CASH){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
                        gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
                        payment_type = CASH;
                       // write_string("cashaha");
-                       cash_selected = TRUE;
-                       ui_state = 3;
+                       pay_state = 3;
                        break;
 
                    } else{
@@ -214,7 +177,6 @@ void payment_task(void* pvParameters){
                                 if (i == 7){
                                     write_string(" card entered ");
                                     //write_int16u(get_queue_element(Q_CARD, 8, 7));
-                                    card_number_entered = TRUE;
                                     order = 1;
                                 }
                               } else {
@@ -241,8 +203,7 @@ void payment_task(void* pvParameters){
                                 xQueueSend(Q_PIN, &pin_cif, 0);
                                 if (j == 3){
                                     write_string(" pin entered ");
-                                    pin_code_entered = TRUE;
-                                    ui_state = 3;
+                                    pay_state = 3;
                                 }
                               } else {
                                   j--;
@@ -259,7 +220,7 @@ void payment_task(void* pvParameters){
                        //Do if statement
        //                if (!cardpin){
        //                    //if (card_try == 0){
-       //                    ui_state = 1; // if the card number and pin doesn't match, go to 'choose payment type' again ----- or try three times and then go to ui_state 1
+       //                    pay_state = 1; // if the card number and pin doesn't match, go to 'choose payment type' again ----- or try three times and then go to pay_state 1
        //                    //}else{
        //                    //k--}
        //                } else{
@@ -270,52 +231,53 @@ void payment_task(void* pvParameters){
        //                }
                    }
                }
-        switch(payment_type){
 
-              case CARD:
-                  if(get_paytype_complete()){
-                      //write_string("weout");
-                      card_last_number = last_elemet_queue(Q_CARD, 8);
-                      //write_int16u(card_last_number);
-                      card_last_pin = last_elemet_queue(Q_PIN, 4);
-                      //write_int16u(card_last_pin);
-                  }
+        if(paytype_complete){
+            switch(payment_type){
+
+                  case CARD:
+                          card_last_number = last_elemet_queue(Q_CARD, 8);
+                          //write_int16u(card_last_number);
+                          card_last_pin = last_elemet_queue(Q_PIN, 4);
+                          //write_int16u(card_last_pin);
 
 
-                  if(card_last_number % 2 == 0){
-                        is_card_number_even = TRUE;
-                    } else {
-                        is_card_number_even = FALSE;
-                    }
+                      if(card_last_number % 2 == 0){
+                            is_card_number_even = TRUE;
+                        } else {
+                            is_card_number_even = FALSE;
+                        }
 
-                    if(card_last_pin % 2 == 0){
-                        is_pin_even = TRUE;
-                    } else {
-                        is_pin_even = FALSE;
-                    }
+                        if(card_last_pin % 2 == 0){
+                            is_pin_even = TRUE;
+                        } else {
+                            is_pin_even = FALSE;
+                        }
 
-                    if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
-                        card_valid = TRUE;
-                        is_payment_complete = TRUE;
-                    }
+                        if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
+                            card_valid = TRUE;
+                            is_payment_complete = TRUE;
+                        }
 
-                    if(card_valid){
-                        write_string(" card valid! ");
-                    }
+                        if(card_valid){
+                            write_string(" card valid! ");
+                        }
 
-              break;
+                  break;
 
-              case CASH:
+                  case CASH:
 
-                      if(stop_payment){
-                         total_cash_from_digi = get_total_cash_from_digi();
-                         is_payment_complete = TRUE;
-                      }
+                      // brug knap fra digi her til at afslutte kontant betaling
+                      //stop_payment = digi_button
+                          if(stop_payment){
+                             total_cash_from_digi = get_total_cash_from_digi();
+                             is_payment_complete = TRUE;
+                          }
 
-              break;
+                  break;
 
+            }
         }
-
     }
 }
 /****************************** End Of Module *******************************/

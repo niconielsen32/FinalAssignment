@@ -121,16 +121,35 @@ void payment_task(void* pvParameters){
                   if(get_paytype_complete()){
                       //write_string("weout");
                       xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
-                      write_int16u(que_buffer);
-                      is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
+                      //is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
+                      card_last_number = last_elemet_queue(Q_CARD, 8);
+                      write_int16u(card_last_number);
+                      card_last_pin = last_elemet_queue(Q_PIN, 4);
+                      write_int16u(card_last_pin);
                   }
-//                  if(que_buffer % 2 == 0){
-//                      is_pin_even = TRUE;
-//                      is_payment_complete = TRUE;
-//                  } else {
-//                      is_pin_even = FALSE;
-//                      is_payment_complete = TRUE;
-//                  }
+
+
+                  if(card_last_number % 2 == 0){
+                        is_card_number_even = TRUE;
+                    } else {
+                        is_card_number_even = FALSE;
+                    }
+
+                    if(card_last_pin % 2 == 0){
+                        is_pin_even = TRUE;
+                    } else {
+                        is_pin_even = FALSE;
+                    }
+
+                    if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
+                        card_valid = TRUE;
+                        is_payment_complete = TRUE;
+                    }
+
+                    if(card_valid){
+                        write_string(" card valid! ");
+                    }
+
               break;
 
               case CASH:
@@ -149,31 +168,6 @@ void payment_task(void* pvParameters){
                           }
                       }
 
-                      card_last_number = last_elemet_queue(Q_CARD, 8);
-                      card_last_pin = last_elemet_queue(Q_PIN, 4);
-                      //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
-                      //write_int16u(que_buffer);
-                  }
-
-                  if(card_last_number % 2 == 0){
-                      is_card_number_even = TRUE;
-                  } else {
-                      is_card_number_even = FALSE;
-                  }
-
-                  if(card_last_pin % 2 == 0){
-                      is_pin_even = TRUE;
-                  } else {
-                      is_pin_even = FALSE;
-                  }
-
-                  if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
-                      card_valid = TRUE;
-                      is_payment_complete = TRUE;
-                  }
-
-                  if(card_valid){
-                      write_string(" card valid! ");
                   }
 
               break;

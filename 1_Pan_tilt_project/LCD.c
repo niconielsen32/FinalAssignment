@@ -87,7 +87,7 @@ BOOLEAN get_card_number_entered(){
     return card_number_entered;
 }
 BOOLEAN get_paytype_complete(){
-    write_int16u(paytype_complete);
+    //write_int16u(paytype_complete);
     return paytype_complete;
 }
 
@@ -138,7 +138,7 @@ void select_pay_type_task(void* pvParameters){
             break;
 
         case 2:
-            order = 0;
+
              switch(order)
              {
 

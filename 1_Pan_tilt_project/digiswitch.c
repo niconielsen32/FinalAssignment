@@ -24,7 +24,7 @@
 #include "emp_type.h"
 #include "glob_def.h"
 #include "payment.h"
-#include "digiswitch.h"
+//#include "digiswitch.h"
 #include "UserInterface/write.h"
 /*****************************    Defines    *******************************/
 
@@ -33,34 +33,53 @@
 
 /*****************************   Constants   *******************************/
 
-INT16U digi_pulses = 0;
-INT16U direction;
-
 INT8U DigiA = 0;
 INT8U DigiB = 0;
+INT8U lastA = 0;
+INT8U A = 0;
+INT8U B = 0;
+
+INT16U total_cash_digi = 0;
+
 /*****************************   Functions   *******************************/
-INT8U get_direction(){
-    return direction;
-}
-INT16U get_digi_pulses(){
-    return digi_pulses;
+
+INT16U get_total_cash_from_digi(){
+    return total_cash_digi;
 }
 
 void digiswitch_task(void* pvParameters) {
 
+
+
     while(1){
 
-        //if(!(GPIO_PORTF_DATA_R & 0x10))
-       DigiA = (GPIO_PORTA_DATA_R & 0x20);
-       DigiB = (GPIO_PORTA_DATA_R & 0x40);
+        DigiA = (GPIO_PORTA_DATA_R & 0x20);
+        DigiB = (GPIO_PORTA_DATA_R & 0x40);
 
-       write_int16u(DigiA);
-       write_string("  ");
-       write_int16u(DigiB);
-       write_string("  ");
+        if(DigiA == 32){
+            A = 1;
+        } else{
+            A = 0;
+        }
 
+        if(DigiB == 64){
+            B = 1;
+        } else{
+            B = 0;
+        }
 
+       if(A != lastA){
+           if(B != A){
+               total_cash_digi += 100;
+           } else{
+               total_cash_digi += 10;
+           }
+           //write_int16u(total_cash);
+           //write_string("  ");
+       }
+       lastA = A;
     }
+    vTaskDelay(pdMS_TO_TICKS(500));
 }
 /****************************** End Of Module *******************************/
 

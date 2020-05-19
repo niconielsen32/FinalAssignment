@@ -59,7 +59,7 @@ INT8U pay_state = 0;
 INT8U order = 0;
 INT8U card_cif;
 INT8U pin_cif;
-//INT8U card_try;        //<-- If pin is wrong 3 times
+INT8U card_try;        //<-- If pin is wrong 3 times
 INT16U type;
 
 /*****************************   Functions   *******************************/
@@ -89,6 +89,14 @@ INT16U get_payment_type(){
 
 BOOLEAN get_paytype_complete(){
     return paytype_complete;
+}
+
+void terminate_session(){
+    xQueueReset(Q_CARD);
+    xQueueReset(Q_PIN);
+    pay_state = 0;
+    order = 0;
+    paytype_complete = FALSE;
 }
 
 void payment_task(void* pvParameters){
@@ -123,7 +131,7 @@ void payment_task(void* pvParameters){
                    if( type == CARD)
                    {
                        write_string("CARD");
-                       //card_try = 3;
+                       card_try = 3;
                        gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                        payment_type = CARD;
                        pay_state = 2;
@@ -152,7 +160,6 @@ void payment_task(void* pvParameters){
                         gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
                         write_string(" card no: ");
-                        //BOOLEAN hat = TRUE;
                         for(INT8U i = 0; i < 8; i++){
 
                             key = get_keyboard();
@@ -206,19 +213,12 @@ void payment_task(void* pvParameters){
 
                    case 3:
 
-                       //Do if statement
-       //                if (!cardpin){
-       //                    //if (card_try == 0){
-       //                    pay_state = 1; // if the card number and pin doesn't match, go to 'choose payment type' again ----- or try three times and then go to pay_state 1
-       //                    //}else{
-       //                    //k--}
-       //                } else{
-
                        paytype_complete = TRUE;
                        write_string(" Complete ");
+
                        break;
-       //                }
                    }
+
                }
 
         if(paytype_complete){
@@ -248,8 +248,13 @@ void payment_task(void* pvParameters){
                             is_payment_complete = TRUE;
                         }
 
-                        if(card_valid){
-                            //write_string(" card valid! ");
+                        if(!card_valid){
+
+                            gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
+                            gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+                            write_string(" card not valid! ");
+
+                            terminate_session();
                         }
 
                   break;
@@ -260,7 +265,7 @@ void payment_task(void* pvParameters){
                           total_cash_from_digi = get_total_cash_from_digi();
                           write_int16u(total_cash_from_digi);
                           set_digi_complete(TRUE);
-                          set_payment_complete(TRUE);
+                          is_payment_complete = TRUE;
                       }
 
                   break;

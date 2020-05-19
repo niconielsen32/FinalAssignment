@@ -24,6 +24,10 @@
 #include "emp_type.h"
 #include "glob_def.h"
 #include "systick_frt.h"
+<<<<<<< HEAD
+=======
+//#include "ADC.h"
+>>>>>>> fuelselect_task
 #include "gpio.h"
 #include "UserInterface/UI.h"
 #include "UserInterface/write.h"
@@ -66,11 +70,21 @@ static void setupHardware(void)
   init_systick();
   init_gpio();
   init_write();
+<<<<<<< HEAD
   init_files();
  // uart0_init( 9600, 8, 1, 'n' );
+=======
+  //init_ADC();
+  init_files();
+>>>>>>> fuelselect_task
 }
 
 TaskHandle_t write_task_handle = NULL;
+<<<<<<< HEAD
+=======
+//TaskHandle_t adc_task_handle = NULL;
+TaskHandle_t ai_task_handle = NULL;
+>>>>>>> fuelselect_task
 TaskHandle_t UI_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
@@ -78,7 +92,15 @@ TaskHandle_t keypad_task_handle = NULL;
 TaskHandle_t flowmeter_task_handle = NULL;
 TaskHandle_t pumping_task_handle = NULL;
 TaskHandle_t lcd_task_handle = NULL;
+<<<<<<< HEAD
 TaskHandle_t digiswitch_task_handle = NULL;
+=======
+TaskHandle_t ui_task_handle = NULL;
+TaskHandle_t scale_task_handle = NULL;
+TaskHandle_t paytype_task_handle = NULL;
+TaskHandle_t fuelselect_task_handle = NULL;
+
+>>>>>>> fuelselect_task
 
 int main(void)
 /*****************************************************************************
@@ -86,8 +108,8 @@ int main(void)
 *   Output   :
 *   Function : The super loop.
 ******************************************************************************/
-{
 
+{
     setupHardware();
 
     timer_pumping = xTimerCreate("pumping timer", pdMS_TO_TICKS(1000), pdTRUE, 0, pumping_timer_callback);
@@ -97,6 +119,7 @@ int main(void)
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)
 
+<<<<<<< HEAD
     Q_KEY = xQueueCreate(8, sizeof(INT8U));
     Q_LCD = xQueueCreate(128, sizeof(INT8U));
     Q_PIN = xQueueCreate(4, sizeof(INT8U));
@@ -104,14 +127,28 @@ int main(void)
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     //xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle); ///// skal ind kommenteres for at det virker
+=======
+    Q_KEY = xQueueCreate(128, sizeof(INT8U));
+    Q_LCD = xQueueCreate(128, sizeof(INT16U));
+    Q_CARD = xQueueCreate(8, sizeof(INT8U));
+    Q_PIN = xQueueCreate(4, sizeof(INT8U));
+
+    xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
+    xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);
+>>>>>>> fuelselect_task
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
     xTaskCreate(payment_task, "payment", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &payment_task_handle);
     xTaskCreate(keypad_task, "keypad", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &keypad_task_handle);
     xTaskCreate(flowmeter_task, "flowmeter", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &flowmeter_task_handle);
     xTaskCreate(pumping_task, "pumping_task", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &pumping_task_handle);
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
+<<<<<<< HEAD
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
 
+=======
+    xTaskCreate(select_pay_type_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &paytype_task_handle);
+    xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
+>>>>>>> fuelselect_task
 
     // Start the scheduler.
     // --------------------

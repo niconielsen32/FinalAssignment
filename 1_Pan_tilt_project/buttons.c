@@ -26,6 +26,7 @@
 #include "buttons.h"
 #include "UserInterface/write.h"
 #include "pumping.h"
+#include "LCD.h"
 #include <stdint.h>
 
 
@@ -38,10 +39,15 @@
 static INT16U  button_state = idle;
 static INT16U counter_timer = 0;
 INT16U counter_timer_event = TE_TIMEOUT;
+<<<<<<< HEAD
 BOOLEAN payment_stop = FALSE;
+=======
+INT16U running_pulses;
+>>>>>>> fuelselect_task
 
 
 /*****************************   Functions   *******************************/
+
 
 INT16U get_button_state(){
     return button_state;
@@ -70,6 +76,13 @@ void button_task(void* pvParameters){
             case idle:
 
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
+<<<<<<< HEAD
+=======
+                    //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
+                    button_state = nozzle_removal;
+                    pumping_stopped = FALSE;
+                    //write_int16u(get_pay_type());
+>>>>>>> fuelselect_task
                     //write_string("nozzle_removed ");
                     button_state = nozzle_removal;
                     set_pumping_stopped(FALSE);
@@ -78,6 +91,11 @@ void button_task(void* pvParameters){
                 break;
 
             case nozzle_removal:
+<<<<<<< HEAD
+=======
+                //turn on display
+                running_pulses = get_total_pulses(); // = 0 here
+>>>>>>> fuelselect_task
 
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                     write_string("lever_depressed ");

@@ -15,6 +15,7 @@
 
 
 //  QUEUES
+<<<<<<< HEAD
 QueueHandle_t  Q_KEY, Q_LCD, Q_PIN, Q_CARD_NUMBER;
 
 // TIMERS
@@ -22,6 +23,9 @@ QueueHandle_t  Q_KEY, Q_LCD, Q_PIN, Q_CARD_NUMBER;
 TimerHandle_t timer_pumping;
 TimerHandle_t timer_total_pumping;
 TimerHandle_t timer_lever;
+=======
+QueueHandle_t  Q_KEY, Q_LCD, Q_CARD, Q_PIN;
+>>>>>>> fuelselect_task
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;
@@ -58,11 +62,19 @@ INT16U adjusted_value;
 INT8U scale;
 INT16U offset;
 
+<<<<<<< HEAD
 //payment
 #define CARD 0
 #define CASH 1
 #define PIN_ODD 1
 #define PIN_EVEN 0
+=======
+#define CARD 1
+#define CASH 2
+#define PIN_ODD 1
+#define PIN_EVEN 0
+
+>>>>>>> fuelselect_task
 
 
 #endif /* GLOB_DEF_H_ */

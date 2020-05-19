@@ -91,7 +91,11 @@ void pumping_task(void* pvParameters){
 //write_int16u(total_pumping_time);
 //write_string(" ");
 
+<<<<<<< HEAD
         type_of_payment = get_payment_type(); //input from keypad
+=======
+        type_of_payment = CARD; //input from keypad
+>>>>>>> fuelselect_task
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
 
@@ -133,7 +137,12 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x02; //red
                         seconds = 0;
                         //selected_gastype = get_gastype_keypad();
+<<<<<<< HEAD
                         select_gas_type(0);
+=======
+                        //select_gas_type(selected_gastype);
+                        gas_type = get_gas_price();
+>>>>>>> fuelselect_task
 
                         // red led
                         //write_string("no ");
@@ -146,6 +155,7 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_idle:
+<<<<<<< HEAD
 
                         if(seconds_lever == 15){
                             seconds_lever = 0;
@@ -160,6 +170,10 @@ void pumping_task(void* pvParameters){
                         }
 
                        //write_string("idle ");
+=======
+                        GPIO_PORTF_DATA_R = 0x02; //red
+                        //write_string("idle ");
+>>>>>>> fuelselect_task
                         if(cur_button_state == lever_depressed){
                             xTimerStart(timer_pumping, 0);
                             seconds = 2;
@@ -169,6 +183,13 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_start:
+<<<<<<< HEAD
+=======
+                        GPIO_PORTF_DATA_R = 0x04; //yellow
+                        //yellow led
+                        //reduced speed 2 sec
+                        //write_string("start ");
+>>>>>>> fuelselect_task
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("start ");
@@ -183,6 +204,13 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_regular:
+<<<<<<< HEAD
+=======
+                        GPIO_PORTF_DATA_R = 0x08; //green
+                            //green led
+                            //Regular speed
+                        //write_string("regu ");
+>>>>>>> fuelselect_task
 
                         GPIO_PORTF_DATA_R = 0x08; //green
                         //write_string("regu ");
@@ -205,7 +233,11 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("stop ");
+<<<<<<< HEAD
 
+=======
+                        //yellow led
+>>>>>>> fuelselect_task
                         if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
                            pumping_state = pumping_idle;

@@ -22,34 +22,83 @@
 #include "glob_def.h"
 #include "payment.h"
 #include "buttons.h"
+<<<<<<< HEAD
 #include "LCD.h"
 #include "string.h"
 #include "digiswitch.h"
+=======
+#include "string.h"
+#include "UserInterface/write.h"
+#include "LCD.h"
+#include "file.h"
+#include "keypad.h"
+#include "queue.h"
+>>>>>>> fuelselect_task
 
 
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
+<<<<<<< HEAD
 INT16U payment_type = 3;
+=======
+>>>>>>> fuelselect_task
 
-BOOLEAN is_payment_complete = FALSE;
 
+<<<<<<< HEAD
 INT16U que_buffer;
 INT16U total_cash;
 INT16U stop_payment;
+=======
+INT16U payment_type;
+INT8U que_buffer;
+INT16U adc_value;
+INT16U digi_pulses = 0;
+INT16U total_cash = 0;
+INT16U cash_invalid;
+>>>>>>> fuelselect_task
 BOOLEAN pulses_clockwise; // = get_digi_direction
+
+INT8U card_last_number;
+INT8U card_last_pin;
+
+
+BOOLEAN is_card_number_even;
 BOOLEAN is_pin_even;
+BOOLEAN card_valid;
+BOOLEAN is_payment_complete = FALSE;
+
 /*****************************   Functions   *******************************/
 
 
 //INT16U select_payment_type(INT16U payment){
+<<<<<<< HEAD
 //
+=======
+>>>>>>> fuelselect_task
 //    if(payment == CARD)
 //        return CARD;
 //    if(payment== CASH)
 //        return CASH;
 //}
 
+<<<<<<< HEAD
+=======
+BOOLEAN get_card_valid(){
+    return card_valid;
+}
+
+INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
+    INT8U last_element;
+    INT8U reverseQueue[queue_size];
+    for(INT8U i = 0; i < queue_size; i++){
+        xQueueReceive(queue, &reverseQueue[i], 5);
+    }
+    last_element = reverseQueue[queue_size - 1];
+    //write_int16u(last_element);
+    return last_element;
+}
+>>>>>>> fuelselect_task
 
 BOOLEAN get_payment_complete(){
     return is_payment_complete;
@@ -64,10 +113,36 @@ INT16U get_payment_type(){
     return payment_type;
 }
 
+
 void payment_task(void* pvParameters){
+
 
     while(1){
 
+<<<<<<< HEAD
+=======
+        //select_pay_type();
+        payment_type = get_pay_type();
+
+        //payment_type = select_payment_type(CARD);
+
+//
+//        if (payment_type == 2){
+//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
+//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
+//            write_int16u(payment_type);
+//        } else if(payment_type == 1){
+//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
+//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
+//            write_int16u(payment_type);
+//        } else {
+//            payment_type = get_pay_type();
+//        }
+
+
+
+        //write_int16u(payment_type);
+>>>>>>> fuelselect_task
 
 
 //        if (payment_type == 0 || payment_type == 1){
@@ -81,29 +156,92 @@ void payment_task(void* pvParameters){
         stop_payment = get_payment_stop();
 
         switch(payment_type){
+
               case CARD:
-
-                  xQueuePeek(Q_KEY, que_buffer, (TickType_t) 10); //Q-key mangler
-
-                  if(que_buffer % 2 == 0){
-                      is_pin_even = TRUE;
-                      is_payment_complete = TRUE;
-                  } else {
-                      is_pin_even = FALSE;
-                      is_payment_complete = TRUE;
+                  if(get_paytype_complete()){
+                      //write_string("weout");
+                      //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
+                      //is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
+                      card_last_number = last_elemet_queue(Q_CARD, 8);
+                      //write_int16u(card_last_number);
+                      card_last_pin = last_elemet_queue(Q_PIN, 4);
+                      //write_int16u(card_last_pin);
                   }
+
+
+                  if(card_last_number % 2 == 0){
+                        is_card_number_even = TRUE;
+                    } else {
+                        is_card_number_even = FALSE;
+                    }
+
+                    if(card_last_pin % 2 == 0){
+                        is_pin_even = TRUE;
+                    } else {
+                        is_pin_even = FALSE;
+                    }
+
+                    if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
+                        card_valid = TRUE;
+                        is_payment_complete = TRUE;
+                    }
+
+                    if(card_valid){
+                        write_string(" card valid! ");
+                    }
+
               break;
 
               case CASH:
+<<<<<<< HEAD
 
                       if(stop_payment){
                          total_cash = get_total_cash();
                          is_payment_complete = TRUE;
                       }
+=======
+                  //adc_value = get_adc(); //evt fra en que, skal laves om
+                  //digi_pulses = get_digi_pulses();
+
+                  if(get_paytype_complete()){
+                      while(!is_payment_complete){
+                          if(pulses_clockwise){                                        //mangler
+                              total_cash += 100;
+                          } else if(!pulses_clockwise){
+                              total_cash += 10;
+                          }
+                          if(cash_invalid != 0){
+                              is_payment_complete = TRUE;
+                          }
+                      }
+
+                  }
+>>>>>>> fuelselect_task
 
               break;
 
+//              case CASH:
+//
+//                  while(!is_payment_complete){
+//                  if(pulses_clockwise){                                        //mangler
+//                      total_cash += 100;
+//                  } else if(!pulses_clockwise){
+//                      total_cash += 10;
+//                  }
+//                  if(cash_invalid != 0){
+//                      is_payment_complete = TRUE;
+//
+//                  }
+//
+//              break;
+
+
+        //write_int16u(que_buffer);
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> fuelselect_task
     }
 }
 /****************************** End Of Module *******************************/

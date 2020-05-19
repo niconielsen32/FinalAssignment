@@ -35,20 +35,28 @@
 
 /*****************************   Constants   *******************************/
 
+
 /*****************************   Functions   *******************************/
 void wr_str_LCD( INT8U* );
 void move_LCD( INT8U, INT8U );
 INT8U wr_ch_LCD( INT8U Ch );
+BOOLEAN get_paytype_complete();
 
 
-
-void lcd_task();
+void lcd_task(void* pvParameters);
 /*****************************************************************************
 *   Input    : -
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
+<<<<<<< HEAD
 INT16U get_pay_type();
+=======
+void select_pay_type_task(void* pvParameters);
+INT16U get_pay_type();
+BOOLEAN get_card_number_entered();
+
+>>>>>>> fuelselect_task
 
 /****************************** End Of Module *******************************/
 #endif

@@ -138,6 +138,15 @@ extern INT8U uart0_getc()
   return ( UART0_DR_R );
 }
 
+void uart_read_text(char* output, INT8U length)
+{
+  for(INT8U i=0;i<length;i++){
+      output[i] = uart0_getc();
+      write_string(output[i]);
+  }
+}
+
+
 extern BOOLEAN uart0_tx_rdy()
 /*****************************************************************************
 *   Function : See module specification (.h-file).

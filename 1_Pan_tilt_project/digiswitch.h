@@ -28,7 +28,7 @@
 
 /*****************************   Functions   *******************************/
 
-INT16U get_total_cash();
+INT16U get_total_cash_from_digi();
 
 void digiswitch_task(void* pvParameters);
 /****************************** End Of Module *******************************/

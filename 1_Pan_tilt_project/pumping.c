@@ -96,28 +96,9 @@ void pumping_task(void* pvParameters){
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
 
-        total_cash_temp = get_total_cash();
+        total_cash_temp = get_total_cash_from_digi();
         out_of_cash_cal = gas_price_temp * SEC3_reduced;
 
-        //write_int16u(total_pulses_temp);
-
-//        if(cur_button_state == lever_released){
-//            counter_timer_pumping = TIM_15_SEC;
-//
-//            if(counter_timer_event_pumping == TE_TIMEOUT){
-//                pumping_stopped = TRUE;
-//            }
-//
-//            if(type_of_payment == CARD){
-//                        //pumping is stopped by releasing the lever for more than 5 seconds.
-//                if(counter_timer_pumping >= TIM_5_SEC){
-//                    pumping_stopped = TRUE;
-//                }
-//
-//            } else {//pumping is stopped either by releasing the lever or by reaching the prepaid cash
-//                    pumping_stopped = TRUE;
-//            }
-//        }
 
             if(get_pumping_stopped() == TRUE){
                 xTimerStop(timer_total_pumping, 0);
@@ -133,8 +114,6 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x02; //red
                         seconds = 0;
-                        //selected_gastype = get_gastype_keypad();
-                        select_gas_type(0);
                         //select_gas_type(selected_gastype);
                         gas_type = get_gas_price();
 
@@ -162,7 +141,6 @@ void pumping_task(void* pvParameters){
                             set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
                         }
 
-                       //write_string("idle ");
                         GPIO_PORTF_DATA_R = 0x02; //red
                         //write_string("idle ");
                         if(cur_button_state == lever_depressed){
@@ -174,12 +152,6 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_start:
-
-                        GPIO_PORTF_DATA_R = 0x04; //yellow
-                        //yellow led
-                        //reduced speed 2 sec
-                        //write_string("start ");
-
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("start ");
@@ -194,11 +166,6 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_regular:
-
-                        GPIO_PORTF_DATA_R = 0x08; //green
-                            //green led
-                            //Regular speed
-                        //write_string("regu ");
 
                         GPIO_PORTF_DATA_R = 0x08; //green
                         //write_string("regu ");

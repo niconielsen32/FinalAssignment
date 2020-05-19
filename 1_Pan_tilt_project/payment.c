@@ -101,36 +101,6 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-        //select_pay_type();
-        payment_type = get_pay_type();
-
-        //payment_type = select_payment_type(CARD);
-
-//
-//        if (payment_type == 2){
-//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
-//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
-//            write_int16u(payment_type);
-//        } else if(payment_type == 1){
-//            gfprintf(COM2, "%c%cPay Type is     ", 0x1B, 0x80);
-//            gfprintf(COM2, "%c%c       %u       ", 0x1B, 0xA8, payment_type);
-//            write_int16u(payment_type);
-//        } else {
-//            payment_type = get_pay_type();
-//        }
-
-
-
-        //write_int16u(payment_type);
-
-
-//        if (payment_type == 0 || payment_type == 1){
-//        gfprintf(COM2, "%c%cPayment type is:", 0x1B, 0x80);
-//        gfprintf(COM2, "%c%c     %05u", 0x1B, 0xA8, payment_type);
-//        } else {
-//            payment_type = get_pay_type();
-//        }
-
         payment_type = get_pay_type();
         stop_payment = get_payment_stop();
 
@@ -139,8 +109,6 @@ void payment_task(void* pvParameters){
               case CARD:
                   if(get_paytype_complete()){
                       //write_string("weout");
-                      //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
-                      //is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
                       card_last_number = last_elemet_queue(Q_CARD, 8);
                       //write_int16u(card_last_number);
                       card_last_pin = last_elemet_queue(Q_PIN, 4);
@@ -174,29 +142,12 @@ void payment_task(void* pvParameters){
               case CASH:
 
                       if(stop_payment){
-                        // total_cash_from_digi_ = get_total_cash();
+                         total_cash_from_digi = get_total_cash_from_digi();
                          is_payment_complete = TRUE;
                       }
 
               break;
 
-//              case CASH:
-//
-//                  while(!is_payment_complete){
-//                  if(pulses_clockwise){                                        //mangler
-//                      total_cash += 100;
-//                  } else if(!pulses_clockwise){
-//                      total_cash += 10;
-//                  }
-//                  if(cash_invalid != 0){
-//                      is_payment_complete = TRUE;
-//
-//                  }
-//
-//              break;
-
-
-        //write_int16u(que_buffer);
         }
 
     }

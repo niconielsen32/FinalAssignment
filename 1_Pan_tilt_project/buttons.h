@@ -28,6 +28,12 @@
 /*****************************   Functions   *******************************/
 INT16U get_button_state();
 
+FP32 get_running_pulses();
+FP32 get_price_one_liter();
+FP32 get_running_total_price();
+
+void set_display_pumping_lcd(BOOLEAN display);
+BOOLEAN get_display_pumping_lcd();
 
 void button_task(void* pvParameters);
 

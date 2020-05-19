@@ -257,8 +257,8 @@ void payment_task(void* pvParameters){
                   case CASH:
 
                       if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
-                          total_cash_from_digi = get_total_cash_from_digi();
-                          write_int16u(total_cash_from_digi);
+                          //total_cash_from_digi = get_total_cash_from_digi();
+                          //write_int16u(total_cash_from_digi);
                           set_digi_complete(TRUE);
                           set_payment_complete(TRUE);
                       }

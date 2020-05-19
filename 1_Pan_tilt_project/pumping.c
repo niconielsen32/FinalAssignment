@@ -197,7 +197,7 @@ void display_pumping(){
    //write_string(" ");
    //write_fp32(price_one_liter);
    gfprintf(COM2, "%c%c L    PPL   TotP ", 0x1B, 0x80);
-   gfprintf(COM2, "%c%c %s %s  %s     ", 0x1B, 0xA8, liter, Price_per_liter, dollar);
+   gfprintf(COM2, "%c%c%s %s %s      ", 0x1B, 0xA8, liter, Price_per_liter, dollar);
 
    write_string(" ");
    write_fp32(running_total_price);

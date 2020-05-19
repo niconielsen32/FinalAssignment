@@ -121,13 +121,20 @@ void show_report(){
 
     INT8U* newline = "\n";
     INT8U* dkk = " DKK ";
+    INT8U* minutes = " minutes";
     INT8U* total_sales_lf92_string = "LeadFree92 sales: ";
     INT8U* total_sales_lf95_string = "LeadFree95 sales: ";
     INT8U* total_sales_diesel_string = "Diesel sales: ";
+    INT8U* total_sum_cash_string = "Sum of cash purchases: ";
+    INT8U* total_sum_card_string = "SUm of card purchases: ";
+    INT8U* total_op_time_string = "Total operating time: ";
 
     FP32 total_sales_lf92;
     FP32 total_sales_lf95;
     FP32 total_sales_diesel;
+    FP32 total_sum_cash;
+    FP32 total_sum_card;
+    FP32 total_op_time;
 
 
     if(get_char_from_uart() == 'r'){
@@ -152,12 +159,30 @@ void show_report(){
         //write_fp32(total_sales_diesel);
         write_string(dkk);
         write_cr();
+        write_string(newline);
 
+        write_string(total_sum_cash_string);
+        //write_fp32(total_sum_cash);
+        write_string(dkk);
+        write_cr();
+        write_string(newline);
+
+        write_string(total_sum_card_string);
+        //write_fp32(total_sum_card);
+        write_string(dkk);
+        write_cr();
+        write_string(newline);
+
+        write_string(total_op_time_string);
+        //write_fp32(total_op_time / 60.0);
+        write_string(minutes);
+        write_cr();
+        write_string(newline);
     }
 }
 
-void report_task(void* pvParameters){
 
+void report_task(void* pvParameters){
 
     while(1){
 

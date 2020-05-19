@@ -41,7 +41,18 @@ INT8U B = 0;
 
 INT16U total_cash_digi = 0;
 
+BOOLEAN digi_complete;
+
 /*****************************   Functions   *******************************/
+
+BOOLEAN get_digi_complete(){
+    return digi_complete;
+}
+
+void set_digi_complete(BOOLEAN digi){
+    digi_complete = digi;
+}
+
 
 INT16U get_total_cash_from_digi(){
     return total_cash_digi;
@@ -53,7 +64,7 @@ void digiswitch_task(void* pvParameters) {
 
     while(1){
 
-        if(get_payment_type()){
+        if(get_paytype_complete() && get_payment_type() == CASH && !digi_complete){
 
             DigiA = (GPIO_PORTA_DATA_R & 0x20);
             DigiB = (GPIO_PORTA_DATA_R & 0x40);

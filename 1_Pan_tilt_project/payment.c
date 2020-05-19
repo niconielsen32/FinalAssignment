@@ -87,10 +87,14 @@ INT16U get_payment_type(){
     return payment_type;
 }
 
-
+BOOLEAN get_paytype_complete(){
+    return paytype_complete;
+}
 
 void payment_task(void* pvParameters){
 
+    TickType_t last_unblock_payment;
+    last_unblock_payment = xTaskGetTickCount();
 
     while(1){
 
@@ -255,6 +259,7 @@ void payment_task(void* pvParameters){
                       if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
                           total_cash_from_digi = get_total_cash_from_digi();
                           write_int16u(total_cash_from_digi);
+                          set_digi_complete(TRUE);
                           set_payment_complete(TRUE);
                       }
 
@@ -262,6 +267,7 @@ void payment_task(void* pvParameters){
 
             }
         }
+        vTaskDelayUntil(&last_unblock_payment, pdMS_TO_TICKS(100));
     }
 }
 /****************************** End Of Module *******************************/

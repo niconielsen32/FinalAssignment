@@ -97,7 +97,7 @@ void pumping_task(void* pvParameters){
 
             if(get_pumping_stopped()){
                 xTimerStop(timer_total_pumping, 0);
-                total_pulses_temp = total_pulses;
+                total_pulses_temp = get_total_pulses();
                 total_liters = total_pulses_temp / pulses_pr_liter;
                 total_amount = total_liters * gas_price_temp;
                 pumping_state = no_pumping;
@@ -111,7 +111,7 @@ void pumping_task(void* pvParameters){
                         seconds = 0;
                         //write_string("no ");
                         if(cur_button_state == nozzle_removal){
-                            total_pulses = 0;
+                            set_total_pulses(0);
                             xTimerStart(timer_total_pumping, 0);
                             pumping_state = pumping_idle;
                         }

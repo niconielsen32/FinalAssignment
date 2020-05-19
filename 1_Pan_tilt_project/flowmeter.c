@@ -24,19 +24,21 @@
 #include "pumping.h"
 #include "UserInterface/write.h"
 /*****************************    Defines    *******************************/
-//#define no_pumping        0
-//#define pumping_start     1
-//#define pumping_regular   2
-//#define pumping_stop      3
+
 /*****************************   Constants   *******************************/
 
 INT16U type_of_flow;
+INT16U total_pulses;
 INT16U pulses_regular = 154;
 INT16U pulses_reduced = 26;
 
 /*****************************   Functions   *******************************/
-INT64U get_total_pulses(){
+INT16U get_total_pulses(){
    return total_pulses;
+}
+
+void set_total_pulses(INT16U pulses){
+    total_pulses = pulses;
 }
 
 void flowmeter_task(void* pvParameters){
@@ -53,22 +55,23 @@ void flowmeter_task(void* pvParameters){
         type_of_flow = get_pumping_state();
 
       if(!get_pumping_stopped()){
-       switch(type_of_flow){
+           switch(type_of_flow){
 
-           case pumping_regular:
-               total_pulses += pulses_regular;
-               break;
+               case pumping_regular:
+                   total_pulses += pulses_regular;
+                   break;
 
-           case pumping_start:
-               total_pulses += pulses_reduced;
-               break;
+               case pumping_start:
+                   total_pulses += pulses_reduced;
+                   break;
 
-           case pumping_stop:
-               total_pulses += pulses_reduced;
-               break;
-       }
+               case pumping_stop:
+                   total_pulses += pulses_reduced;
+                   break;
+           }
 
-      }
+        }
+
         vTaskDelayUntil(&last_unblock_flowmeter, pdMS_TO_TICKS(1000));; // der tælles pulser op for hvert sekund
     }
 

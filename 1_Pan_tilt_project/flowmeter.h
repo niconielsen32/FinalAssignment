@@ -24,12 +24,12 @@
 
 /*****************************    Defines    *******************************/
 
-INT16U total_pulses;
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
 
-INT64U get_total_pulses();
+INT16U get_total_pulses();
+void set_total_pulses(INT16U pulses);
 
 void flowmeter_task(void* pvParameters);
 

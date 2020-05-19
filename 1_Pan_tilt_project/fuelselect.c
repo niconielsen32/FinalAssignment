@@ -75,6 +75,10 @@ BOOLEAN get_fuelselect_complete(){
     return fuelselect;
 }
 
+void set_fuelselect_complete(BOOLEAN fuel){
+    fuelselect = fuel;
+}
+
 void select_gas_type(INT16U gastype){
 
     gas_type = gastype;
@@ -104,17 +108,19 @@ void fuelselect_task(void* pvParameters){
     {
         INT8U key = 0;
 
-        if(get_payment_complete()){
+        if(get_payment_complete() && !fuelselect){
             switch(gas_state)
             {
 
             case 0:
+                write_string(" fuel: ");
                 gfprintf(COM2, "%c%cLF92: LF95:  D: ", 0x1B, 0x80);
                 gfprintf(COM2, "%c%c  1     2    3  ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
                 //gfprintf(COM2, "%c%cD: Press 3", 0x1B, 0xA8);
                 key = get_keyboard();                                       // we get a value from the keyboard
                 if( key >= '1' && key <= '3'){
                     gastype = key - '0';
+                    write_int16u(gastype);
                     //write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                     gas_state = 1;
                 }
@@ -123,6 +129,7 @@ void fuelselect_task(void* pvParameters){
             case 1:
                 gfprintf(COM2, "%c%cYou have chosen: ", 0x1B, 0x80);
                 select_gas_type(gastype);
+                write_string(" gasselected ");
                 fuelselect = TRUE;
                 break;
             }

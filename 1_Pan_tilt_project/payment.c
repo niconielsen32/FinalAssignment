@@ -86,25 +86,6 @@ INT16U get_payment_type(){
 }
 
 
-INT16U get_pay_type()
-{
-    INT8U key = 0;
-
-    gfprintf(COM2, "%c%cCash: Press one", 0x1B, 0x80);
-    gfprintf(COM2, "%c%cCard: Press Two", 0x1B, 0xA8);
-
-    key = get_keyboard();                                      // we get a value from the keyboard
-    if( key == 1)                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
-      {
-       return CASH;
-      }
-    else if (key == 2)
-      {
-       return CARD;
-      }
-}
-
-
 
 void payment_task(void* pvParameters){
 
@@ -135,12 +116,14 @@ void payment_task(void* pvParameters){
 
                    if( type == CARD)
                    {
+                       write_string("CARD");
                        //card_try = 3;
                        gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                        payment_type = CARD;
                        pay_state = 2;
 
-                   }else if ( type == CASH){                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
+                   }else if ( type == CASH){
+                       write_string("CASH");// again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
                        gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
                        payment_type = CASH;
                       // write_string("cashaha");
@@ -260,7 +243,7 @@ void payment_task(void* pvParameters){
                         }
 
                         if(card_valid){
-                            write_string(" card valid! ");
+                            //write_string(" card valid! ");
                         }
 
                   break;

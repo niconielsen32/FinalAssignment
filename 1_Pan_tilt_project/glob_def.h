@@ -57,8 +57,8 @@ INT8U scale;
 INT16U offset;
 
 //payment
-#define CARD 0
-#define CASH 1
+#define CARD 1
+#define CASH 2
 #define PIN_ODD 1
 #define PIN_EVEN 0
 

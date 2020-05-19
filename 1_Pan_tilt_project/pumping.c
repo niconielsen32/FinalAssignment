@@ -170,9 +170,8 @@ void lever_timer_callback(TimerHandle_t timer){
     seconds_lever++;
 }
 
+
 void display_pumping(){
-
-
 
     running_pulses = get_total_pulses();
     running_liters = running_pulses / 512.0; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
@@ -252,13 +251,15 @@ void pumping_task(void* pvParameters){
                         if(seconds_lever == 15){
                             seconds_lever = 0;
                             write_string("15sec timeout");
-                            set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
+                            xTimerStop(timer_lever, 0);
+                            set_pumping_stopped(TRUE);
                         }
 
                         if((seconds_lever == 5) && (get_payment_type() == CARD)){
                             seconds_lever = 0;
                             write_string("5sec timeout");
-                            set_pumping_stopped(TRUE); //DER SKAL LAVES EN NY TANKNING
+                            xTimerStop(timer_lever, 0);
+                            set_pumping_stopped(TRUE);
                         }
 
                         GPIO_PORTF_DATA_R = 0x02; //red

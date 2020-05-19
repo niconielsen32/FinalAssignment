@@ -103,7 +103,7 @@ void fuelselect_task(void* pvParameters){
     while(1)
     {
         INT8U key = 0;
-       // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
+
         if(get_paytype_complete()){
             switch(gas_state)
             {

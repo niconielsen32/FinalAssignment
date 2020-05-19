@@ -42,10 +42,14 @@ INT16U get_payment_type();
 BOOLEAN payment_complete();
 INT16U get_payment_selection();
 INT16U get_total_cash();
-INT16U get_pay_type();
 BOOLEAN get_card_valid();
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size);
 
+INT16U get_pay_type();
+void select_pay_type_task(void* pvParameters);
+INT16U get_pay_type();
+BOOLEAN get_card_number_entered();
+BOOLEAN get_paytype_complete();
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

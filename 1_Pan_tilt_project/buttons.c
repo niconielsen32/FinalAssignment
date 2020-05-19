@@ -73,9 +73,6 @@ void button_task(void* pvParameters){
             case idle:
 
                 if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
-
-                    //GPIO_PORTF_DATA_R = 0x04; //put it on the YELLOW LED
-                    //write_int16u(get_pay_type());
                     //write_string("nozzle_removed ");
                     button_state = nozzle_removal;
                     set_pumping_stopped(FALSE);
@@ -107,7 +104,6 @@ void button_task(void* pvParameters){
                 break;
 
             case lever_released:
-
 
                     if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                        // write_string("lever_depressed ");

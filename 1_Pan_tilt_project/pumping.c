@@ -94,11 +94,7 @@ void display_pumping(){
     running_total_price;
     digi_cash;
 
-    if(get_payment_type() == CARD){
-        running_total_price = running_liters * price_one_liter; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
-    } else if(get_payment_type() == CASH){
-        running_total_price = digi_cash - (running_liters * price_one_liter);
-    }
+    running_total_price = running_liters * price_one_liter; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
 
 //    write_string(" Pulses: ");
 //    write_int16u(get_total_pulses());

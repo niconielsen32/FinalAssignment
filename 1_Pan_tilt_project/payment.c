@@ -270,17 +270,17 @@ void payment_task(void* pvParameters){
 
                   case CASH:
                       if(!is_payment_complete){
+
+                      if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
+                         set_digi_complete(TRUE);
+                         is_payment_complete = TRUE;
+                      }
                       total_cash_from_digi = get_total_cash_from_digi();
                       itoa(total_cash_from_digi, digiCash, 10);
                       gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
                       gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
-                      }
 
-                      if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
-                          //total_cash_from_digi = get_total_cash_from_digi();
-                          //write_int16u(total_cash_from_digi);
-                          set_digi_complete(TRUE);
-                          is_payment_complete = TRUE;
+
                       }
 
                   break;

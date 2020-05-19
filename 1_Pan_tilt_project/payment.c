@@ -120,12 +120,12 @@ void payment_task(void* pvParameters){
               case CARD:
                   if(get_paytype_complete()){
                       //write_string("weout");
-                      xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
+                      //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
                       //is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
                       card_last_number = last_elemet_queue(Q_CARD, 8);
-                      write_int16u(card_last_number);
+                      //write_int16u(card_last_number);
                       card_last_pin = last_elemet_queue(Q_PIN, 4);
-                      write_int16u(card_last_pin);
+                      //write_int16u(card_last_pin);
                   }
 
 

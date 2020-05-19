@@ -22,16 +22,12 @@
 #include "emp_type.h"
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
-<<<<<<< HEAD
 #include "glob_def.h"
 #include "FreeRTOS.h"
 #include "write.h"
-=======
-//#include "ADC.h"
 #include "glob_def.h"
 #include "frt10/frt10/inc/FreeRTOS.h"
 #include "UserInterface/write.h"
->>>>>>> fuelselect_task
 #include "data.h"
 #include "UI.h"
 #include "buttons.h"
@@ -39,11 +35,8 @@
 #include "keypad.h"
 #include "string.h"
 #include "tmodel.h"
-<<<<<<< HEAD
 #include "uart0.h"
-=======
 #include "UserInterface/uart0.h"
->>>>>>> fuelselect_task
 
 /*****************************    Defines    *******************************/
 
@@ -64,8 +57,6 @@ void UI_task(void * pvParameters)
 ******************************************************************************/
 {
 
-
-<<<<<<< HEAD
     INT8U ui_state = 0;
     INT16U off1;                                                        // off1-3 are used for storing the 3 digits of the offset temporarily
     INT8U off2;
@@ -137,7 +128,7 @@ void UI_task(void * pvParameters)
                     break;
                 }
             }
-=======
+
 //    INT8U ui_state = 0;
 //
 //
@@ -259,7 +250,6 @@ void UI_task(void * pvParameters)
 }
 
 /****************************** End Of Module *******************************/
->>>>>>> fuelselect_task
 
 
 
@@ -303,6 +293,6 @@ void UI_task(void * pvParameters)
         //    }
 
 
-        }
+       // }
 
         /****************************** End Of Module *******************************/

@@ -49,14 +49,11 @@ void lcd_task(void* pvParameters);
 *   Output   : -
 *   Function : Test function
 ******************************************************************************/
-<<<<<<< HEAD
 INT16U get_pay_type();
-=======
 void select_pay_type_task(void* pvParameters);
 INT16U get_pay_type();
 BOOLEAN get_card_number_entered();
 
->>>>>>> fuelselect_task
 
 /****************************** End Of Module *******************************/
 #endif

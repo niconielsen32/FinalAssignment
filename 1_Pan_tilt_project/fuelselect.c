@@ -39,19 +39,16 @@ FP32 Diesel_price = 8.12;
 
 FP32 gas_price = 0;
 
-<<<<<<< HEAD
+
 INT16U gas_type;
-=======
 INT8U gas_state = 0;
 INT8U gastype;
 BOOLEAN fuelselect;
->>>>>>> fuelselect_task
 /*****************************   Functions   *******************************/
 FP32 get_gas_price(){
     return gas_price;
 }
 
-<<<<<<< HEAD
 INT16U get_gas_type(){
     return gas_type;
 }
@@ -72,10 +69,10 @@ void set_gas_price(INT16U gastype, FP32 gasprice){
                Diesel_price = gasprice;
                break;
         }
-=======
+}
+
 BOOLEAN get_fuelselect_complete(){
     return fuelselect;
->>>>>>> fuelselect_task
 }
 
 void select_gas_type(INT16U gastype){
@@ -118,7 +115,7 @@ void fuelselect_task(void* pvParameters){
                 key = get_keyboard();                                       // we get a value from the keyboard
                 if( key >= '1' && key <= '3'){
                     gastype = key - '0';
-                    write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+                    //write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                     gas_state = 1;
                 }
                 break;
@@ -131,10 +128,8 @@ void fuelselect_task(void* pvParameters){
             }
         }
 
-
         vTaskDelay(  100 / portTICK_PERIOD_MS);
     }
 }
-
 
 /****************************** End Of Module *******************************/

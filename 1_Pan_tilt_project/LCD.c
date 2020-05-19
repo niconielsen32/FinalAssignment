@@ -26,12 +26,10 @@
 #include "file.h"
 #include "string.h"
 #include "keypad.h"
-<<<<<<< HEAD
-=======
 #include "UserInterface/write.h"
 #include "queue.h"
 #include "payment.h"
->>>>>>> fuelselect_task
+
 
 
 /*****************************    Defines    *******************************/
@@ -86,7 +84,6 @@ INT16U type;
 
 /*****************************   Functions   *******************************/
 
-<<<<<<< HEAD
 INT16U get_pay_type()
 {
     INT8U key = 0;
@@ -104,7 +101,7 @@ INT16U get_pay_type()
        return CARD;
       }
 }
-=======
+
 BOOLEAN get_card_number_entered(){
     return card_number_entered;
 }
@@ -130,7 +127,7 @@ void select_pay_type_task(void* pvParameters){
             if( key >= '1' && key <= '2')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
             {
                 type = key - '0';
-                write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+                //write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                 ui_state = 1;
             }
             break;
@@ -243,14 +240,6 @@ void select_pay_type_task(void* pvParameters){
     }
 
 }
-
-INT16U get_pay_type(){
-    return payment_type;
-
-}
-
-
->>>>>>> fuelselect_task
 
 
 INT8U wr_ch_LCD( INT8U Ch )

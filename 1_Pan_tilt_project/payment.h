@@ -24,7 +24,7 @@
 
 /*****************************    Defines    *******************************/
 
-<<<<<<< HEAD
+
 /*****************************   Constants   *******************************/
 
 /*****************************   Functions   *******************************/
@@ -34,7 +34,6 @@ void set_payment_complete(BOOLEAN);
 INT16U get_payment_selection();
 INT16U get_payment_type();
 
-=======
 
 /*****************************   Constants   *******************************/
 
@@ -46,7 +45,7 @@ INT16U get_total_cash();
 INT16U get_pay_type();
 BOOLEAN get_card_valid();
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size);
->>>>>>> fuelselect_task
+
 
 void payment_task(void* pvParameters);
 /****************************** End Of Module *******************************/

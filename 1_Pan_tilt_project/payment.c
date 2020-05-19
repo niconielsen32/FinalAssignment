@@ -22,46 +22,33 @@
 #include "glob_def.h"
 #include "payment.h"
 #include "buttons.h"
-<<<<<<< HEAD
 #include "LCD.h"
 #include "string.h"
 #include "digiswitch.h"
-=======
 #include "string.h"
 #include "UserInterface/write.h"
 #include "LCD.h"
 #include "file.h"
 #include "keypad.h"
 #include "queue.h"
->>>>>>> fuelselect_task
 
 
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
-<<<<<<< HEAD
-INT16U payment_type = 3;
-=======
->>>>>>> fuelselect_task
 
-
-<<<<<<< HEAD
 INT16U que_buffer;
-INT16U total_cash;
 INT16U stop_payment;
-=======
 INT16U payment_type;
-INT8U que_buffer;
 INT16U adc_value;
 INT16U digi_pulses = 0;
-INT16U total_cash = 0;
 INT16U cash_invalid;
->>>>>>> fuelselect_task
 BOOLEAN pulses_clockwise; // = get_digi_direction
 
 INT8U card_last_number;
 INT8U card_last_pin;
 
+INT16U total_cash_from_digi;
 
 BOOLEAN is_card_number_even;
 BOOLEAN is_pin_even;
@@ -72,18 +59,14 @@ BOOLEAN is_payment_complete = FALSE;
 
 
 //INT16U select_payment_type(INT16U payment){
-<<<<<<< HEAD
 //
-=======
->>>>>>> fuelselect_task
+
 //    if(payment == CARD)
 //        return CARD;
 //    if(payment== CASH)
 //        return CASH;
 //}
 
-<<<<<<< HEAD
-=======
 BOOLEAN get_card_valid(){
     return card_valid;
 }
@@ -98,7 +81,6 @@ INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
     //write_int16u(last_element);
     return last_element;
 }
->>>>>>> fuelselect_task
 
 BOOLEAN get_payment_complete(){
     return is_payment_complete;
@@ -119,8 +101,6 @@ void payment_task(void* pvParameters){
 
     while(1){
 
-<<<<<<< HEAD
-=======
         //select_pay_type();
         payment_type = get_pay_type();
 
@@ -142,7 +122,6 @@ void payment_task(void* pvParameters){
 
 
         //write_int16u(payment_type);
->>>>>>> fuelselect_task
 
 
 //        if (payment_type == 0 || payment_type == 1){
@@ -193,30 +172,11 @@ void payment_task(void* pvParameters){
               break;
 
               case CASH:
-<<<<<<< HEAD
 
                       if(stop_payment){
-                         total_cash = get_total_cash();
+                        // total_cash_from_digi_ = get_total_cash();
                          is_payment_complete = TRUE;
                       }
-=======
-                  //adc_value = get_adc(); //evt fra en que, skal laves om
-                  //digi_pulses = get_digi_pulses();
-
-                  if(get_paytype_complete()){
-                      while(!is_payment_complete){
-                          if(pulses_clockwise){                                        //mangler
-                              total_cash += 100;
-                          } else if(!pulses_clockwise){
-                              total_cash += 10;
-                          }
-                          if(cash_invalid != 0){
-                              is_payment_complete = TRUE;
-                          }
-                      }
-
-                  }
->>>>>>> fuelselect_task
 
               break;
 
@@ -238,10 +198,7 @@ void payment_task(void* pvParameters){
 
         //write_int16u(que_buffer);
         }
-<<<<<<< HEAD
-=======
 
->>>>>>> fuelselect_task
     }
 }
 /****************************** End Of Module *******************************/

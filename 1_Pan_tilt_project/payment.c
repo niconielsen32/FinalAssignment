@@ -18,11 +18,13 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
 #include "payment.h"
 #include "buttons.h"
 #include "LCD.h"
+#include "gpio.h"
 #include "string.h"
 #include "digiswitch.h"
 #include "string.h"
@@ -250,12 +252,11 @@ void payment_task(void* pvParameters){
 
                   case CASH:
 
-                      // brug knap fra digi her til at afslutte kontant betaling
-                      //stop_payment = digi_button
-                          if(stop_payment){
-                             total_cash_from_digi = get_total_cash_from_digi();
-                             is_payment_complete = TRUE;
-                          }
+                      if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
+                          total_cash_from_digi = get_total_cash_from_digi();
+                          write_int16u(total_cash_from_digi);
+                          set_payment_complete(TRUE);
+                      }
 
                   break;
 

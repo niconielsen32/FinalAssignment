@@ -24,7 +24,7 @@
 #include "emp_type.h"
 #include "glob_def.h"
 #include "payment.h"
-//#include "digiswitch.h"
+#include "digiswitch.h"
 #include "UserInterface/write.h"
 /*****************************    Defines    *******************************/
 
@@ -53,32 +53,37 @@ void digiswitch_task(void* pvParameters) {
 
     while(1){
 
-        DigiA = (GPIO_PORTA_DATA_R & 0x20);
-        DigiB = (GPIO_PORTA_DATA_R & 0x40);
+        if(get_payment_type()){
 
-        if(DigiA == 32){
-            A = 1;
-        } else{
-            A = 0;
-        }
+            DigiA = (GPIO_PORTA_DATA_R & 0x20);
+            DigiB = (GPIO_PORTA_DATA_R & 0x40);
 
-        if(DigiB == 64){
-            B = 1;
-        } else{
-            B = 0;
-        }
+            if(DigiA == 32){
+                A = 1;
+            } else{
+                A = 0;
+            }
 
-       if(A != lastA){
-           if(B != A){
-               total_cash_digi += 100;
-           } else{
-               total_cash_digi += 10;
+            if(DigiB == 64){
+                B = 1;
+            } else{
+                B = 0;
+            }
+
+           if(A != lastA){
+               if(B != A){
+                   total_cash_digi += 100;
+               } else{
+                   total_cash_digi += 10;
+               }
+               write_int16u(total_cash_digi);
+               write_string("  ");
            }
-           //write_int16u(total_cash);
-           //write_string("  ");
-       }
-       lastA = A;
+           lastA = A;
+        }
     }
+
+
     vTaskDelay(pdMS_TO_TICKS(500));
 }
 /****************************** End Of Module *******************************/

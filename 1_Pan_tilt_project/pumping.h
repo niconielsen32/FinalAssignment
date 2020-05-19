@@ -41,6 +41,8 @@ void pumping_timer_callback(TimerHandle_t timer);
 void total_pumping_time_callback(TimerHandle_t timer);
 void lever_timer_callback(TimerHandle_t timer);
 
+void display_pumping();
+
 
 void pumping_task(void* pvParameters);
 /****************************** End Of Module *******************************/

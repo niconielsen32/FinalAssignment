@@ -49,6 +49,12 @@ INT16U seconds_lever = 0;
 INT16U seconds = 0;
 INT16U total_pumping_time = 0;
 
+INT16U running_pulses;
+FP32 running_liters;
+FP32 price_one_liter;
+FP32 running_total_price;
+FP32 digi_cash;
+
 BOOLEAN pumping_stopped;
 
 /*****************************   Functions   *******************************/
@@ -76,6 +82,36 @@ void total_pumping_time_callback(TimerHandle_t timer) {
 
 void lever_timer_callback(TimerHandle_t timer){
     seconds_lever++;
+}
+
+void display_pumping(){
+
+    running_pulses = get_total_pulses();
+    running_liters = running_pulses / 512.0; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
+
+    price_one_liter = get_gas_price(); // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
+
+    running_total_price;
+    digi_cash;
+
+    if(get_payment_type() == CARD){
+        running_total_price = running_liters * price_one_liter; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
+    } else if(get_payment_type() == CASH){
+        running_total_price = digi_cash - (running_liters * price_one_liter);
+    }
+
+//    write_string(" Pulses: ");
+//    write_int16u(get_total_pulses());
+
+   write_string(" ");
+   write_fp32(running_liters);
+
+   write_string(" ");
+   write_fp32(price_one_liter);
+
+   write_string(" ");
+   write_fp32(running_total_price);
+
 }
 
 void pumping_task(void* pvParameters){
@@ -112,6 +148,7 @@ void pumping_task(void* pvParameters){
                         //write_string("no ");
                         if(cur_button_state == nozzle_removal){
                             set_total_pulses(0);
+                            write_int16u(get_total_pulses());
                             xTimerStart(timer_total_pumping, 0);
                             pumping_state = pumping_idle;
                         }
@@ -146,6 +183,9 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("start ");
+
+                        display_pumping();
+
                         if(seconds == 0){
                             xTimerStop(timer_pumping, 0);
                             pumping_state = pumping_regular;
@@ -160,6 +200,9 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x08; //green
                         //write_string("regu ");
+
+                        display_pumping();
+
                         if(cur_button_state == lever_released){
                             xTimerStart(timer_lever, 0);
                             xTimerStart(timer_pumping, 0);
@@ -179,6 +222,8 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("stop ");
+
+                        display_pumping();
 
                         if(seconds == 0){
                            xTimerStop(timer_pumping, 0);

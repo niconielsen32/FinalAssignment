@@ -51,14 +51,13 @@ void flowmeter_task(void* pvParameters){
 
 
     while(1){
-//
-//        write_int16u(total_pulses);
-//        write_string(" ");
+
+       // write_int16u(total_pulses);
+      //  write_string(" ");
 
         type_of_flow = get_pumping_state();
         button = get_button_state();
 
-      if(button == lever_depressed){
            switch(type_of_flow){
 
                case pumping_regular:
@@ -74,7 +73,7 @@ void flowmeter_task(void* pvParameters){
                    break;
            }
 
-        }
+
 
         vTaskDelayUntil(&last_unblock_flowmeter, pdMS_TO_TICKS(1000));; // der tælles pulser op for hvert sekund
     }

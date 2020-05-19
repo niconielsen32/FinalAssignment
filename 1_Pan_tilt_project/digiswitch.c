@@ -53,6 +53,9 @@ void set_digi_complete(BOOLEAN digi){
     digi_complete = digi;
 }
 
+void set_total_cash_from_digi(INT8U reset_digi){
+    total_cash_digi = reset_digi;
+}
 
 INT16U get_total_cash_from_digi(){
     return total_cash_digi;

@@ -40,6 +40,8 @@ void set_pumping_stopped(BOOLEAN pumping_bool);
 void pumping_timer_callback(TimerHandle_t timer);
 void total_pumping_time_callback(TimerHandle_t timer);
 void lever_timer_callback(TimerHandle_t timer);
+BOOLEAN set_reduced_last(BOOLEAN reduced);
+INT8U get_seconds_lever();
 
 void display_pumping();
 

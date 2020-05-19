@@ -27,8 +27,7 @@
 #include "buttons.h"
 #include "UserInterface/write.h"
 #include "pumping.h"
-#include "file.h"
-#include "LCD.h"
+//#include "LCD.h"
 #include "payment.h"
 #include "fuelselect.h"
 #include "digiswitch.h"
@@ -62,14 +61,16 @@ BOOLEAN display_pumping_lcd;
 //    return running_total_price;
 //}
 
-BOOLEAN get_display_pumping_lcd(){
-    return display_pumping_lcd;
-}
+//BOOLEAN get_display_pumping_lcd(){
+//    return display_pumping_lcd;
+//}
 
-void set_display_pumping_lcd(BOOLEAN display){
-    display_pumping_lcd = display;
+//void set_display_pumping_lcd(BOOLEAN display){
+//    display_pumping_lcd = display;
+//}
+void set_button_state(INT16U button){
+    button_state = button;
 }
-
 
 INT16U get_button_state(){
     return button_state;
@@ -97,7 +98,8 @@ void button_task(void* pvParameters){
 
                     if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
                         write_string("nozzle_removed ");
-
+                        //gfprintf(COM2, "%c%c     Ready!     ", 0x1B, 0x80);
+                        //gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
                         button_state = nozzle_removal;
                         set_pumping_stopped(FALSE);
                     }
@@ -106,14 +108,12 @@ void button_task(void* pvParameters){
                 case nozzle_removal:
 
                     //turn on display
-                    gfprintf(COM2, "%c%c     Ready!     ", 0x1B, 0x80);
-                    gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
-                    gfprintf(COM2, "%c%c L    PPL   TotP", 0x1B, 0x80);
-                    gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+                    //gfprintf(COM2, "%c%c L    PPL   TotP", 0x1B, 0x80);
+
                     if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                         write_string("lever_depressed ");
-                        gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
-                        gfprintf(COM2, "%c%c    Depressed   ", 0x1B, 0xA8);
+                        //gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
+                        //gfprintf(COM2, "%c%c    Depressed   ", 0x1B, 0xA8);
                         button_state = lever_depressed;
                     }
                     break;
@@ -125,8 +125,8 @@ void button_task(void* pvParameters){
                     }
 
                     if((GPIO_PORTF_DATA_R & 0x01)) { //sw2 released
-                        gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
-                        gfprintf(COM2, "%c%c    released    ", 0x1B, 0xA8);
+                        //gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
+                        //gfprintf(COM2, "%c%c    released    ", 0x1B, 0xA8);
                         button_state = lever_released;
                         write_string("lever_released ");
                     }
@@ -139,12 +139,17 @@ void button_task(void* pvParameters){
                             button_state = lever_depressed;
                         } else if(!(GPIO_PORTF_DATA_R & 0x10)) { //sw1 pressed
                             counter_timer = TIM_200_MSEC;
+                            //write_string("This is a ducking test!");
+                            //button_state = idle;
+                            //set_pumping_stopped(TRUE);
                         } else if(! --counter_timer){
                             write_string("nozzle_putback ");
-                            gfprintf(COM2, "%c%cHave a nice day!", 0x1B, 0x80);
-                            gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+                           // gfprintf(COM2, "%c%cHave a nice day!", 0x1B, 0x80);
+                           // gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
                             button_state = idle; //GÅ TIL EN NY TANKNING ISTEDET
+
                             set_pumping_stopped(TRUE);
+//                            button_state = nozzle_putback;
                         }
                     break;
               }

@@ -32,7 +32,9 @@ INT16U get_total_cash_from_digi();
 
 BOOLEAN get_digi_complete();
 void set_digi_complete(BOOLEAN digi);
+void set_total_cash_from_digi(INT8U reset_digi);
 
 void digiswitch_task(void* pvParameters);
+
 /****************************** End Of Module *******************************/
 #endif

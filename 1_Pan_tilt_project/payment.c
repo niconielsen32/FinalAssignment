@@ -97,6 +97,13 @@ void terminate_session(){
     pay_state = 0;
     order = 0;
     paytype_complete = FALSE;
+    set_payment_complete(FALSE);
+    set_fuelselect_complete(FALSE);
+    set_pumping_stopped(FALSE);
+    set_digi_complete(FALSE);
+    set_total_cash_from_digi(0);
+    set_reduced_last(FALSE);
+    set_button_state(idle);
 }
 
 void payment_task(void* pvParameters){

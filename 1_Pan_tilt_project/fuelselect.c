@@ -76,6 +76,7 @@ BOOLEAN get_fuelselect_complete(){
 }
 
 void set_fuelselect_complete(BOOLEAN fuel){
+    gas_state = 0;
     fuelselect = fuel;
 }
 

@@ -62,6 +62,10 @@ INT16U offset;
 #define PIN_ODD 1
 #define PIN_EVEN 0
 
+#define COM1  0      // UART
+#define COM2  1      // LCD
+#define COM3  2      // Keyboard
+
 
 
 

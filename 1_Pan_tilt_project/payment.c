@@ -33,6 +33,7 @@
 #include "file.h"
 #include "keypad.h"
 #include "queue.h"
+#include <stdlib.h>
 
 
 /*****************************    Defines    *******************************/
@@ -60,6 +61,7 @@ INT8U order = 0;
 INT8U card_cif;
 INT8U pin_cif;
 INT8U card_try;        //<-- If pin is wrong 3 times
+char digiCash[7];
 INT16U type;
 
 /*****************************   Functions   *******************************/
@@ -121,8 +123,8 @@ void payment_task(void* pvParameters){
                {
 
                case 0:
-                   gfprintf(COM2, "%c%cCard: Press one", 0x1B, 0x80);
-                   gfprintf(COM2, "%c%cCash: Press two", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
+                   gfprintf(COM2, "%c%cCard: Press one ", 0x1B, 0x80);
+                   gfprintf(COM2, "%c%cCash: Press two ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
                    key = get_keyboard();                                       // we get a value from the keyboard
                    if( key >= '1' && key <= '2')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                    {
@@ -267,12 +269,18 @@ void payment_task(void* pvParameters){
                   break;
 
                   case CASH:
+                      if(!is_payment_complete){
 
                       if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
-                          //total_cash_from_digi = get_total_cash_from_digi();
-                          //write_int16u(total_cash_from_digi);
-                          set_digi_complete(TRUE);
-                          is_payment_complete = TRUE;
+                         set_digi_complete(TRUE);
+                         is_payment_complete = TRUE;
+                      }
+                      total_cash_from_digi = get_total_cash_from_digi();
+                      itoa(total_cash_from_digi, digiCash, 10);
+                      gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+                      gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
+
+
                       }
 
                   break;

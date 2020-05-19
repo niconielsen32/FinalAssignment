@@ -44,6 +44,7 @@ BOOLEAN set_reduced_last(BOOLEAN reduced);
 INT8U get_seconds_lever();
 
 void display_pumping();
+void ftoa(float n, char *res, int afterpoint);
 
 
 void pumping_task(void* pvParameters);

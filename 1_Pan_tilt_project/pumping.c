@@ -35,9 +35,7 @@
 static INT16U  pumping_state = no_pumping;
 
 FP32 total_amount;
-INT16U gas_type;
 FP32 gas_price_temp;
-INT16U selected_gastype;
 INT16U cur_button_state;
 INT16U type_of_payment;
 FP32 out_of_cash_cal;
@@ -91,16 +89,13 @@ void pumping_task(void* pvParameters){
 //write_int16u(total_pumping_time);
 //write_string(" ");
 
-        type_of_payment = get_payment_type(); //input from keypad
-        type_of_payment = CARD; //input from keypad
         cur_button_state = get_button_state();
         gas_price_temp = get_gas_price();
-
         total_cash_temp = get_total_cash_from_digi();
         out_of_cash_cal = gas_price_temp * SEC3_reduced;
 
 
-            if(get_pumping_stopped() == TRUE){
+            if(get_pumping_stopped()){
                 xTimerStop(timer_total_pumping, 0);
                 total_pulses_temp = total_pulses;
                 total_liters = total_pulses_temp / pulses_pr_liter;
@@ -114,10 +109,6 @@ void pumping_task(void* pvParameters){
 
                         GPIO_PORTF_DATA_R = 0x02; //red
                         seconds = 0;
-                        //select_gas_type(selected_gastype);
-                        gas_type = get_gas_price();
-
-                        // red led
                         //write_string("no ");
                         if(cur_button_state == nozzle_removal){
                             total_pulses = 0;
@@ -148,7 +139,7 @@ void pumping_task(void* pvParameters){
                             seconds = 2;
                             pumping_state = pumping_start;
                         }
-                        //lcd = LCD_POWER_UP;
+
                         break;
 
                     case pumping_start:
@@ -189,7 +180,6 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("stop ");
 
-                        //yellow led
                         if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
                            pumping_state = pumping_idle;

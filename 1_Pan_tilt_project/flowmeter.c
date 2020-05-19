@@ -52,7 +52,7 @@ void flowmeter_task(void* pvParameters){
 
         type_of_flow = get_pumping_state();
 
-
+      if(!get_pumping_stopped()){
        switch(type_of_flow){
 
            case pumping_regular:
@@ -68,7 +68,9 @@ void flowmeter_task(void* pvParameters){
                break;
        }
 
+      }
         vTaskDelayUntil(&last_unblock_flowmeter, pdMS_TO_TICKS(1000));; // der tælles pulser op for hvert sekund
     }
+
 }
 /****************************** End Of Module *******************************/

@@ -120,7 +120,6 @@ void payment_task(void* pvParameters){
               case CARD:
                   if(get_paytype_complete()){
                       //write_string("weout");
-<<<<<<< HEAD
                       xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
                       write_int16u(que_buffer);
                       is_payment_complete = TRUE; // KUN TIL TEST, SKAL IKKE VÆRE HER!
@@ -149,7 +148,7 @@ void payment_task(void* pvParameters){
                               is_payment_complete = TRUE;
                           }
                       }
-=======
+
                       card_last_number = last_elemet_queue(Q_CARD, 8);
                       card_last_pin = last_elemet_queue(Q_PIN, 4);
                       //xQueuePeek(Q_CARD, &que_buffer, 0); //Q-key mangler
@@ -179,24 +178,24 @@ void payment_task(void* pvParameters){
 
               break;
 
-              case CASH:
+//              case CASH:
+//
+//                  while(!is_payment_complete){
+//                  if(pulses_clockwise){                                        //mangler
+//                      total_cash += 100;
+//                  } else if(!pulses_clockwise){
+//                      total_cash += 10;
+//                  }
+//                  if(cash_invalid != 0){
+//                      is_payment_complete = TRUE;
+//
+//                  }
+//
+//              break;
 
-                  while(!is_payment_complete){
-                  if(pulses_clockwise){                                        //mangler
-                      total_cash += 100;
-                  } else if(!pulses_clockwise){
-                      total_cash += 10;
-                  }
-                  if(cash_invalid != 0){
-                      is_payment_complete = TRUE;
->>>>>>> LCD_work
-                  }
 
-              break;
-
-        }
         //write_int16u(que_buffer);
-
+        }
 
     }
 }

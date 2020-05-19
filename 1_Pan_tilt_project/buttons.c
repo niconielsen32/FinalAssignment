@@ -39,6 +39,7 @@
 static INT16U  button_state = idle;
 static INT16U counter_timer = 0;
 INT16U counter_timer_event = TE_TIMEOUT;
+INT16U running_pulses;
 
 BOOLEAN pumping = FALSE;
 
@@ -46,6 +47,7 @@ INT8U karakter;
 
 INT8U event;
 /*****************************   Functions   *******************************/
+
 
 INT16U get_button_state(){
     return button_state;
@@ -63,7 +65,6 @@ void button_task(void* pvParameters){
              }
         }
 
-
         //GPIO_PORTF_DATA_R &= 0xF7;
         switch(button_state)
           {
@@ -77,6 +78,9 @@ void button_task(void* pvParameters){
                 }
                 break;
             case nozzle_removal:
+                //turn on display
+                running_pulses = get_total_pulses(); // = 0 here
+
                 if(!(GPIO_PORTF_DATA_R & 0x01)) { //sw2 pressed
                     //GPIO_PORTF_DATA_R = 0x02; //put it on the GREEN LED
                     button_state = lever_depressed;

@@ -118,7 +118,7 @@ void select_pay_type_task(void* pvParameters){
 
             if( type == CARD)
             {
-                card_try = 3;
+                //card_try = 3;
                 gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                 payment_type = CARD;
                 ui_state = 2;

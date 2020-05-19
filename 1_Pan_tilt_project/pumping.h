@@ -42,6 +42,8 @@ void total_pumping_time_callback(TimerHandle_t timer);
 void lever_timer_callback(TimerHandle_t timer);
 BOOLEAN set_reduced_last(BOOLEAN reduced);
 INT8U get_seconds_lever();
+FP32 get_total_liters();
+FP32 get_total_amount();
 
 void display_pumping();
 void ftoa(float n, char *res, int afterpoint);

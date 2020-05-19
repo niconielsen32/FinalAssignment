@@ -158,6 +158,16 @@ INT16U get_pumping_state(){
     return pumping_state;
 }
 
+FP32 get_total_liters(){
+    return total_liters;
+}
+
+FP32 get_total_amount(){
+    return total_amount;
+}
+
+
+
 void pumping_timer_callback(TimerHandle_t timer) {
     seconds--;
 }
@@ -177,9 +187,6 @@ void display_pumping(){
     running_liters = running_pulses / 512.0; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
 
     price_one_liter = get_gas_price(); // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
-
-    running_total_price;
-    digi_cash;
 
     running_total_price = running_liters * price_one_liter; // skal skrives ud på LCD et andet sted når display_pumping_lcd == true
 
@@ -202,6 +209,7 @@ void display_pumping(){
    write_fp32(running_total_price);
 
 }
+
 
 void pumping_task(void* pvParameters){
 

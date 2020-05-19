@@ -29,6 +29,7 @@
 #include "digiswitch.h"
 #include "string.h"
 #include "UserInterface/write.h"
+#include "UserInterface/UI.h"
 #include "LCD.h"
 #include "file.h"
 #include "keypad.h"
@@ -56,6 +57,7 @@ BOOLEAN is_payment_complete;
 INT16U payment_type;
 
 BOOLEAN paytype_complete;
+
 INT8U pay_state = 0;
 INT8U order = 0;
 INT8U card_cif;
@@ -93,7 +95,10 @@ BOOLEAN get_paytype_complete(){
     return paytype_complete;
 }
 
+
+
 void terminate_session(){
+    UI_receipt();
     xQueueReset(Q_CARD);
     xQueueReset(Q_PIN);
     pay_state = 0;
@@ -131,6 +136,7 @@ void payment_task(void* pvParameters){
                        type = key - '0';
                        //write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                        pay_state = 1;
+
                    }
                    break;
 
@@ -178,6 +184,7 @@ void payment_task(void* pvParameters){
                                 card_cif = key -'0';
                                 write_int16u(card_cif);
                                 xQueueSend(Q_CARD, &card_cif, 5);
+                                xQueueSend(Q_CARDnumber, &card_cif, 5);
 
                                 if (i == 7){
                                     write_string(" card entered ");

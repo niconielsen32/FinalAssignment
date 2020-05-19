@@ -36,20 +36,19 @@
 #include "string.h"
 #include "tmodel.h"
 #include "uart0.h"
+#include "fuelselect.h"
 #include "UserInterface/uart0.h"
+#include "pumping.h"
 
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
 
 /*****************************   Variables   *******************************/
-
-
+INT8U temp_char_uart;
 /*****************************   Functions   *******************************/
 
-
-
-void UI_task(void * pvParameters)
+void UI_receipt()
 /*****************************************************************************
 *   Input    :
 *   Output   :
@@ -57,92 +56,181 @@ void UI_task(void * pvParameters)
 ******************************************************************************/
 {
 
-    INT8U ui_state = 0;
-    INT16U off1;                                                        // off1-3 are used for storing the 3 digits of the offset temporarily
-    INT8U off2;
-    INT8U off3;
-    INT8U scale_tmp;                                                    // scale_tmp stores the scale value temporarily
-    scale = 1;                                                          // we initialize the scale and offset values
-    offset = 0;
+    INT8U* ui_product;
+    FP32 ui_total_liters;
+    FP32 ui_total_price;
 
-    INT16U temp = 0;
+    INT8U* newline = "\n";
+    INT8U* dkk = " DKK";
+    INT8U* product = "Product: ";
+    INT8U* total_liters = " - Total liters: ";
+    INT8U* total_price = " - Total price: ";
 
-    while(1)
-    {
-//        if(uart0_rx_rdy()){
-//            temp = uart0_getc();
-//        }
-//        if(temp){
-//            write_string("modtaget ");
-//            temp = 0;
-//        }
+    INT8U* Cash_or_cardNo = " - Acc number: ";
+    INT8U card_number[8];
+    INT8U* cash = "CASH ";
+
+    INT8U* sClear = "                     ";
+    write_string(sClear);
 
 
-                INT8U key = 0;
-                gfprintf(COM2, "%c%cValue: %05u", 0x1B, 0x80, adjusted_value);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
-                switch(ui_state)
-                {
-                case 0:
-                    gfprintf(COM2, "%c%cScale:         ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
-                    key = get_keyboard();                                       // we get a value from the keyboard
-                    if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
-                    {
-                        scale_tmp = key - '0';                                  // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
-                        ui_state = 1;
-                    }
-                    break;
-                case 1:
-                    gfprintf(COM2, "%c%cOffset:", 0x1B, 0xA8);                  // "Offset:" is printed on the second line of the display
-                    key = get_keyboard();                                       // same procedure as in state 0, but we save the value in off1 since we want it as the first digit of the offset value
-                    if( key >= '0' && key <= '9')
-                    {
-                        gfprintf(COM2, "%c%c%c", 0x1B, 0xC9, key);              // the digit is printed on the second line (after "Offset:")
-                        off1 = (key - '0')*100;                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
-                        ui_state = 2;
-                    }
-                    break;
-                case 2:
-                    key = get_keyboard();                                       // same procedure for the second digit of the offset value
-                    if( key >= '0' && key <= '9')
-                    {
-                        gfprintf(COM2, "%c%c%c", 0x1B, 0xCA, key);
-                        off2 = (key - '0')*10;
-                        ui_state = 3;
-                    }
-                    break;
-                case 3:
-                    key = get_keyboard();                                       // same procedure for the third digit of the offset value
-                    if( key >= '0' && key <= '9')
-                    {
-                        gfprintf(COM2, "%c%c%c", 0x1B, 0xCB, key);
-                        off3 = (key - '0')*1;
+    ui_total_liters = get_total_liters();
+    ui_total_price = get_total_amount();
 
-                        if( xSemaphoreTake( xMutex, portMAX_DELAY ))            // we want to change the shared variables so we protect them with a mutex
-                        {
-                            scale = scale_tmp;
-                            offset = off1 + off2 + off3;
-                            xSemaphoreGive(xMutex);
-                        }
-                        ui_state = 0;
-                    }
-                    break;
-                }
+    write_cr();
+    write_string(newline);
+    write_string(newline);
+
+    if(get_gas_type() == 1){
+       ui_product = "LeadFree92";
+   } else if(get_gas_type() == 2){
+       ui_product = "LeadFree95";
+   } else if(get_gas_type() == 3){
+       ui_product = "Diesel";
+   }
+
+        write_string(product);
+        write_string(ui_product);
+
+        write_string(total_liters);
+        write_fp32(ui_total_liters);
+
+        write_string(total_price);
+        write_fp32(ui_total_price);
+        write_string(dkk);
+
+
+        if(get_payment_type() == CARD){
+            write_string(Cash_or_cardNo);
+            for(INT8U i = 0; i < 8; i++){
+                xQueueReceive(Q_CARDnumber, &card_number[i], 5);
+                write_int16u(card_number[i]);
             }
+        } else if(get_payment_type() == CASH){
+            write_string(Cash_or_cardNo);
+            write_string(cash);
+        }
+
+}
+
+INT8U get_char_from_uart(){
+    return temp_char_uart;
+}
+
+void show_report(){
+
+    INT8U* newline = "\n";
+    INT8U* dkk = " DKK ";
+    INT8U* total_sales_lf92_string = "LeadFree92 sales: ";
+    INT8U* total_sales_lf95_string = "LeadFree95 sales: ";
+    INT8U* total_sales_diesel_string = "Diesel sales: ";
+
+    FP32 total_sales_lf92;
+    FP32 total_sales_lf95;
+    FP32 total_sales_diesel;
+
+
+    if(get_char_from_uart() == 'r'){
+
+        write_string(newline);
+        write_string(newline);
+        write_string(newline);
+        write_cr();
+        write_string(total_sales_lf92_string);
+       // write_fp32(total_sales_lf92);
+        write_string(dkk);
+        write_cr();
+        write_string(newline);
+
+        write_string(total_sales_lf95_string);
+        //write_fp32(total_sales_lf95);
+        write_string(dkk);
+        write_cr();
+        write_string(newline);
+
+        write_string(total_sales_diesel_string);
+        //write_fp32(total_sales_diesel);
+        write_string(dkk);
+        write_cr();
+
+    }
+}
+
+void report_task(void* pvParameters){
+
+
+    while(1){
+
+        if(uart0_rx_rdy()){
+            temp_char_uart = uart0_getc();
+            show_report();
+        }
+
+    }
+}
+
+
+
+
+
+
+//                INT8U key = 0;
+//                gfprintf(COM2, "%c%cValue: %05u", 0x1B, 0x80, adjusted_value);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
+//                switch(ui_state)
+//                {
+//                case 0:
+//                    gfprintf(COM2, "%c%cScale:         ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
+//                    key = get_keyboard();                                       // we get a value from the keyboard
+//                    if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
+//                    {
+//                        scale_tmp = key - '0';                                  // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+//                        ui_state = 1;
+//                    }
+//                    break;
+//                case 1:
+//                    gfprintf(COM2, "%c%cOffset:", 0x1B, 0xA8);                  // "Offset:" is printed on the second line of the display
+//                    key = get_keyboard();                                       // same procedure as in state 0, but we save the value in off1 since we want it as the first digit of the offset value
+//                    if( key >= '0' && key <= '9')
+//                    {
+//                        gfprintf(COM2, "%c%c%c", 0x1B, 0xC9, key);              // the digit is printed on the second line (after "Offset:")
+//                        off1 = (key - '0')*100;                                 // again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
+//                        ui_state = 2;
+//                    }
+//                    break;
+//                case 2:
+//                    key = get_keyboard();                                       // same procedure for the second digit of the offset value
+//                    if( key >= '0' && key <= '9')
+//                    {
+//                        gfprintf(COM2, "%c%c%c", 0x1B, 0xCA, key);
+//                        off2 = (key - '0')*10;
+//                        ui_state = 3;
+//                    }
+//                    break;
+//                case 3:
+//                    key = get_keyboard();                                       // same procedure for the third digit of the offset value
+//                    if( key >= '0' && key <= '9')
+//                    {
+//                        gfprintf(COM2, "%c%c%c", 0x1B, 0xCB, key);
+//                        off3 = (key - '0')*1;
+//
+//                        if( xSemaphoreTake( xMutex, portMAX_DELAY ))            // we want to change the shared variables so we protect them with a mutex
+//                        {
+//                            scale = scale_tmp;
+//                            offset = off1 + off2 + off3;
+//                            xSemaphoreGive(xMutex);
+//                        }
+//                        ui_state = 0;
+//                    }
+//                    break;
+//                }
+//            }
 
 //    INT8U ui_state = 0;
 //
 //
-    while(1)
-    {
-//        char output[41];
-//        uart_read_text(output, 7);
-
-//        if(name){
-//            //write_string(" Enter name: ");
-//            write_string(" name entered: ");
-//            write_string(name);
-//        }
-
+//    while(1)
+//    {
+//
 //        INT8U key = 0;
 //        INT16U type;
 //       // gfprintf(COM2, "%c%cChoose payment method", 0x1B, 0x80);  // the adjusted value is shown on the first line of the display. this is done outside the state machine so it's displayed all the time
@@ -246,8 +334,8 @@ void UI_task(void * pvParameters)
 //        vTaskDelay(pdMS_TO_TICKS(100));
 ////    }
 //
-    }
-}
+//    }
+//}
 
 /****************************** End Of Module *******************************/
 

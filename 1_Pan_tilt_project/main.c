@@ -67,12 +67,10 @@ static void setupHardware(void)
   init_gpio();
   init_write();
   init_files();
- // uart0_init( 9600, 8, 1, 'n' );
-
 }
 
 TaskHandle_t write_task_handle = NULL;
-//TaskHandle_t UI_task_handle = NULL;
+TaskHandle_t report_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;
@@ -106,6 +104,7 @@ int main(void)
     Q_KEY = xQueueCreate(128, sizeof(INT8U));
     Q_LCD = xQueueCreate(128, sizeof(INT16U));
     Q_CARD = xQueueCreate(8, sizeof(INT8U));
+    Q_CARDnumber = xQueueCreate(8, sizeof(INT8U));
     Q_PIN = xQueueCreate(4, sizeof(INT8U));
 
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
@@ -117,6 +116,7 @@ int main(void)
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
     xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
+    xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);
 
 
     // Start the scheduler.

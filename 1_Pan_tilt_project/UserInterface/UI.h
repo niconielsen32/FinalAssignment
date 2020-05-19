@@ -9,7 +9,9 @@
 #define USERINTERFACE_UI_H_
 
 
-void UI_task(void * pvParameters);
-
+void UI_receipt();
+void show_report();
+INT8U get_char_from_uart();
+void report_task(void* pvParameters);
 
 #endif /* USERINTERFACE_UI_H_ */

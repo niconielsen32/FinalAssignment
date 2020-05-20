@@ -23,12 +23,12 @@
 /***************************** Include files *******************************/
 
 /*****************************    Defines    *******************************/
-#define no_pumping        0
-#define pumping_idle      1
-#define pumping_start     2
-#define pumping_regular   3
-#define pumping_reduced   4
-#define pumping_stop      5
+#define no_pumping              0
+#define pumping_idle            1
+#define pumping_reduced_2sec    2
+#define pumping_regular         3
+#define pumping_reduced_1sec    4
+#define pumping_stop            5
 
 /*****************************   Constants   *******************************/
 

@@ -56,6 +56,12 @@ INT16U adjusted_value;
 INT8U scale;
 INT16U offset;
 
+
+#define LeadFree92 1
+#define LeadFree95 2
+#define Diesel     3
+
+
 //payment
 #define CARD 1
 #define CASH 2

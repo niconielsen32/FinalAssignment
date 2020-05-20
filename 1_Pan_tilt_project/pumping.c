@@ -319,12 +319,6 @@ void pumping_task(void* pvParameters){
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         write_int16u(running_liters);
                         display_pumping();
-                        //gfprintf(COM2, "%c%c %05u          ", 0x1B, 0xA8, running_liters);
-
-//                        if(seconds == 0){
-//                           xTimerStop(timer_pumping, 0);
-//                           pumping_state = pumping_idle;
-//                        }
 
                         if (reduced_last){
                             if(running_total_price >= total_cash_temp){
@@ -333,6 +327,8 @@ void pumping_task(void* pvParameters){
                                  pumping_state = pumping_stop;
                                  //set_pumping_stopped(TRUE);
                              }
+                        } else if (cur_button_state == lever_depressed){
+                            pumping_state = pumping_regular;
                         } else if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
                            pumping_state = pumping_stop;

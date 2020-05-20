@@ -44,7 +44,7 @@ FP32 gas_price_temp;
 INT16U cur_button_state;
 INT16U type_of_payment;
 FP32 out_of_cash_cal;
-FP32 total_cash_temp;
+INT16U total_cash_temp;
 INT16U total_pulses_temp = 0;
 FP32 total_liters = 0;
 FP32 pulses_pr_liter = 512.0;
@@ -58,7 +58,7 @@ INT16U running_pulses;
 FP32 running_liters;
 FP32 price_one_liter;
 FP32 running_total_price;
-FP32 digi_cash;
+INT16U digi_cash;
 
 BOOLEAN timer_runout;
 
@@ -247,7 +247,7 @@ void pumping_task(void* pvParameters){
                 }
 
                 if(get_payment_type() == CASH){
-                    add_to_sum_of_cash(get_total_cash_from_digi());
+                    add_to_sum_of_cash(total_cash_temp);
                 } else {
                     add_to_sum_of_card(get_total_amount());
                 }
@@ -348,7 +348,7 @@ void pumping_task(void* pvParameters){
                               // total_pulses_temp = get_total_pulses();
                                  //write_string("price is reached!");
                                  pumping_state = pumping_stop;
-                                 //set_pumping_stopped(TRUE);
+                                 set_pumping_stopped(TRUE);
                              }
                         } else if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
@@ -359,11 +359,12 @@ void pumping_task(void* pvParameters){
 
                     case pumping_stop:
 
-                        if (cur_button_state == lever_depressed){
+                        if (cur_button_state == lever_depressed && !reduced_last){
                             seconds_lever = 0;
                             xTimerStop(timer_lever, 0);
                             pumping_state = pumping_regular;
                         }
+
 
                         if(seconds_lever == 15){
                             seconds_lever = 0;

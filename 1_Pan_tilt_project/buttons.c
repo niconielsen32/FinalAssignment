@@ -89,13 +89,8 @@ void button_task(void* pvParameters){
 
                 case nozzle_removal:
 
-                    //turn on display
-                    //gfprintf(COM2, "%c%c L    PPL   TotP", 0x1B, 0x80);
-
                     if(!(GPIO_PORTF_DATA_R & 0x01) && !get_pumping_stopped()) { //sw2 pressed
                         write_string("lever_depressed ");
-                        //gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
-                        //gfprintf(COM2, "%c%c    Depressed   ", 0x1B, 0xA8);
                         button_state = lever_depressed;
                     }
                     break;
@@ -105,10 +100,7 @@ void button_task(void* pvParameters){
                     while(!(GPIO_PORTF_DATA_R & 0x01) && !get_pumping_stopped()){ //sw2 depressed
 
                     }
-
                     if((GPIO_PORTF_DATA_R & 0x01) && !get_pumping_stopped()) { //sw2 released
-                    //gfprintf(COM2, "%c%c     Lever      ", 0x1B, 0x80);
-                    //gfprintf(COM2, "%c%c    released    ", 0x1B, 0xA8);
                     button_state = lever_released;
                     write_string("lever_released ");
                     }

@@ -266,16 +266,13 @@ void pumping_task(void* pvParameters){
                 switch(pumping_state)
                   {
                     case no_pumping:
-
                         GPIO_PORTF_DATA_R = ~0x02; //red led
                         seconds = 0;
-
                         if(cur_button_state == nozzle_removal){
                             set_total_pulses(0);
                             xTimerStart(timer_total_pumping, 0);
                             pumping_state = pumping_idle;
                         }
-
                         break;
 
                     case pumping_idle:
@@ -287,25 +284,19 @@ void pumping_task(void* pvParameters){
                             seconds = 2;
                             pumping_state = pumping_reduced_2sec;
                         }
-
                         break;
 
                     case pumping_reduced_2sec:
-
                         GPIO_PORTF_DATA_R = ~0x04; //yellow led
-
                         display_pumping();
-
                         if(seconds == 0){
                             xTimerStop(timer_pumping, 0);
                             pumping_state = pumping_regular;
                         }
-
                         if(cur_button_state == lever_released){
                            xTimerStart(timer_lever, 0);
                            pumping_state = pumping_reduced_1sec;
                         }
-
                         break;
 
                     case pumping_regular:

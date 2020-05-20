@@ -256,7 +256,7 @@ void payment_task(void* pvParameters){
                             is_pin_even = FALSE;
                         }
 
-                        if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){ //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
+                        if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){                    //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
                             card_valid = TRUE;
                             is_payment_complete = TRUE;
                         }
@@ -277,11 +277,6 @@ void payment_task(void* pvParameters){
                             set_digi_complete(TRUE);
                             is_payment_complete = TRUE;
                           }
-
-
-
-
-
 
                   break;
 

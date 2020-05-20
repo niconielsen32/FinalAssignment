@@ -36,6 +36,9 @@
 #include "pumping.h"
 #include "digiswitch.h"
 
+#include <stdio.h>
+#include <time.h>
+
 
 
 /*****************************    Defines    *******************************/
@@ -96,6 +99,11 @@ int main(void)
     timer_pumping = xTimerCreate("pumping timer", pdMS_TO_TICKS(1000), pdTRUE, 0, pumping_timer_callback);
     timer_total_pumping = xTimerCreate("total pumping timer", pdMS_TO_TICKS(1000), pdTRUE, 0, total_pumping_time_callback);
     timer_lever = xTimerCreate("lever timer", pdMS_TO_TICKS(1000), pdTRUE, 0, lever_timer_callback);
+
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    write_int16u((INT16U)tm.tm_sec);
 
 
     xMutex = xSemaphoreCreateMutex();                                                                                // create the mutex and the queues. make sure the handles are defined globally (in glob_def.h for example)

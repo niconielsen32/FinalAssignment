@@ -93,6 +93,7 @@ void digiswitch_task(void* pvParameters) {
                } else{
                    total_cash_digi += 10;
                }
+
                write_int16u(total_cash_digi);
                write_string("  ");
                itoa(total_cash_digi, digiCash, 10);

@@ -327,10 +327,6 @@ void pumping_task(void* pvParameters){
                                  pumping_state = pumping_stop;
                                  //set_pumping_stopped(TRUE);
                              }
-                        } else if (cur_button_state == lever_depressed){
-                            seconds_lever = 0;
-                            xTimerStop(timer_lever, 0);
-                            pumping_state = pumping_regular;
                         } else if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
                            pumping_state = pumping_stop;
@@ -339,6 +335,13 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_stop:
+
+                        if (cur_button_state == lever_depressed){
+                            seconds_lever = 0;
+                            xTimerStop(timer_lever, 0);
+                            pumping_state = pumping_regular;
+                        }
+
                         if(seconds_lever == 15){
                             seconds_lever = 0;
                             write_string("15sec timeout");

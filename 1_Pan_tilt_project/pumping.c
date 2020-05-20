@@ -232,9 +232,9 @@ void pumping_task(void* pvParameters){
             if(get_pumping_stopped()){
                 xTimerStop(timer_total_pumping, 0);
                 total_pumping_time = 0;
-//                total_pulses_temp = get_total_pulses();
-//                total_liters = total_pulses_temp / pulses_pr_liter;
-//                total_amount = total_liters * gas_price_temp;
+                total_pulses_temp = get_total_pulses();
+                total_liters = total_pulses_temp / pulses_pr_liter;
+                total_amount = total_liters * gas_price_temp;
                 pumping_state = no_pumping;
                 write_string(" Terminated ");
                 terminate_session();

@@ -64,7 +64,7 @@ void flowmeter_task(void* pvParameters){
                    total_pulses += pulses_regular;
                    break;
 
-               case pumping_start:
+               case pumping_reduced_2sec:
                    total_pulses += pulses_reduced;
                    break;
 

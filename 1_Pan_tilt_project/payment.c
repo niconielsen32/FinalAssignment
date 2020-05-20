@@ -47,6 +47,10 @@ BOOLEAN pulses_clockwise; // = get_digi_direction
 
 INT8U card_last_number;
 INT8U card_last_pin;
+INT8U pay_state = 0;
+INT8U type;
+INT8U card_cif;
+INT8U order = 0;
 
 INT16U total_cash_from_digi;
 
@@ -54,6 +58,10 @@ BOOLEAN is_card_number_even;
 BOOLEAN is_pin_even;
 BOOLEAN card_valid;
 BOOLEAN is_payment_complete = FALSE;
+BOOLEAN paytype_complete = FALSE;
+
+
+
 
 /*****************************   Functions   *******************************/
 
@@ -95,8 +103,6 @@ INT16U get_payment_type(){
     return payment_type;
 }
 
-<<<<<<< Updated upstream
-=======
 BOOLEAN get_paytype_complete(){
     return paytype_complete;
 }
@@ -117,17 +123,14 @@ void terminate_session(){
     set_reduced_last(FALSE);
     set_button_state(idle);
 }
->>>>>>> Stashed changes
 
 void payment_task(void* pvParameters){
 
 
     while(1){
-
-<<<<<<< Updated upstream
         payment_type = get_pay_type();
         stop_payment = get_payment_stop();
-=======
+
         if(!paytype_complete){
 
             INT8U key = 0;
@@ -154,6 +157,7 @@ void payment_task(void* pvParameters){
 
                    if( type == CARD)
                    {
+                       order = 0;
                        write_string("CARD");
                        gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                        payment_type = CARD;
@@ -243,7 +247,6 @@ void payment_task(void* pvParameters){
                    break;
                }
              }
->>>>>>> Stashed changes
 
         switch(payment_type){
 

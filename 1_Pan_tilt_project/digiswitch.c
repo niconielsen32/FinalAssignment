@@ -53,10 +53,8 @@ void digiswitch_task(void* pvParameters) {
 
     while(1){
 
-<<<<<<< Updated upstream
         DigiA = (GPIO_PORTA_DATA_R & 0x20);
         DigiB = (GPIO_PORTA_DATA_R & 0x40);
-=======
         if(get_paytype_complete() && get_payment_type() == CASH && !digi_complete){
 
             DigiA = (GPIO_PORTA_DATA_R & 0x20);
@@ -77,7 +75,6 @@ void digiswitch_task(void* pvParameters) {
             write_int16u(A);
             write_string(" DigiB: ");
             write_int16u(B);
->>>>>>> Stashed changes
 
         if(DigiA == 32){
             A = 1;
@@ -91,7 +88,6 @@ void digiswitch_task(void* pvParameters) {
             B = 0;
         }
 
-<<<<<<< Updated upstream
        if(A != lastA){
            if(B != A){
                total_cash_digi += 100;
@@ -104,7 +100,6 @@ void digiswitch_task(void* pvParameters) {
        lastA = A;
     }
     vTaskDelay(pdMS_TO_TICKS(500));
-=======
                if(B != A){
                    total_cash_digi += 100;
                } else{
@@ -121,7 +116,6 @@ void digiswitch_task(void* pvParameters) {
         vTaskDelay(pdMS_TO_TICKS(500));
     }
 
->>>>>>> Stashed changes
 }
 /****************************** End Of Module *******************************/
 

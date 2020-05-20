@@ -259,15 +259,21 @@ void payment_task(void* pvParameters){
                         if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){                    //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
                             card_valid = TRUE;
                             is_payment_complete = TRUE;
-                        }
+                        } else{
 
-                        if(!card_valid){
-                            write_string("card invalid!");
                             gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
                             set_pumping_stopped(TRUE);
                         }
+
+//                        if(!card_valid){
+//                            write_string("card invalid!");
+//                            gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
+//                            gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+//
+//                            terminate_session();
+//                        }
 
                   break;
 

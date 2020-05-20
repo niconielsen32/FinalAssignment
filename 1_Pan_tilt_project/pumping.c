@@ -267,7 +267,7 @@ void pumping_task(void* pvParameters){
                   {
                     case no_pumping:
 
-                        GPIO_PORTF_DATA_R = 0x02; //red led
+                        GPIO_PORTF_DATA_R = ~0x02; //red led
                         seconds = 0;
 
                         if(cur_button_state == nozzle_removal){
@@ -280,7 +280,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_idle:
 
-                        GPIO_PORTF_DATA_R = 0x02; //red led
+                        GPIO_PORTF_DATA_R = ~0x02; //red led
 
                         if(cur_button_state == lever_depressed){
                             xTimerStart(timer_pumping, 0);
@@ -292,7 +292,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_reduced_2sec:
 
-                        GPIO_PORTF_DATA_R = 0x04; //yellow led
+                        GPIO_PORTF_DATA_R = ~0x04; //yellow led
 
                         display_pumping();
 
@@ -310,7 +310,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_regular:
 
-                        GPIO_PORTF_DATA_R = 0x08; //green led
+                        GPIO_PORTF_DATA_R = ~0x08; //green led
 
                         display_pumping();
 
@@ -331,7 +331,7 @@ void pumping_task(void* pvParameters){
 
                     case pumping_reduced_1sec:
                         write_string(" Reduced ");
-                        GPIO_PORTF_DATA_R = 0x04; //yellow led
+                        GPIO_PORTF_DATA_R = ~0x04; //yellow led
                         write_int16u(running_liters);
                         display_pumping();
 
@@ -348,6 +348,8 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_stop:
+
+                        GPIO_PORTF_DATA_R = ~0x02; //red led
 
                         if (reduced_last){
                            set_pumping_stopped(TRUE);

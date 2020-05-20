@@ -154,6 +154,43 @@ void write_fp32(FP32 number)
     }
 }
 
+void write_fp32_one_digit(FP32 number)
+{
+    INT16S number_int = (INT16S) (number*1000);
+    INT16U number_u = number_int;
+    if (number < 0.0f)
+    {
+        write_character('-');
+        number_u = -number_u;
+    }
+    else {
+       write_character(' ');
+    }
+
+
+    INT8U output[5];
+
+    output[0] = number_u/10000;               // gets most significant digit
+    output[1] = (number_u%10000)/1000;
+    output[2] = (number_u%1000)/100;
+    output[3] = (number_u%100)/10;
+    output[4] = (number_u%10)/1;              // gets least significant digit
+
+    BOOLEAN start_writing_zeroes = 0;
+    for(INT8U i = 0; i < 5; i++)
+    {
+        if( output[i] != 0 ||  start_writing_zeroes == 1 )
+            write_character(output[i] + '0');
+        else {
+            write_character(' ');
+        }
+        if( i == 3 )
+            write_character('.');
+        start_writing_zeroes = 1;
+    }
+}
+
+
 void init_write()
 {
     write_queue = xQueueCreate( QUEUE_LENGTH, sizeof(INT8U) );

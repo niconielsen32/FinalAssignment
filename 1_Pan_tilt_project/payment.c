@@ -34,6 +34,8 @@
 #include "file.h"
 #include "keypad.h"
 #include "queue.h"
+#include "fuelselect.h"
+#include "pumping.h"
 #include <stdlib.h>
 
 
@@ -66,6 +68,8 @@ INT8U card_try;        //<-- If pin is wrong 3 times
 
 INT16U type;
 
+BOOLEAN is_terminated;
+
 /*****************************   Functions   *******************************/
 
 INT8U last_elemet_queue(QueueHandle_t queue, INT16U queue_size){
@@ -94,7 +98,6 @@ INT16U get_payment_type(){
 BOOLEAN get_paytype_complete(){
     return paytype_complete;
 }
-
 
 
 void terminate_session(){

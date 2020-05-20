@@ -27,6 +27,7 @@
 
 /*****************************   Functions   *******************************/
 INT16U get_button_state();
+void set_counter_timer(INT16U time);
 
 FP32 get_running_pulses();
 FP32 get_price_one_liter();

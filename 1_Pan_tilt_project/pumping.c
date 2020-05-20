@@ -146,7 +146,7 @@ void ftoa(float n, char *res, int afterpoint)
 INT8U get_seconds_lever(){
     return seconds_lever;
 }
-BOOLEAN set_reduced_last(BOOLEAN reduced){
+void set_reduced_last(BOOLEAN reduced){
     reduced_last = reduced;
 }
 
@@ -238,18 +238,28 @@ void pumping_task(void* pvParameters){
                 total_liters = total_pulses_temp / pulses_pr_liter;
                 total_amount = total_liters * gas_price_temp;
 
-                if(get_gas_type() == LeadFree92){
-                    add_to_sales_lf92(get_total_amount());
-                }else if(get_gas_type() == LeadFree95){
-                    add_to_sales_lf95(get_total_amount());
-                } else if(get_gas_type() == Diesel){
-                    add_to_sales_diesel(get_total_amount());
-                }
 
                 if(get_payment_type() == CASH){
                     add_to_sum_of_cash(total_cash_temp);
+
+                    if(get_gas_type() == LeadFree92){
+                        add_to_sales_lf92(total_cash_temp);
+                    }else if(get_gas_type() == LeadFree95){
+                        add_to_sales_lf95(total_cash_temp);
+                    } else if(get_gas_type() == Diesel){
+                        add_to_sales_diesel(total_cash_temp);
+                    }
+
                 } else {
                     add_to_sum_of_card(get_total_amount());
+
+                    if(get_gas_type() == LeadFree92){
+                        add_to_sales_lf92(get_total_amount());
+                    }else if(get_gas_type() == LeadFree95){
+                        add_to_sales_lf95(get_total_amount());
+                    } else if(get_gas_type() == Diesel){
+                        add_to_sales_diesel(get_total_amount());
+                    }
                 }
 
                 add_to_total_op_time(total_pumping_time);

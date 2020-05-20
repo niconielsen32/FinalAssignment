@@ -77,6 +77,8 @@ void write_fp32(FP32 number);
 *   Output   : -
 *   Function : write fp32 to 5 decimals 2 before point 3 after
 ******************************************************************************/
+void write_fp32_one_digit(FP32 number);
+
 
 void init_write();
 

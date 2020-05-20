@@ -33,6 +33,7 @@ BOOLEAN get_payment_complete();
 void set_payment_complete(BOOLEAN payment_complete);
 INT16U get_payment_type();
 BOOLEAN get_paytype_complete();
+
 void terminate_session();
 
 void payment_task(void* pvParameters);

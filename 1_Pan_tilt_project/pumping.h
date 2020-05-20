@@ -40,6 +40,16 @@ void set_pumping_stopped(BOOLEAN pumping_bool);
 void pumping_timer_callback(TimerHandle_t timer);
 void total_pumping_time_callback(TimerHandle_t timer);
 void lever_timer_callback(TimerHandle_t timer);
+<<<<<<< Updated upstream
+=======
+void set_reduced_last(BOOLEAN reduced);
+INT8U get_seconds_lever();
+FP32 get_total_liters();
+FP32 get_total_amount();
+INT16U get_total_cash_temp();
+
+void display_pumping();
+>>>>>>> Stashed changes
 
 
 void pumping_task(void* pvParameters);

@@ -95,14 +95,155 @@ INT16U get_payment_type(){
     return payment_type;
 }
 
+<<<<<<< Updated upstream
+=======
+BOOLEAN get_paytype_complete(){
+    return paytype_complete;
+}
+
+
+void terminate_session(){
+   // UI_receipt();
+    xQueueReset(Q_CARD);
+    xQueueReset(Q_PIN);
+    pay_state = 0;
+    order = 0;
+    paytype_complete = FALSE;
+    set_payment_complete(FALSE);
+    set_fuelselect_complete(FALSE);
+    set_pumping_stopped(FALSE);
+    set_digi_complete(FALSE);
+    set_total_cash_from_digi(0);
+    set_reduced_last(FALSE);
+    set_button_state(idle);
+}
+>>>>>>> Stashed changes
 
 void payment_task(void* pvParameters){
 
 
     while(1){
 
+<<<<<<< Updated upstream
         payment_type = get_pay_type();
         stop_payment = get_payment_stop();
+=======
+        if(!paytype_complete){
+
+            INT8U key = 0;
+
+               switch(pay_state)
+               {
+
+               case 0:
+                   gfprintf(COM2, "%c%cCard: Press one ", 0x1B, 0x80);
+                   gfprintf(COM2, "%c%cCash: Press two ", 0x1B, 0xA8);
+                   key = get_keyboard();                                       // we get a value from the keyboard
+                   if( key >= '1' && key <= '2')                               // if it's a either 1 or 2 we save that value in type and go to the next state
+                   {
+                       // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+                       type = key - '0';
+
+                       pay_state = 1;
+
+                   }
+                   break;
+
+               case 1:
+                   gfprintf(COM2, "%c%cYou have method: ", 0x1B, 0x80);                  // "Offset:" is printed on the second line of the display                                      // same procedure as in state 0, but we save the value in off1 since we want it as the first digit of the offset value
+
+                   if( type == CARD)
+                   {
+                       write_string("CARD");
+                       gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
+                       payment_type = CARD;
+                       pay_state = 2;
+
+                   }else if ( type == CASH){
+                       write_string("CASH");// again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
+                       gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
+                       payment_type = CASH;
+
+                       gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+                       gfprintf(COM2, "%c%c       0         ", 0x1B, 0xA8);
+                       pay_state = 3;
+                       break;
+
+                   } else{
+                       gfprintf(COM2, "%c%c", 0x1B, 0xA8);
+
+                   }
+                   break;
+
+               case 2:
+
+                    switch(order)
+                    {
+
+                    case 0:
+                        gfprintf(COM2, "%c%cCard number:    ", 0x1B, 0x80);
+                        gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+
+                        write_string(" card no: ");
+                        for(INT8U i = 0; i < 8; i++){
+
+                            key = get_keyboard();
+                            if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
+                              {
+                                gfprintf(COM2, "%c%c%c", 0x1B, 0xC4+i, key);
+                                card_cif = key -'0';
+                                write_int16u(card_cif);
+                                xQueueSend(Q_CARD, &card_cif, 5);
+                                xQueueSend(Q_CARDnumber, &card_cif, 5);
+
+                                if (i == 7){
+                                    write_string(" card entered ");
+                                    order = 1;
+                                }
+                              } else {
+                                  i--;
+                              }
+                        }
+                        break;
+
+                    case 1:
+
+                        gfprintf(COM2, "%c%cPin code:    ", 0x1B, 0x80);
+                        gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
+
+                        write_string("pin: ");
+
+                        for(INT8U j = 0; j < 4; j++){
+
+                            key = get_keyboard();
+                            if( key >= '0' && key <= '9')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
+                              {
+                                gfprintf(COM2, "%c%c%c", 0x1B, 0xC6+j, key);
+                                pin_cif = key - '0';
+                                write_int16u(pin_cif);
+                                xQueueSend(Q_PIN, &pin_cif, 0);
+                                if (j == 3){
+                                    write_string(" pin entered ");
+                                    pay_state = 3;
+                                }
+                              } else {
+                                  j--;
+                              }
+                            }
+
+                        break;
+
+                    }
+                   break;
+
+               case 3:
+                   paytype_complete = TRUE;
+                   write_string(" Complete ");
+
+                   break;
+               }
+             }
+>>>>>>> Stashed changes
 
         switch(payment_type){
 

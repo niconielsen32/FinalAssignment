@@ -53,8 +53,31 @@ void digiswitch_task(void* pvParameters) {
 
     while(1){
 
+<<<<<<< Updated upstream
         DigiA = (GPIO_PORTA_DATA_R & 0x20);
         DigiB = (GPIO_PORTA_DATA_R & 0x40);
+=======
+        if(get_paytype_complete() && get_payment_type() == CASH && !digi_complete){
+
+            DigiA = (GPIO_PORTA_DATA_R & 0x20);
+            DigiB = (GPIO_PORTA_DATA_R & 0x40);
+
+            if(DigiA == 32){
+                A = 1;
+            } else{
+                A = 0;
+            }
+
+            if(DigiB == 64){
+                B = 1;
+            } else{
+                B = 0;
+            }
+            write_string(" DigiA: ");
+            write_int16u(A);
+            write_string(" DigiB: ");
+            write_int16u(B);
+>>>>>>> Stashed changes
 
         if(DigiA == 32){
             A = 1;
@@ -68,6 +91,7 @@ void digiswitch_task(void* pvParameters) {
             B = 0;
         }
 
+<<<<<<< Updated upstream
        if(A != lastA){
            if(B != A){
                total_cash_digi += 100;
@@ -80,6 +104,24 @@ void digiswitch_task(void* pvParameters) {
        lastA = A;
     }
     vTaskDelay(pdMS_TO_TICKS(500));
+=======
+               if(B != A){
+                   total_cash_digi += 100;
+               } else{
+                   total_cash_digi += 10;
+               }
+               write_int16u(total_cash_digi);
+               write_string("  ");
+               itoa(total_cash_digi, digiCash, 10);                         //Turn integer into float - itoa(int, char[],
+               gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+               gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
+           }
+           lastA = A;
+        }
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+
+>>>>>>> Stashed changes
 }
 /****************************** End Of Module *******************************/
 

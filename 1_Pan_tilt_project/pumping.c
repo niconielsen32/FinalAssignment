@@ -51,10 +51,34 @@ INT16U seconds_lever = 0;
 INT16U seconds = 0;
 INT16U total_pumping_time = 0;
 
+<<<<<<< Updated upstream
+=======
+INT16U running_pulses;
+FP32 running_liters;
+FP32 price_one_liter;
+FP32 running_total_price;
+
+BOOLEAN timer_runout;
+
+//For LCD
+char liter[7];
+char dollar[7];
+char Price_per_liter[7];
+
+>>>>>>> Stashed changes
 BOOLEAN pumping_stopped;
 
 /*****************************   Functions   *******************************/
 
+<<<<<<< Updated upstream
+=======
+INT8U get_seconds_lever(){
+    return seconds_lever;
+}
+void set_reduced_last(BOOLEAN reduced){
+    reduced_last = reduced;
+}
+>>>>>>> Stashed changes
 
 BOOLEAN get_pumping_stopped(){
     return pumping_stopped;

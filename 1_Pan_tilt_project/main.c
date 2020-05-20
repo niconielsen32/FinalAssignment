@@ -18,6 +18,7 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include <string.h>
 #include <stdint.h>
 #include "FreeRTOS.h"
 #include "tm4c123gh6pm.h"
@@ -35,6 +36,7 @@
 #include "LCD.h"
 #include "pumping.h"
 #include "digiswitch.h"
+#include "change_price.h"
 
 
 
@@ -67,6 +69,7 @@ static void setupHardware(void)
   init_gpio();
   init_write();
   init_files();
+<<<<<<< Updated upstream
  // uart0_init( 9600, 8, 1, 'n' );
 
 }
@@ -75,6 +78,14 @@ TaskHandle_t write_task_handle = NULL;
 //TaskHandle_t adc_task_handle = NULL;
 TaskHandle_t ai_task_handle = NULL;
 TaskHandle_t UI_task_handle = NULL;
+=======
+  uart0_init(115200, 8, 1, 0);
+}
+
+TaskHandle_t write_task_handle = NULL;
+TaskHandle_t change_price_task_handle = NULL;
+//TaskHandle_t report_task_handle = NULL;
+>>>>>>> Stashed changes
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;
@@ -86,6 +97,7 @@ TaskHandle_t ui_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
 TaskHandle_t paytype_task_handle = NULL;
 TaskHandle_t fuelselect_task_handle = NULL;
+
 
 
 
@@ -112,6 +124,7 @@ int main(void)
     Q_CARD = xQueueCreate(8, sizeof(INT8U));
     Q_PIN = xQueueCreate(4, sizeof(INT8U));
 
+    xTaskCreate(change_price_task, "change_price", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &change_price_task_handle);
     xTaskCreate(write_task , "write", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &write_task_handle);
     xTaskCreate(UI_task, "UI", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &UI_task_handle);
     xTaskCreate(button_task, "buttons", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &button_task_handle);
@@ -123,6 +136,11 @@ int main(void)
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
     xTaskCreate(select_pay_type_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &paytype_task_handle);
     xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
+<<<<<<< Updated upstream
+=======
+//    xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);
+
+>>>>>>> Stashed changes
 
 
     // Start the scheduler.

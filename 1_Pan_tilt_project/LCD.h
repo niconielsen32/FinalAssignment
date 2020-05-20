@@ -42,6 +42,7 @@ void move_LCD( INT8U, INT8U );
 INT8U wr_ch_LCD( INT8U Ch );
 BOOLEAN get_paytype_complete();
 
+void ftoa(float n, char *res, int afterpoint);
 
 void lcd_task(void* pvParameters);
 /*****************************************************************************

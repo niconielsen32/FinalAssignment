@@ -74,7 +74,7 @@ static void setupHardware(void)
 }
 
 TaskHandle_t write_task_handle = NULL;
-//TaskHandle_t report_task_handle = NULL;
+//TaskHandle_t report_task_handle = NULL;  -> needs changing
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;

@@ -126,7 +126,7 @@ int main(void)
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
     xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
-    //xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);  <--- We need to change this!
+    //xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);
     xTaskCreate(change_price_task, "change_price", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &change_fuel_price_handle);
 
 

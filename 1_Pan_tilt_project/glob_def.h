@@ -19,7 +19,7 @@
 TimerHandle_t timer_pumping;
 TimerHandle_t timer_total_pumping;
 TimerHandle_t timer_lever;
-QueueHandle_t  Q_KEY, Q_LCD, Q_CARD, Q_PIN;
+QueueHandle_t  Q_KEY, Q_LCD, Q_CARD, Q_PIN, Q_CARDnumber;
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;

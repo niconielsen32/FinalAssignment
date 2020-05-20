@@ -119,6 +119,7 @@ int main(void)
     Q_KEY = xQueueCreate(128, sizeof(INT8U));
     Q_LCD = xQueueCreate(128, sizeof(INT16U));
     Q_CARD = xQueueCreate(8, sizeof(INT8U));
+    Q_CARDnumber = xQueueCreate(8, sizeof(INT8U));
     Q_PIN = xQueueCreate(4, sizeof(INT8U));
 
     xTaskCreate(change_price_task, "change_price", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &change_price_handle);

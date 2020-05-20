@@ -27,6 +27,7 @@
 #include "glob_def.h"
 #include "write.h"
 #include "uart0.h"
+#include "UI.h"
 /*****************************    Defines    *******************************/
 
 /***********************   Constants & variables  **************************/
@@ -36,7 +37,8 @@ enum functions{
     LF92_state,
     LF95_state,
     Diesel_state,
-    Display_state
+    Display_state,
+    report_state
 };
 
 
@@ -93,6 +95,9 @@ void change_price_task(void *pvParameters){
                         if(strcmp("change", activate_change) == 0){
                             wr_str_UART("\n*************** Change fuel prices *******************\n");
                             func = LF92_state;
+                        } else if(strcmp("report", activate_change) == 0){
+                            wr_str_UART("\n*************** Report of the day *******************\n");
+                            func = report_state;
                         }
                         break;
 
@@ -139,6 +144,11 @@ void change_price_task(void *pvParameters){
 //                        write_fp32(fuel_LF95_f);
                         //write_fp32(fuel_Diesel_f);
                         wr_str_UART("\n");
+                        func = change;
+                        break;
+
+                    case report_state:
+                        show_report();
                         func = change;
                         break;
                     }

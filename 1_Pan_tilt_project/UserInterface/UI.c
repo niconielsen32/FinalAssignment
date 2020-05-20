@@ -159,7 +159,7 @@ void show_report(){
     INT8U* total_sales_lf95_string = "LeadFree95 sales: ";
     INT8U* total_sales_diesel_string = "Diesel sales: ";
     INT8U* total_sum_cash_string = "Sum of cash purchases: ";
-    INT8U* total_sum_card_string = "SUm of card purchases: ";
+    INT8U* total_sum_card_string = "Sum of card purchases: ";
     INT8U* total_op_time_string = "Total operating time: ";
 
 

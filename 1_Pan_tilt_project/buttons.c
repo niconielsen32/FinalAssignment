@@ -147,7 +147,6 @@ void button_task(void* pvParameters){
                             gfprintf(COM2, "%c%cHave a nice day!", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
                             button_state = idle; //GÅ TIL EN NY TANKNING ISTEDET
-
                             set_pumping_stopped(TRUE);
 //                            button_state = nozzle_putback;
                         }

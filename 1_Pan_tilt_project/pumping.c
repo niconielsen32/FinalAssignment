@@ -231,9 +231,10 @@ void pumping_task(void* pvParameters){
 
             if(get_pumping_stopped()){
                 xTimerStop(timer_total_pumping, 0);
-                total_pulses_temp = get_total_pulses();
-                total_liters = total_pulses_temp / pulses_pr_liter;
-                total_amount = total_liters * gas_price_temp;
+                total_pumping_time = 0;
+//                total_pulses_temp = get_total_pulses();
+//                total_liters = total_pulses_temp / pulses_pr_liter;
+//                total_amount = total_liters * gas_price_temp;
                 pumping_state = no_pumping;
                 write_string(" Terminated ");
                 terminate_session();
@@ -256,31 +257,18 @@ void pumping_task(void* pvParameters){
                         break;
 
                     case pumping_idle:
-                        if(seconds_lever == 15){
-                            seconds_lever = 0;
-                            write_string("15sec timeout");
-                            xTimerStop(timer_lever, 0);
-                            set_pumping_stopped(TRUE);
-                        }
-
-                        if((seconds_lever == 5) && (get_payment_type() == CARD)){
-                            seconds_lever = 0;
-                            write_string("5sec timeout");
-                            xTimerStop(timer_lever, 0);
-                            set_pumping_stopped(TRUE);
-                        }
 
                         GPIO_PORTF_DATA_R = 0x02; //red
                         //write_string("idle ");
                         if(cur_button_state == lever_depressed){
                             xTimerStart(timer_pumping, 0);
                             seconds = 2;
-                            pumping_state = pumping_start;
+                            pumping_state = pumping_reduced_2sec;
                         }
 
                         break;
 
-                    case pumping_start:
+                    case pumping_reduced_2sec:
 
                         GPIO_PORTF_DATA_R = 0x04; //yellow
                         //write_string("start ");
@@ -291,10 +279,12 @@ void pumping_task(void* pvParameters){
                             xTimerStop(timer_pumping, 0);
                             pumping_state = pumping_regular;
                         }
+
                         if(cur_button_state == lever_released){
                            xTimerStart(timer_lever, 0);
-                           pumping_state = pumping_stop;
+                           pumping_state = pumping_reduced_1sec;
                         }
+
                         break;
 
                     case pumping_regular:
@@ -309,14 +299,14 @@ void pumping_task(void* pvParameters){
                             xTimerStart(timer_lever, 0);
                             xTimerStart(timer_pumping, 0);
                             seconds = 1;
-                            pumping_state = pumping_stop;
+                            pumping_state = pumping_reduced_1sec;
                         }
 
 
                         if((get_payment_type() == CASH) && ((total_cash_temp - running_total_price ) <= out_of_cash_cal)){ // total amont skal være et løbende beløb
                             reduced_last = TRUE;
-                            write_string("Almost there.");
-                            pumping_state = pumping_stop;
+                            write_string(" Almost there ");
+                            pumping_state = pumping_reduced_1sec;
                             //bool reduced3sec = true
                             //go to pumping_stop
                             //reduced speed for 3 sec
@@ -324,10 +314,9 @@ void pumping_task(void* pvParameters){
 
                         break;
 
-                    case pumping_stop:
-
+                    case pumping_reduced_1sec:
+                        write_string(" Reduced ");
                         GPIO_PORTF_DATA_R = 0x04; //yellow
-                        write_string(" Stop ");
                         write_int16u(running_liters);
                         display_pumping();
                         //gfprintf(COM2, "%c%c %05u          ", 0x1B, 0xA8, running_liters);
@@ -338,17 +327,38 @@ void pumping_task(void* pvParameters){
 //                        }
 
                         if (reduced_last){
-                        //
-                         if(running_total_price >= total_cash_temp){
-                          // total_pulses_temp = get_total_pulses();
-                             //write_string("price is reached!");
-                             pumping_state = no_pumping;
-                             //set_pumping_stopped(TRUE);
-
-                         }
-                       } else if(seconds == 0){
+                            if(running_total_price >= total_cash_temp){
+                              // total_pulses_temp = get_total_pulses();
+                                 //write_string("price is reached!");
+                                 pumping_state = pumping_stop;
+                                 //set_pumping_stopped(TRUE);
+                             }
+                        } else if(seconds == 0){
                            xTimerStop(timer_pumping, 0);
-                           pumping_state = pumping_idle;
+                           pumping_state = pumping_stop;
+                        }
+
+                        break;
+
+                    case pumping_stop:
+                        if(seconds_lever == 15){
+                            seconds_lever = 0;
+                            write_string("15sec timeout");
+                            xTimerStop(timer_lever, 0);
+                            set_pumping_stopped(TRUE);
+                        }
+
+                        if((seconds_lever == 5) && (get_payment_type() == CARD)){
+                            seconds_lever = 0;
+                            write_string("5sec timeout");
+                            xTimerStop(timer_lever, 0);
+                            set_pumping_stopped(TRUE);
+                        }
+
+                        write_string(" Stop ");
+                        if(!(GPIO_PORTF_DATA_R & 0x10)){ //sw1 pressed
+                            xTimerStop(timer_pumping, 0);
+                            set_pumping_stopped(TRUE);
                         }
 
                         break;

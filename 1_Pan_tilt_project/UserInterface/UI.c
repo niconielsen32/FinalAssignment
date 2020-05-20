@@ -46,6 +46,13 @@
 
 /*****************************   Variables   *******************************/
 INT8U temp_char_uart;
+
+FP32 total_sales_lf92 = 0;
+FP32 total_sales_lf95 = 0;
+FP32 total_sales_diesel = 0;
+FP32 total_sum_cash = 0;
+FP32 total_sum_card = 0;
+FP32 total_op_time = 0;
 /*****************************   Functions   *******************************/
 
 void UI_receipt()
@@ -117,6 +124,32 @@ INT8U get_char_from_uart(){
     return temp_char_uart;
 }
 
+
+void add_to_sales_lf92(FP32 price){
+    total_sales_lf92 += price;
+}
+
+void add_to_sales_lf95(FP32 price){
+    total_sales_lf95 += price;
+}
+
+void add_to_sales_diesel(FP32 price){
+    total_sales_diesel += price;
+}
+
+void add_to_sum_of_cash(FP32 cashPrice){
+    total_sum_cash += cashPrice;
+}
+
+void add_to_sum_of_card(FP32 cardPrice){
+    total_sum_card += cardPrice;
+}
+
+void add_to_total_op_time(INT16U seconds){
+    total_op_time += seconds;
+}
+
+
 void show_report(){
 
     INT8U* newline = "\n";
@@ -129,12 +162,6 @@ void show_report(){
     INT8U* total_sum_card_string = "SUm of card purchases: ";
     INT8U* total_op_time_string = "Total operating time: ";
 
-    FP32 total_sales_lf92;
-    FP32 total_sales_lf95;
-    FP32 total_sales_diesel;
-    FP32 total_sum_cash;
-    FP32 total_sum_card;
-    FP32 total_op_time;
 
 
     if(get_char_from_uart() == 'r'){
@@ -144,37 +171,37 @@ void show_report(){
         write_string(newline);
         write_cr();
         write_string(total_sales_lf92_string);
-       // write_fp32(total_sales_lf92);
+        write_fp32(total_sales_lf92);
         write_string(dkk);
         write_cr();
         write_string(newline);
 
         write_string(total_sales_lf95_string);
-        //write_fp32(total_sales_lf95);
+        write_fp32(total_sales_lf95);
         write_string(dkk);
         write_cr();
         write_string(newline);
 
         write_string(total_sales_diesel_string);
-        //write_fp32(total_sales_diesel);
+        write_fp32(total_sales_diesel);
         write_string(dkk);
         write_cr();
         write_string(newline);
 
         write_string(total_sum_cash_string);
-        //write_fp32(total_sum_cash);
+        write_fp32(total_sum_cash);
         write_string(dkk);
         write_cr();
         write_string(newline);
 
         write_string(total_sum_card_string);
-        //write_fp32(total_sum_card);
+        write_fp32(total_sum_card);
         write_string(dkk);
         write_cr();
         write_string(newline);
 
         write_string(total_op_time_string);
-        //write_fp32(total_op_time / 60.0);
+        write_fp32(total_op_time / 60.0);
         write_string(minutes);
         write_cr();
         write_string(newline);

@@ -26,9 +26,6 @@
 #include "file.h"
 
 /*****************************    Defines    *******************************/
-#define LeadFree92 1
-#define LeadFree95 2
-#define Diesel     3
 
 
 /*****************************   Constants   *******************************/

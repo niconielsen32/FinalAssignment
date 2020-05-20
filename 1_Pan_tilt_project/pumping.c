@@ -31,6 +31,8 @@
 #include "UserInterface/write.h"
 #include "timer.h"
 #include "LCD.h"
+#include "UserInterface/UI.h"
+#include "digiswitch.h"
 
 /*****************************    Defines    *******************************/
 
@@ -57,6 +59,8 @@ FP32 running_liters;
 FP32 price_one_liter;
 FP32 running_total_price;
 FP32 digi_cash;
+
+BOOLEAN timer_runout;
 
 char liter[7];
 char dollar[7];
@@ -228,16 +232,35 @@ void pumping_task(void* pvParameters){
         out_of_cash_cal = gas_price_temp * SEC3_reduced;
 
 
-
             if(get_pumping_stopped()){
-                xTimerStop(timer_total_pumping, 0);
-                total_pumping_time = 0;
+
                 total_pulses_temp = get_total_pulses();
                 total_liters = total_pulses_temp / pulses_pr_liter;
                 total_amount = total_liters * gas_price_temp;
+
+                if(get_gas_type() == LeadFree92){
+                    add_to_sales_lf92(get_total_amount());
+                }else if(get_gas_type() == LeadFree95){
+                    add_to_sales_lf95(get_total_amount());
+                } else if(get_gas_type() == Diesel){
+                    add_to_sales_diesel(get_total_amount());
+                }
+
+                if(get_payment_type() == CASH){
+                    add_to_sum_of_cash(get_total_cash_from_digi());
+                } else {
+                    add_to_sum_of_card(get_total_amount());
+                }
+
+                add_to_total_op_time(total_pumping_time);
+
+                xTimerStop(timer_total_pumping, 0);
+                total_pumping_time = 0;
+
                 pumping_state = no_pumping;
                 write_string(" Terminated ");
                 terminate_session();
+
             } else {
 
                 switch(pumping_state)
@@ -346,6 +369,7 @@ void pumping_task(void* pvParameters){
                             seconds_lever = 0;
                             write_string("15sec timeout");
                             xTimerStop(timer_lever, 0);
+                            timer_runout = TRUE;
                             set_pumping_stopped(TRUE);
                         }
 
@@ -353,6 +377,7 @@ void pumping_task(void* pvParameters){
                             seconds_lever = 0;
                             write_string("5sec timeout");
                             xTimerStop(timer_lever, 0);
+
                             set_pumping_stopped(TRUE);
                         }
 

@@ -26,7 +26,6 @@
 #include "glob_def.h"
 #include "keypad.h"
 #include "file.h"
-#include "UserInterface/write.h"
 
 INT8U row( INT8U y )
 {
@@ -83,9 +82,6 @@ void keypad_task(void* pvParameters)
   INT8U my_state = 0;
   while (1)
   {
-
-    //put_file(COM1, get_keyboard() );
-    //write_int16u(temp);
 
     switch(my_state)
     {

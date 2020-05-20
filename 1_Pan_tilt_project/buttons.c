@@ -23,15 +23,10 @@
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
-#include "FreeRTOS.h"
 #include "buttons.h"
 #include "UserInterface/write.h"
 #include "pumping.h"
-//#include "LCD.h"
-#include "payment.h"
 #include "fuelselect.h"
-#include "digiswitch.h"
-#include "flowmeter.h"
 
 
 /*****************************    Defines    *******************************/
@@ -127,15 +122,13 @@ void button_task(void* pvParameters){
                             button_state = lever_depressed;
                         } else if(!(GPIO_PORTF_DATA_R & 0x10) && !get_pumping_stopped()) { //sw1 pressed
                             counter_timer = TIM_200_MSEC;
-                            //write_string("This is a ducking test!");
-                            //button_state = idle;
-                            //set_pumping_stopped(TRUE);
+
                         } else if(! --counter_timer){
                             write_string("nozzle_putback ");
                             gfprintf(COM2, "%c%cHave a nice day!", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
                             set_pumping_stopped(TRUE);
-//                            button_state = nozzle_putback;
+
                         }
                     break;
               }

@@ -23,21 +23,10 @@
 #include <stdint.h>
 #include "tm4c123gh6pm.h"
 #include "glob_def.h"
-#include "FreeRTOS.h"
-#include "write.h"
-#include "glob_def.h"
-#include "frt10/frt10/inc/FreeRTOS.h"
 #include "UserInterface/write.h"
-#include "data.h"
 #include "UI.h"
-#include "buttons.h"
-#include "file.h"
-#include "keypad.h"
-#include "string.h"
-#include "tmodel.h"
 #include "uart0.h"
 #include "fuelselect.h"
-#include "UserInterface/uart0.h"
 #include "pumping.h"
 
 /*****************************    Defines    *******************************/
@@ -82,7 +71,13 @@ void UI_receipt()
 
 
     ui_total_liters = get_total_liters();
-    ui_total_price = get_total_amount();
+
+    if(get_payment_type() == CASH){
+        ui_total_price = get_total_cash_temp();
+    } else {
+        ui_total_price = get_total_amount();
+    }
+
 
     write_cr();
     write_string(newline);
@@ -90,20 +85,21 @@ void UI_receipt()
 
     if(get_gas_type() == 1){
        ui_product = "LeadFree92";
-   } else if(get_gas_type() == 2){
+    } else if(get_gas_type() == 2){
        ui_product = "LeadFree95";
-   } else if(get_gas_type() == 3){
+    } else if(get_gas_type() == 3){
        ui_product = "Diesel";
-   }
+    }
 
         write_string(product);
         write_string(ui_product);
 
         write_string(total_liters);
-        write_fp32(ui_total_liters);
+        write_fp32_one_digit(ui_total_liters / 100.0);
+
 
         write_string(total_price);
-        write_fp32(ui_total_price);
+        write_fp32_one_digit(ui_total_price / 100.0);
         write_string(dkk);
 
 
@@ -117,6 +113,8 @@ void UI_receipt()
             write_string(Cash_or_cardNo);
             write_string(cash);
         }
+
+        write_string(newline);
 
 }
 

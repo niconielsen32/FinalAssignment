@@ -22,8 +22,6 @@
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
-#include "emp_type.h"
-#include "glob_def.h"
 #include "payment.h"
 #include "digiswitch.h"
 #include "UserInterface/write.h"

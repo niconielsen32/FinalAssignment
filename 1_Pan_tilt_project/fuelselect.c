@@ -23,7 +23,6 @@
 #include "fuelselect.h"
 #include "payment.h"
 #include "LCD.h"
-#include "file.h"
 
 /*****************************    Defines    *******************************/
 
@@ -117,9 +116,8 @@ void fuelselect_task(void* pvParameters){
                 //gfprintf(COM2, "%c%cD: Press 3", 0x1B, 0xA8);
                 key = get_keyboard();                                       // we get a value from the keyboard
                 if( key >= '1' && key <= '3'){
-                    gastype = key - '0';
+                    gastype = key - '0';  // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                     write_int16u(gastype);
-                    //write_int16u(gastype);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                     gas_state = 1;
                 }
                 break;

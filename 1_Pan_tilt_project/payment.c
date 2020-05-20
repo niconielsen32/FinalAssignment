@@ -18,6 +18,7 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include <stdlib.h>
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
@@ -36,7 +37,6 @@
 #include "queue.h"
 #include "fuelselect.h"
 #include "pumping.h"
-#include <stdlib.h>
 
 
 /*****************************    Defines    *******************************/
@@ -194,7 +194,6 @@ void payment_task(void* pvParameters){
 
                                 if (i == 7){
                                     write_string(" card entered ");
-                                    //write_int16u(get_queue_element(Q_CARD, 8, 7));
                                     order = 1;
                                 }
                               } else {
@@ -209,7 +208,7 @@ void payment_task(void* pvParameters){
                         gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
                         write_string("pin: ");
-                        //BOOLEAN hat = TRUE;
+
                         for(INT8U j = 0; j < 4; j++){
 
                             key = get_keyboard();
@@ -235,34 +234,19 @@ void payment_task(void* pvParameters){
 
                    case 3:
                        paytype_complete = TRUE;
-//                       while(){
-//                       if (type == CASH){
-//                           total_cash_from_digi = get_total_cash_from_digi();
-//                           itoa(total_cash_from_digi, digiCash, 10);
-//                           gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
-//                           gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
-//                           write_string(" Complete cash");
-//
-//
-//                       } else if (type == CARD){
-
                        write_string(" Complete ");
-                       //}
-                       //}
+
                        break;
                    }
-
                }
 
         if(paytype_complete){
             switch(payment_type){
 
                   case CARD:
-                          card_last_number = last_elemet_queue(Q_CARD, 8);
-                          //write_int16u(card_last_number);
-                          card_last_pin = last_elemet_queue(Q_PIN, 4);
-                          //write_int16u(card_last_pin);
 
+                      card_last_number = last_elemet_queue(Q_CARD, 8);
+                      card_last_pin = last_elemet_queue(Q_PIN, 4);
 
                       if(card_last_number % 2 == 0){
                             is_card_number_even = TRUE;
@@ -285,7 +269,6 @@ void payment_task(void* pvParameters){
 
                             gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
-                            //write_string(" card not valid! ");
 
                             terminate_session();
                         }

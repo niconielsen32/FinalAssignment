@@ -22,14 +22,12 @@
 #include "glob_def.h"
 #include "flowmeter.h"
 #include "pumping.h"
-#include "buttons.h"
-#include "UserInterface/write.h"
 /*****************************    Defines    *******************************/
 
 /*****************************   Constants   *******************************/
 
 INT16U type_of_flow;
-INT16U button;
+
 
 INT16U total_pulses;
 INT16U pulses_regular = 154;
@@ -52,11 +50,7 @@ void flowmeter_task(void* pvParameters){
 
     while(1){
 
-       // write_int16u(total_pulses);
-      //  write_string(" ");
-
         type_of_flow = get_pumping_state();
-        button = get_button_state();
 
            switch(type_of_flow){
 
@@ -72,8 +66,6 @@ void flowmeter_task(void* pvParameters){
                    total_pulses += pulses_reduced;
                    break;
            }
-
-
 
         vTaskDelayUntil(&last_unblock_flowmeter, pdMS_TO_TICKS(1000));; // der tælles pulser op for hvert sekund
     }

@@ -43,6 +43,7 @@
 
 /*****************************   Constants   *******************************/
 
+INT16U stop_payment;
 INT16U cash_invalid;
 
 INT8U card_last_number;
@@ -67,6 +68,7 @@ INT8U card_try;        //<-- If pin is wrong 3 times
 
 INT16U type;
 
+BOOLEAN is_terminated;
 
 /*****************************   Functions   *******************************/
 
@@ -135,7 +137,7 @@ void payment_task(void* pvParameters){
                    if( key >= '1' && key <= '2')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                    {
                        type = key - '0';
-                       // the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+                       //write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
                        pay_state = 1;
 
                    }
@@ -147,6 +149,7 @@ void payment_task(void* pvParameters){
                    if( type == CARD)
                    {
                        write_string("CARD");
+                       card_try = 3;
                        gfprintf(COM2, "%c%c     Card      ", 0x1B, 0xA8);              // the digit is printed on the second line (after "Offset:")
                        payment_type = CARD;
                        pay_state = 2;
@@ -155,6 +158,7 @@ void payment_task(void* pvParameters){
                        write_string("CASH");// again we subtract the ASCII for 0. we also multiply by 100 since it's the first of the 3 digits
                        gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
                        payment_type = CASH;
+                      // write_string("cashaha");
 
                        gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
                        gfprintf(COM2, "%c%c       0         ", 0x1B, 0xA8);
@@ -228,13 +232,13 @@ void payment_task(void* pvParameters){
                     }
                    break;
 
-               case 3:
-                   paytype_complete = TRUE;
-                   write_string(" Complete ");
+                   case 3:
+                       paytype_complete = TRUE;
+                       write_string(" Complete ");
 
-                   break;
+                       break;
+                   }
                }
-             }
 
         if(paytype_complete){
             switch(payment_type){
@@ -259,21 +263,15 @@ void payment_task(void* pvParameters){
                         if((is_card_number_even && !is_pin_even) || (!is_card_number_even && is_pin_even)){                    //Valid combinations are: an even card number with odd PIN, or an odd card number with an even PIN.
                             card_valid = TRUE;
                             is_payment_complete = TRUE;
-                        } else{
+                        }
+
+                        if(!card_valid){
 
                             gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
-                            set_pumping_stopped(TRUE);
+                            terminate_session();
                         }
-
-//                        if(!card_valid){
-//                            write_string("card invalid!");
-//                            gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
-//                            gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
-//
-//                            terminate_session();
-//                        }
 
                   break;
 

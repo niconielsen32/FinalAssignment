@@ -36,10 +36,6 @@ void set_gas_price(INT16U gastype, FP32 gasprice);
 BOOLEAN get_fuelselect_complete();
 void set_fuelselect_complete(BOOLEAN fuel);
 
-//void set_fuel_type_FP92(FP32 type1);
-//void set_fuel_type_FP95(FP32 type2);
-//void set_fuel_type_Diesel(FP32 type3);
-
 void fuelselect_task(void* pvParameters);
 
 /****************************** End Of Module *******************************/

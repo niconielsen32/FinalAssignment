@@ -41,21 +41,6 @@ INT8U gas_state = 0;
 INT8U gastype;
 BOOLEAN fuelselect;
 /*****************************   Functions   *******************************/
-
-//**************************** set gas price *******************************
-//void set_fuel_type_FP92(FP32 type1){
-//    LF92_price = type1;
-//}
-//
-//void set_fuel_type_FP95(FP32 type2){
-//    LF95_price = type2;
-//}
-//
-//void set_fuel_type_Diesel(FP32 type3){
-//    Diesel_price = type3;
-//}
-
-
 FP32 get_gas_price(){
     return gas_price;
 }

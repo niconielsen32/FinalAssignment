@@ -100,6 +100,8 @@ BOOLEAN get_paytype_complete(){
 }
 
 
+
+
 void terminate_session(){
     UI_receipt();
     xQueueReset(Q_CARD);

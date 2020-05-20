@@ -27,6 +27,8 @@
 #include "glob_def.h"
 #include "write.h"
 #include "uart0.h"
+#include "fuelselect.h"
+#include "payment.h"
 /*****************************    Defines    *******************************/
 
 /***********************   Constants & variables  **************************/
@@ -59,6 +61,8 @@ enum functions func = change;
 
 /*****************************   Functions   *******************************/
 
+
+
 void wr_ch_UART(char character)
 {
     while(!(uart0_tx_rdy())){}      //wait for transfer
@@ -79,6 +83,7 @@ void change_price_task(void *pvParameters){
 
     while(1)
     {
+        if(get_payment_complete() && !get_fuelselect_complete()){
         if(uart0_rx_rdy()){                   //check if anything is entered in UART
 
             char round_char = uart0_getc();
@@ -109,12 +114,10 @@ void change_price_task(void *pvParameters){
                               fuel_LF92[i] = activate_change[i];
                         }
                         fuel_LF92_f = atof(fuel_LF92);
-
+                        //set_gas_price(0, fuel_LF92_f);
                         wr_str_UART("\n");
                         wr_str_UART("LeadFree 95 new price: ");
 
-                        //write_string(activate_change);
-                        ///wr_str_UART("\n");
                         func = Diesel_state;
                         break;
 
@@ -123,6 +126,7 @@ void change_price_task(void *pvParameters){
                               fuel_LF95[i] = activate_change[i];
                         }
                         fuel_LF95_f = atof(fuel_LF95);
+                        //set_gas_price(1, fuel_LF95_f);
 
                         wr_str_UART("\n");
                         wr_str_UART("Diesel new price: ");
@@ -135,9 +139,8 @@ void change_price_task(void *pvParameters){
                               fuel_Diesel[i] = activate_change[i];
                         }
                         fuel_Diesel_f = atof(fuel_Diesel);
+                        //set_gas_price(2, fuel_Diesel_f);
 
-//                        write_fp32(fuel_LF95_f);
-                        //write_fp32(fuel_Diesel_f);
                         wr_str_UART("\n");
                         func = change;
                         break;
@@ -159,6 +162,7 @@ void change_price_task(void *pvParameters){
 
 
         }
+    }
 
 //        vTaskDelay(10);
 

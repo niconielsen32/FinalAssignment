@@ -19,7 +19,7 @@
 TimerHandle_t timer_pumping;
 TimerHandle_t timer_total_pumping;
 TimerHandle_t timer_lever;
-QueueHandle_t  Q_KEY, Q_LCD, Q_CARD, Q_PIN, Q_CARDnumber;
+QueueHandle_t  Q_KEY, Q_LCD, Q_CARD, Q_CARDnumber, Q_PIN;
 
 // SEMAPHORES
 xSemaphoreHandle xMutex;
@@ -56,11 +56,21 @@ INT16U adjusted_value;
 INT8U scale;
 INT16U offset;
 
+
+#define LeadFree92 1
+#define LeadFree95 2
+#define Diesel     3
+
+
 //payment
-#define CARD 0
-#define CASH 1
+#define CARD 1
+#define CASH 2
 #define PIN_ODD 1
 #define PIN_EVEN 0
+
+#define COM1  0      // UART
+#define COM2  1      // LCD
+#define COM3  2      // Keyboard
 
 
 

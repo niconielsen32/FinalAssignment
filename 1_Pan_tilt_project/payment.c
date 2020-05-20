@@ -63,7 +63,7 @@ INT8U order = 0;
 INT8U card_cif;
 INT8U pin_cif;
 INT8U card_try;        //<-- If pin is wrong 3 times
-char digiCash[7];
+
 INT16U type;
 
 /*****************************   Functions   *******************************/
@@ -156,6 +156,9 @@ void payment_task(void* pvParameters){
                        gfprintf(COM2, "%c%c     Cash      ", 0x1B, 0xA8);
                        payment_type = CASH;
                       // write_string("cashaha");
+
+                       gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+                       gfprintf(COM2, "%c%c       0         ", 0x1B, 0xA8);
                        pay_state = 3;
                        break;
 
@@ -228,10 +231,21 @@ void payment_task(void* pvParameters){
                    break;
 
                    case 3:
-
                        paytype_complete = TRUE;
-                       write_string(" Complete ");
+//                       while(){
+//                       if (type == CASH){
+//                           total_cash_from_digi = get_total_cash_from_digi();
+//                           itoa(total_cash_from_digi, digiCash, 10);
+//                           gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+//                           gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
+//                           write_string(" Complete cash");
+//
+//
+//                       } else if (type == CARD){
 
+                       write_string(" Complete ");
+                       //}
+                       //}
                        break;
                    }
 
@@ -276,19 +290,16 @@ void payment_task(void* pvParameters){
                   break;
 
                   case CASH:
-                      if(!is_payment_complete){
 
-                      if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
-                         set_digi_complete(TRUE);
-                         is_payment_complete = TRUE;
-                      }
-                      total_cash_from_digi = get_total_cash_from_digi();
-                      itoa(total_cash_from_digi, digiCash, 10);
-                      gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
-                      gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
+                          if(!(GPIO_PORTA_DATA_R & 0x80)){ //button on digiswitch
+                            set_digi_complete(TRUE);
+                            is_payment_complete = TRUE;
+                          }
 
 
-                      }
+
+
+
 
                   break;
 

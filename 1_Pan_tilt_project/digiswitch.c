@@ -18,6 +18,7 @@
 *****************************************************************************/
 
 /***************************** Include files *******************************/
+#include <stdlib.h>
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
@@ -42,6 +43,8 @@ INT8U B = 0;
 INT16U total_cash_digi = 0;
 
 BOOLEAN digi_complete;
+
+char digiCash[7];
 
 /*****************************   Functions   *******************************/
 
@@ -84,7 +87,9 @@ void digiswitch_task(void* pvParameters) {
                 B = 0;
             }
 
+
            if(A != lastA){
+
                if(B != A){
                    total_cash_digi += 100;
                } else{
@@ -92,6 +97,9 @@ void digiswitch_task(void* pvParameters) {
                }
                write_int16u(total_cash_digi);
                write_string("  ");
+               itoa(total_cash_digi, digiCash, 10);
+               gfprintf(COM2, "%c%c   Total Cash    ", 0x1B, 0x80);
+               gfprintf(COM2, "%c%c      %s         ", 0x1B, 0xA8, digiCash);
            }
            lastA = A;
         }

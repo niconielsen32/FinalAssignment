@@ -328,6 +328,8 @@ void pumping_task(void* pvParameters){
                                  //set_pumping_stopped(TRUE);
                              }
                         } else if (cur_button_state == lever_depressed){
+                            seconds_lever = 0;
+                            xTimerStop(timer_lever, 0);
                             pumping_state = pumping_regular;
                         } else if(seconds == 0){
                            xTimerStop(timer_pumping, 0);

@@ -132,8 +132,6 @@ void change_price_task(void *pvParameters){
                         wr_str_UART("\n");
                         wr_str_UART("LeadFree 95 new price: ");
 
-                        //write_string(activate_change);
-                        ///wr_str_UART("\n");
                         func = Diesel_state;
                         break;
 

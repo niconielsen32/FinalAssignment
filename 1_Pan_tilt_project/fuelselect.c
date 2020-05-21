@@ -23,15 +23,16 @@
 #include "fuelselect.h"
 #include "payment.h"
 #include "LCD.h"
+#include "change_price.h"
 
 /*****************************    Defines    *******************************/
 
 
 /*****************************   Constants   *******************************/
 
-FP32 LF92_price = 8.49;
-FP32 LF95_price = 8.79;
-FP32 Diesel_price = 8.12;
+//FP32 LF92_price = 8.49;
+//FP32 LF95_price = 8.79;
+//FP32 Diesel_price = 8.12;
 
 FP32 gas_price = 0;
 
@@ -84,17 +85,17 @@ void select_gas_type(INT16U gastype){
 
        case LeadFree92:
            gfprintf(COM2, "%c%c   LeadFree92   ", 0x1B, 0xA8);
-           gas_price = LF92_price;
+           gas_price = get_fuel_LF92();
            break;
 
        case LeadFree95:
            gfprintf(COM2, "%c%c   LeadFree95   ", 0x1B, 0xA8);
-           gas_price = LF95_price;
+           gas_price = get_fuel_LF95();
            break;
 
        case Diesel:
            gfprintf(COM2, "%c%c     Diesel      ", 0x1B, 0xA8);
-           gas_price = Diesel_price;
+           gas_price = get_fuel_Diesel();
            break;
     }
 }

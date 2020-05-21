@@ -152,7 +152,7 @@ void show_report(){
 
     INT8U* newline = "\n";
     INT8U* dkk = " DKK ";
-    INT8U* minutes = " minutes";
+    INT8U* seconds = " seconds";
     INT8U* total_sales_lf92_string = "LeadFree92 sales: ";
     INT8U* total_sales_lf95_string = "LeadFree95 sales: ";
     INT8U* total_sales_diesel_string = "Diesel sales: ";
@@ -199,7 +199,7 @@ void show_report(){
         write_string(newline);
 
         write_string(total_op_time_string);
-        write_fp32_one_digit((total_op_time / 60.0) / 100.0);
+        write_fp32_one_digit(total_op_time / 100.0);
         write_string(minutes);
         write_cr();
         write_string(newline);

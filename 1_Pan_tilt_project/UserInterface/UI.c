@@ -213,7 +213,9 @@ void report_task(void* pvParameters){
 
         if(uart0_rx_rdy()){
             temp_char_uart = uart0_getc();
-            show_report();
+            if(temp_char_uart == 'r'){
+                show_report();
+            }
         }
 
     }

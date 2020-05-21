@@ -270,7 +270,7 @@ void payment_task(void* pvParameters){
                             gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
-                            terminate_session();
+                            set_pumping_stopped(TRUE);
                         }
 
                   break;

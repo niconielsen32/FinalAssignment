@@ -118,9 +118,9 @@ void UI_receipt()
 
 }
 
-//INT8U get_char_from_uart(){
-//    return temp_char_uart;
-//}
+INT8U get_char_from_uart(){
+    return temp_char_uart;
+}
 
 
 void add_to_sales_lf92(FP32 price){
@@ -162,7 +162,7 @@ void show_report(){
 
 
 
-    //if(get_char_from_uart() == 'r'){
+    if(get_char_from_uart() == 'r'){
 
         write_string(newline);
         write_string(newline);
@@ -203,20 +203,20 @@ void show_report(){
         write_string(minutes);
         write_cr();
         write_string(newline);
-    //}
+    }
 }
 
 
-//void report_task(void* pvParameters){
-//
-//    while(1){
-//
-//        if(uart0_rx_rdy()){
-//            temp_char_uart = uart0_getc();
-//            show_report();
-//        }
-//
-//    }
-//}
+void report_task(void* pvParameters){
+
+    while(1){
+
+        if(uart0_rx_rdy()){
+            temp_char_uart = uart0_getc();
+            show_report();
+        }
+
+    }
+}
 
 

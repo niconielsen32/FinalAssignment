@@ -284,6 +284,8 @@ void payment_task(void* pvParameters){
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
                             set_pumping_stopped(TRUE);
+                            pay_state = 0;              // - crash, don't know why?
+
                         }
 
                   break;

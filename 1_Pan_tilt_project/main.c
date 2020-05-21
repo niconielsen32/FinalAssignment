@@ -35,6 +35,7 @@
 #include "LCD.h"
 #include "pumping.h"
 #include "digiswitch.h"
+#include "UI.h"
 
 
 
@@ -71,15 +72,6 @@ static void setupHardware(void)
 }
 
 TaskHandle_t write_task_handle = NULL;
-<<<<<<< HEAD
-<<<<<<< HEAD
-TaskHandle_t report_task_handle = NULL;
-=======
-//TaskHandle_t report_task_handle = NULL;
->>>>>>> parent of c638706... From_here!
-=======
-//TaskHandle_t report_task_handle = NULL;
->>>>>>> parent of c638706... From_here!
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;
@@ -89,6 +81,7 @@ TaskHandle_t lcd_task_handle = NULL;
 TaskHandle_t digiswitch_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
 TaskHandle_t fuelselect_task_handle = NULL;
+TaskHandle_t report_task_handle = NULL;
 
 
 

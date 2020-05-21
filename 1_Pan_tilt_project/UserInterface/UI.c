@@ -200,7 +200,7 @@ void show_report(){
 
         write_string(total_op_time_string);
         write_fp32_one_digit(total_op_time / 100.0);
-        write_string(minutes);
+        write_string(seconds);
         write_cr();
         write_string(newline);
     }

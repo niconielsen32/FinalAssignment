@@ -199,7 +199,7 @@ void show_report(){
         write_string(newline);
 
         write_string(total_op_time_string);
-        write_fp32_one_digit(total_op_time);
+        write_int16u(total_op_time);
         write_string(seconds);
         write_cr();
         write_string(newline);

@@ -33,6 +33,8 @@ BOOLEAN get_payment_complete();
 void set_payment_complete(BOOLEAN payment_complete);
 INT16U get_payment_type();
 BOOLEAN get_paytype_complete();
+void set_change_price(BOOLEAN change_price_tag);
+BOOLEAN get_change_price();
 
 void terminate_session();
 

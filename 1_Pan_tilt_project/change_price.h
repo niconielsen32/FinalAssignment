@@ -8,7 +8,6 @@
 #ifndef CHANGE_PRICE_H_
 #define CHANGE_PRICE_H_
 #include "emp_type.h"
-//#include <string.h>
 
 void wr_str_UART(char* txt);
 void wr_char_UART(char character);

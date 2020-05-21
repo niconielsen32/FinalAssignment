@@ -28,6 +28,8 @@
 #include "write.h"
 #include "uart0.h"
 #include "UI.h"
+#include "payment.h"
+#include "pumping.h"
 /*****************************    Defines    *******************************/
 
 /***********************   Constants & variables  **************************/
@@ -40,9 +42,6 @@ enum functions{
     Display_state,
     report_state
 };
-
-
-INT8U value = 3;
 
 INT8U number_iterate;
 
@@ -81,6 +80,7 @@ void change_price_task(void *pvParameters){
 
     while(1)
     {
+        if (get_change_price()){
         if(uart0_rx_rdy()){                   //check if anything is entered in UART
 
             char round_char = uart0_getc();
@@ -102,7 +102,7 @@ void change_price_task(void *pvParameters){
                         break;
 
                     case LF92_state:
-                        write_fp32(fuel_LF92_f);
+                        write_fp32(fuel_Diesel_f);
                         wr_str_UART("\n");
                         wr_str_UART("LeadFree 92 new price: ");
                         func = LF95_state;
@@ -141,8 +141,6 @@ void change_price_task(void *pvParameters){
                         }
                         fuel_Diesel_f = atof(fuel_Diesel);
 
-//                        write_fp32(fuel_LF95_f);
-                        //write_fp32(fuel_Diesel_f);
                         wr_str_UART("\n");
                         func = change;
                         break;
@@ -167,10 +165,10 @@ void change_price_task(void *pvParameters){
             }
         }
 
-
+        }
         }
 
-//        vTaskDelay(10);
+        vTaskDelay(10);
 
 }
 /****************************** End Of Module *******************************/

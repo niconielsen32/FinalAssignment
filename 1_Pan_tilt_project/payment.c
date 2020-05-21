@@ -69,6 +69,7 @@ INT8U card_try;        //<-- If pin is wrong 3 times
 INT16U type;
 
 BOOLEAN is_terminated;
+BOOLEAN is_change_price_tag;
 
 /*****************************   Functions   *******************************/
 
@@ -99,6 +100,15 @@ BOOLEAN get_paytype_complete(){
     return paytype_complete;
 }
 
+void set_change_price(BOOLEAN change_price_tag){
+    is_change_price_tag = change_price_tag;
+}
+
+BOOLEAN get_change_price(){
+    return is_change_price_tag;
+}
+
+
 
 void terminate_session(){
     UI_receipt();
@@ -114,6 +124,7 @@ void terminate_session(){
     set_total_cash_from_digi(0);
     set_reduced_last(FALSE);
     set_button_state(idle);
+    set_change_price(TRUE);
 }
 
 void payment_task(void* pvParameters){
@@ -133,11 +144,13 @@ void payment_task(void* pvParameters){
                case 0:
                    gfprintf(COM2, "%c%cCard: Press one ", 0x1B, 0x80);
                    gfprintf(COM2, "%c%cCash: Press two ", 0x1B, 0xA8);          // "Scale:" is printed on the second line of the display
+                   set_change_price(TRUE);
                    key = get_keyboard();                                       // we get a value from the keyboard
                    if( key >= '1' && key <= '2')                               // if it's a number between 0 and 9 we save that value in scale_tmp and go to the next state
                    {
                        type = key - '0';
                        //write_int16u(type);// the value from the keyboard is given as an ASCII char, so to convert to the actual value we subtract the ASCII-value for 0
+
                        pay_state = 1;
 
                    }
@@ -145,7 +158,7 @@ void payment_task(void* pvParameters){
 
                case 1:
                    gfprintf(COM2, "%c%cYou have method: ", 0x1B, 0x80);                  // "Offset:" is printed on the second line of the display                                      // same procedure as in state 0, but we save the value in off1 since we want it as the first digit of the offset value
-
+                   set_change_price(FALSE);
                    if( type == CARD)
                    {
                        write_string("CARD");
@@ -218,6 +231,7 @@ void payment_task(void* pvParameters){
                                 pin_cif = key - '0';
                                 write_int16u(pin_cif);
                                 xQueueSend(Q_PIN, &pin_cif, 0);
+
                                 if (j == 3){
                                     write_string(" pin entered ");
                                     pay_state = 3;
@@ -235,7 +249,6 @@ void payment_task(void* pvParameters){
                    case 3:
                        paytype_complete = TRUE;
                        write_string(" Complete ");
-
                        break;
                    }
                }
@@ -270,7 +283,7 @@ void payment_task(void* pvParameters){
                             gfprintf(COM2, "%c%cCard not Valid! ", 0x1B, 0x80);
                             gfprintf(COM2, "%c%c                ", 0x1B, 0xA8);
 
-                            terminate_session();
+                            set_pumping_stopped(TRUE);
                         }
 
                   break;

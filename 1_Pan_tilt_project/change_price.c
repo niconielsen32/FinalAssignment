@@ -25,11 +25,9 @@
 #include "tm4c123gh6pm.h"
 #include "emp_type.h"
 #include "glob_def.h"
-#include "write.h"
 #include "uart0.h"
 #include "UI.h"
 #include "payment.h"
-#include "pumping.h"
 /*****************************    Defines    *******************************/
 
 /***********************   Constants & variables  **************************/
@@ -40,8 +38,7 @@ enum functions{
     LF95_state,
     Diesel_state,
     Display_state,
-    report_state,
-    try
+    report_state
 };
 
 INT8U number_iterate;
@@ -124,7 +121,6 @@ void change_price_task(void *pvParameters){
                         break;
 
                     case LF95_state:
-                        //write_fp32(fuel_LF92_f);
                         for (int i = 0; i < 5; i++){
                               fuel_LF92[i] = activate_change[i];
                         }
@@ -152,15 +148,11 @@ void change_price_task(void *pvParameters){
                         }
 
                         wr_str_UART("\n");
-                        func = try;
+                        func = change;
                         break;
 
                     case report_state:
                       //show_report();
-                        func = try;
-                        break;
-                    case try:
-                        write_string("reset");
                         func = change;
                         break;
                     }
@@ -182,10 +174,10 @@ void change_price_task(void *pvParameters){
         }
 
         }
-
+        vTaskDelay(pdMS_TO_TICKS(500));
         }
 
-      //  vTaskDelay(10);
+
 
 }
 /****************************** End Of Module *******************************/

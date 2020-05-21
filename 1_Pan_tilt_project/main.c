@@ -72,7 +72,11 @@ static void setupHardware(void)
 
 TaskHandle_t write_task_handle = NULL;
 <<<<<<< HEAD
+<<<<<<< HEAD
 TaskHandle_t report_task_handle = NULL;
+=======
+//TaskHandle_t report_task_handle = NULL;
+>>>>>>> parent of c638706... From_here!
 =======
 //TaskHandle_t report_task_handle = NULL;
 >>>>>>> parent of c638706... From_here!

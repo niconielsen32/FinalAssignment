@@ -35,7 +35,6 @@
 #include "LCD.h"
 #include "pumping.h"
 #include "digiswitch.h"
-#include "change_price.h"
 
 
 
@@ -72,7 +71,7 @@ static void setupHardware(void)
 }
 
 TaskHandle_t write_task_handle = NULL;
-//TaskHandle_t report_task_handle = NULL;
+TaskHandle_t report_task_handle = NULL;
 TaskHandle_t button_task_handle = NULL;
 TaskHandle_t payment_task_handle = NULL;
 TaskHandle_t keypad_task_handle = NULL;
@@ -82,7 +81,6 @@ TaskHandle_t lcd_task_handle = NULL;
 TaskHandle_t digiswitch_task_handle = NULL;
 TaskHandle_t scale_task_handle = NULL;
 TaskHandle_t fuelselect_task_handle = NULL;
-TaskHandle_t change_fuel_price_handle = NULL;
 
 
 
@@ -120,8 +118,7 @@ int main(void)
     xTaskCreate(lcd_task, "lcd", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &lcd_task_handle);
     xTaskCreate(digiswitch_task, "digiswitch", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &digiswitch_task_handle);
     xTaskCreate(fuelselect_task, "select_pay_type", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &fuelselect_task_handle);
-    //xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);
-    xTaskCreate(change_price_task, "change_price", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &change_fuel_price_handle);
+    xTaskCreate(report_task, "report", USERTASK_STACK_SIZE, NULL, LOW_PRIO, &report_task_handle);
 
 
     // Start the scheduler.

@@ -40,20 +40,20 @@ enum functions{
     LF95_state,
     Diesel_state,
     Display_state,
-    report_state
+    report_state,
+    try
 };
 
 INT8U number_iterate;
 
-char fuel_LF92[5];
+char fuel_LF92[5] ="08.49";
 FP32 fuel_LF92_f;
 
-char fuel_LF95[5];
+char fuel_LF95[5] = "08.79";
 FP32 fuel_LF95_f;
 
-char fuel_Diesel[5];
+char fuel_Diesel[5] = "08.12";
 FP32 fuel_Diesel_f;
-
 
 enum functions func = change;
 
@@ -71,6 +71,21 @@ void wr_str_UART(char* txt){
     for (i ; i < strlen(txt); i++){
         wr_ch_UART(txt[i]);
     }
+}
+
+FP32 get_fuel_LF92(){
+    fuel_LF92_f = atof(fuel_LF92);
+    return fuel_LF92_f;
+}
+
+FP32 get_fuel_LF95(){
+    fuel_LF95_f = atof(fuel_LF95);
+    return fuel_LF95_f;
+}
+
+FP32 get_fuel_Diesel(){
+    fuel_Diesel_f = atof(fuel_Diesel);
+    return fuel_Diesel_f;
 }
 
 void change_price_task(void *pvParameters){
@@ -91,18 +106,18 @@ void change_price_task(void *pvParameters){
                 if(round_char == 13){          //Check if the 'enter' key is pressed
                     switch(func){
                     case change:
-
+//
                         if(strcmp("change", activate_change) == 0){
                             wr_str_UART("\n*************** Change fuel prices *******************\n");
                             func = LF92_state;
-                        } else if(strcmp("report", activate_change) == 0){
-                            wr_str_UART("\n*************** Report of the day *******************\n");
-                            func = report_state;
                         }
+                        //else if(strcmp("report", activate_change) == 0){
+//                            wr_str_UART("\n*************** Report of the day *******************\n");
+//                            func = report_state;
+//                        }
                         break;
-
+//
                     case LF92_state:
-                        write_fp32(fuel_Diesel_f);
                         wr_str_UART("\n");
                         wr_str_UART("LeadFree 92 new price: ");
                         func = LF95_state;
@@ -113,7 +128,6 @@ void change_price_task(void *pvParameters){
                         for (int i = 0; i < 5; i++){
                               fuel_LF92[i] = activate_change[i];
                         }
-                        fuel_LF92_f = atof(fuel_LF92);
 
                         wr_str_UART("\n");
                         wr_str_UART("LeadFree 95 new price: ");
@@ -127,7 +141,6 @@ void change_price_task(void *pvParameters){
                         for (int i = 0; i < 5; i++){
                               fuel_LF95[i] = activate_change[i];
                         }
-                        fuel_LF95_f = atof(fuel_LF95);
 
                         wr_str_UART("\n");
                         wr_str_UART("Diesel new price: ");
@@ -139,36 +152,42 @@ void change_price_task(void *pvParameters){
                         for (int i = 0; i < 5; i++){
                               fuel_Diesel[i] = activate_change[i];
                         }
-                        fuel_Diesel_f = atof(fuel_Diesel);
 
                         wr_str_UART("\n");
-                        func = change;
+                        func = try;
                         break;
 
                     case report_state:
-                        show_report();
+                      //show_report();
+                        func = try;
+                        break;
+                    case try:
+                        write_string("reset");
                         func = change;
                         break;
                     }
+
                     memset(activate_change, 0, sizeof(activate_change));                      // Clear text
                     letter_iterate = 0;
-
+//
                     }
-                                                      // Point to first character in text again
-
-
+//                                                      // Point to first character in text again
+//
+//
                 else
                 {
                     activate_change[letter_iterate++] = round_char;
                     activate_change[letter_iterate] = '\0';
                 }
+
             }
         }
 
         }
+
         }
 
-        vTaskDelay(10);
+      //  vTaskDelay(10);
 
 }
 /****************************** End Of Module *******************************/

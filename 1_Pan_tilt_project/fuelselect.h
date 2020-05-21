@@ -32,7 +32,7 @@
 void select_gas_type(INT16U);
 INT16U get_gas_type();
 FP32 get_gas_price();
-void set_gas_price(INT16U gastype, FP32 gasprice);
+//void set_gas_price(INT16U gastype, FP32 gasprice);
 BOOLEAN get_fuelselect_complete();
 void set_fuelselect_complete(BOOLEAN fuel);
 

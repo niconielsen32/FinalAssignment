@@ -49,23 +49,23 @@ INT16U get_gas_type(){
     return gas_type;
 }
 
-void set_gas_price(INT16U gastype, FP32 gasprice){
-
-    switch(gastype){
-
-           case LeadFree92:
-               LF92_price = gasprice;
-               break;
-
-           case LeadFree95:
-               LF95_price = gasprice;
-               break;
-
-           case Diesel:
-               Diesel_price = gasprice;
-               break;
-        }
-}
+//void set_gas_price(INT16U gastype, FP32 gasprice){
+//
+//    switch(gastype){
+//
+//           case LeadFree92:
+//               LF92_price = gasprice;
+//               break;
+//
+//           case LeadFree95:
+//               LF95_price = gasprice;
+//               break;
+//
+//           case Diesel:
+//               Diesel_price = gasprice;
+//               break;
+//        }
+//}
 
 BOOLEAN get_fuelselect_complete(){
     return fuelselect;
